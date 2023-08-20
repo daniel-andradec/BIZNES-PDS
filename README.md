@@ -1,4 +1,4 @@
-# Características do Sistema de E-commerce
+# BIZNES
 
 ## Membros e Papéis
 - Arthur Linhares (Desenvolvedor Fullstack)
