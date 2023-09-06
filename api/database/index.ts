@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { getEnv } from '../utils/functions/get-env';
+import { getEnv } from '../utils/functions/getEnv';
 
 export const sequelize = new Sequelize(
   getEnv('DB'),
