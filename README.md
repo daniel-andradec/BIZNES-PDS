@@ -14,6 +14,10 @@
 ## Objetivo do Projeto
 O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferramenta de aprendizagem prática para os participantes. O sistema será uma plataforma simulada que abrange diversas funcionalidades de um e-commerce real, desde autenticação de usuários até a simulação de pagamentos.
 
+## Protótipo no Figma
+
+[BIZNES](https://www.figma.com/file/NX09jS21AnkyySTjGy6kdd/Biznes?type=design&node-id=0%3A1&mode=design&t=x5TJNNlRNOiTc0aV-1)
+
 ## Características do Sistema
 
 ### Vendedor
