@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import cors, { CorsOptions } from 'cors';
 import cookieParser from 'cookie-parser';
-import { getEnv } from '../utils/functions/get-env';
+import { getEnv } from '../utils/functions/getEnv';
 
 dotenv.config();
 export const app: Express = express();
