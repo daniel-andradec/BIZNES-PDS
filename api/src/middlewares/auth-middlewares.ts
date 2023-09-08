@@ -9,7 +9,7 @@ import { getEnv } from '../../utils/functions/getEnv';
 
 function generateJWT(user: PayloadParams, res: Response) {
   const body = {
-    id: user.id,
+    idUser: user.idUser,
     name: user.name,
     email: user.email,
     role: user.role,

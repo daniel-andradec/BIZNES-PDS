@@ -1,5 +1,5 @@
 export interface PayloadParams {
-    id: string,
+    idUser: string,
     name: string,
     email: string,
     role: string

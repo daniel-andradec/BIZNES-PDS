@@ -1,19 +1,20 @@
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { sequelize } from '../../../../database/index';
-import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import { userRoles } from '../constants/userRoles';
 
 export interface UserInterface extends Model<InferAttributes<UserInterface>, InferCreationAttributes<UserInterface>> {
-  id: CreationOptional<string>;
+  idUser: CreationOptional<string>;
   name: string;
   email: string;
   password: string;
   role: string;
+  balance: number;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
 
 export const User = sequelize.define<UserInterface>('Users', {
-  id: {
+  idUser: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -37,6 +38,10 @@ export const User = sequelize.define<UserInterface>('Users', {
     values: [userRoles.admin, userRoles.customer, userRoles.seller],
     allowNull: false,
   },
+  balance: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
@@ -47,10 +52,8 @@ export const User = sequelize.define<UserInterface>('Users', {
   },
 });
 
-/*
-Comando para criar/alterar as
-colunas da tabela caso necessário
- */
+//User.hasOne(Customer, { foreignKey: 'idUser' });
+
 User.sync({alter: false, force: false})
   .then(() => {
     console.log('User table was (re)created');
