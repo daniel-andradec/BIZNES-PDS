@@ -30,6 +30,7 @@ class UserServiceClass {
       email: body.email,
       password: body.password,
       role: body.role,
+      balance: body.balance,
     };
 
     newUser.password = await this.encryptPassword(newUser.password);
@@ -67,7 +68,7 @@ class UserServiceClass {
   }
 
   async update(id: string, body: UserInterface, loggedUser: PayloadParams){
-    if (loggedUser.role != userRoles.admin && loggedUser.id != id) {
+    if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
       throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
     }
 

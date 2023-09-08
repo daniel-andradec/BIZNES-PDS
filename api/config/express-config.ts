@@ -23,3 +23,6 @@ app.use(express.json());
 
 import { router as usersRouter } from '../src/domains/users/controllers/index';
 app.use('/api/users', usersRouter);
+
+import { router as customerRouter } from '../src/domains/customer/controllers/index';
+app.use('/api/customer', customerRouter);
