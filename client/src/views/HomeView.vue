@@ -1,26 +1,43 @@
 <template>
-  <h1>
-    <fa icon="fas fa-b" :style="{ color: '#57A06F'}"/>iznes
-    oi
-    <i class="fas fa-b"></i>
-  </h1>
+    <div>
+        <div class="header">
+            <ConsumerHeader @input="handleSearch" />
+        </div> 
+        <div class="products">
+            <ProductsList />
+        </div>
+
+    </div>
 </template>
 
-<script lang="ts">
+<script>
+import ProductsList from '@/components/product/ProductsList.vue';
+import ConsumerHeader from '../components/header/ConsumerHeader.vue';
+
 export default {
-  name: 'HomeView',
-  components: {
-  }
+    name: 'HomeView',
+    components: {
+        ConsumerHeader,
+        ProductsList
+    },
+    data() {
+        return {
+        }
+    },
+    methods: {
+        handleSearch(searchText) {
+            console.log('searchText', searchText)
+        }
+    }
 }
-
 </script>
-
-<style scoped lang="less">
-
-i {
-  color: var(--primaryColor) !important;
+<style lang="less">
+.header {
+    padding-bottom: 50px;
 }
 
+.products {
+    padding-top: 30px;
+    margin-bottom: 50px;
+}
 </style>
-
-
