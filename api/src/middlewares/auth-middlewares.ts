@@ -2,10 +2,10 @@ import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 import { User } from '../domains/users/models/User';
 import { PermissionError } from '../../errors/PermissionError';
-import { statusCodes } from '../../utils/constants/status-codes';
+import { statusCodes } from '../../utils/constants/statusCodes';
 import { PayloadParams } from '../domains/users/types/PayloadParams';
 import { Request, Response, NextFunction } from 'express';
-import { getEnv } from '../../utils/functions/get-env';
+import { getEnv } from '../../utils/functions/getEnv';
 
 function generateJWT(user: PayloadParams, res: Response) {
   const body = {
