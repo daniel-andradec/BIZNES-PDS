@@ -7,7 +7,7 @@ export default {
                 description: 'Notebook Apple Macbook Pro 13 polegadas, Chip M1 da Apple com CPU de oito núcleos e GPU de dez núcleos, de 256 GB SSD - Cinza espacial',
                 category: ['Computadores e informática'],
                 price: 10299,
-                img: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp-silver-select-202206?wid=1280&hei=1190&fmt=png-alpha&.v=1664497095569'
+                img: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp-spacegray-select-202206?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1664497359481'
             },
             {
                 id: 2,
@@ -125,10 +125,82 @@ export default {
                 id: 16,
                 name: 'Smartwatch Apple Watch Series 7',
                 description: 'Smartwatch Apple Watch Series 7 com tela sempre ativa, monitor de saúde avançado e compatibilidade com apps de fitness',
-                category: ['Eletrônicos', 'Wearables'],
+                category: ['Eletrônicos', 'Smartwatches'],
                 price: 399,
                 img: 'https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/SP860/series7-480.png'
-            }
+            },
+            {
+                id: 17,
+                name: 'Batedeira KitchenAid Stand Mixer',
+                description: 'Batedeira Stand Mixer da KitchenAid, design icônico e alta performance para suas receitas. Acompanha três batedores.',
+                category: ['Eletrodomésticos'],
+                price: 1999,
+                img: 'https://m.media-amazon.com/images/I/61WJrVNsajL._AC_UF894,1000_QL80_.jpg'
+            },
+            {
+                id: 18,
+                name: 'Tênis Nike Air Force 1',
+                description: 'Nike Air Force 1, design clássico com conforto premium. Ideal para o dia a dia.',
+                category: ['Calçados'],
+                price: 499,
+                img: 'https://droper-media.us-southeast-1.linodeobjects.com/922023175750967.webp'
+            },
+            {
+                id: 19,
+                name: 'Cafeteira Nespresso Essenza Mini',
+                description: 'Cafeteira Nespresso Essenza Mini, compacta e eficiente. Prepara espressos e lungos deliciosos.',
+                category: ['Eletrodomésticos'],
+                price: 399,
+                img: 'https://i.zst.com.br/thumbs/12/4/35/196951040.jpg'
+            },
+            {
+                id: 20,
+                name: 'Bicicleta Mountain Bike GT Avalanche',
+                description: 'Bicicleta Mountain Bike GT Avalanche, ideal para trilhas e terrenos acidentados.',
+                category: ['Esportes', 'Ciclismo'],
+                price: 2499,
+                img: 'https://static.bikepointsc.com.br/public/bikepointsc/imagens/produtos/bicicleta-gt-avalanche-comp-29-6441c801a7b7c.jpg'
+            },
+            {
+                id: 21,
+                name: 'Perfume Chanel No.5',
+                description: 'Perfume Chanel No.5, uma fragrância icônica e atemporal para mulheres.',
+                category: ['Perfumaria'],
+                price: 799,
+                img: 'https://fraguru.com/mdimg/perfume/375x500.40069.jpg'
+            },
+            {
+                id: 22,
+                name: 'Violão Taylor Acústico',
+                description: 'Violão Taylor Acústico, excelente sonoridade e acabamento premium.',
+                category: ['Instrumentos Musicais'],
+                price: 5299,
+                img: 'https://www.musitechinstrumentos.com.br/files/pro_37649_g.jpg'
+            },
+            {
+                id: 23,
+                name: 'Champagne Veuve Clicquot Brut',
+                description: 'Champagne Veuve Clicquot Brut, ideal para comemorações e momentos especiais.',
+                category: ['Bebidas', 'Vinhos e Espumantes'],
+                price: 399,
+                img: 'https://cdn.dooca.store/479/products/champagne-veuve-clicquot-brut.png?v=1606816206'
+            },
+            {
+                id: 24,
+                name: 'Perfume Bleu de Chanel',
+                description: 'Perfume Bleu de Chanel, uma fragrância masculina elegante e sofisticada.',
+                category: ['Perfumaria'],
+                price: 799,
+                img: 'https://m.media-amazon.com/images/I/61rv8u2aRuL._AC_UF1000,1000_QL80_.jpg'
+            },
+            {
+                id: 25,
+                name: 'Galaxy Watch 6 BT 40mm',
+                description: 'Galaxy Watch 6 BT 40mm, monitoramento de saúde avançado e design premium - Grafite com 1,31", Bluetooth e 16GB ',
+                category: ['Eletrônicos', 'Smartwatches'],
+                price: 799,
+                img: 'https://images.samsung.com/is/image/samsung/p6pim/br/2307/gallery/br-galaxy-watch6-r935-sm-r930nzepzto-537403033?$650_519_PNG$'
+            },
         ]
     },
     mutations: {
@@ -136,6 +208,23 @@ export default {
     actions: {
     },
     getters: {
-        getProducts: state => state.products
+        getProducts: state => state.products,
+        // get the product with the given id, and put product.seller = 'Seller Name'
+        // getProduct: state => id => state.products.find(product => product.id == id)
+        getProduct: state => id => {
+            let product = state.products.find(product => product.id == id)
+            product.seller = 'Seller Name'
+            return product
+        },
+        getCategoryProducts: state => (categories, id) => {
+            console.log(categories);
+            // get other products from the same category but not the one with the given id
+            return state.products.filter(product => product.category.some(category => categories?.includes(category)) && product.id != id)
+        },
+        getSearchProducts: state => (search) => {
+            // get products that contain the search term in the name or description or category
+            console.log(search)
+            return state.products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()) || product.description.toLowerCase().includes(search.toLowerCase()) || product.category.some(category => category.toLowerCase().includes(search.toLowerCase())))
+        }
     }
 }

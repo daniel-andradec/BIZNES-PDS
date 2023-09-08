@@ -4,7 +4,7 @@
             <ConsumerHeader />
         </div> 
         <div class="products">
-            <ProductsList :products="getProducts"/>
+            <ProductsList :products="results" :search="this.$route.query.searchText"/>
         </div>
 
     </div>
@@ -13,23 +13,25 @@
 <script>
 import ProductsList from '@/components/products/ProductsList.vue';
 import ConsumerHeader from '@/components/headers/ConsumerHeader.vue';
-import { mapGetters } from 'vuex';
 
 export default {
-    name: 'HomeView',
+    name: 'SearchView',
     components: {
         ConsumerHeader,
         ProductsList
     },
     data() {
         return {
+            results: []
         }
     },
-    computed: {
-        ...mapGetters(['getProducts'])
-    },
     methods: {
-    }
+    },
+    mounted() {
+        const query = this.$route.query.searchText
+        this.results = this.$store.getters.getSearchProducts(query)
+        window.scrollTo(0, 0)
+    },
 }
 </script>
 <style lang="less">

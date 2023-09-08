@@ -1,20 +1,20 @@
 <template>
-    <div class="product-card">
+    <div class="product-card" :class="{ fixedSize: fixSize }">
         <img :src="product.img" />
-        <div class="name">{{ product.name }}</div>
+        <div class="name">{{ fixLength(product.name) }}</div>
         <div class="categories">
             <div class="category" v-for="(category, key) in product.category" :key="key">
                 {{ category }}
             </div>
         </div>
-        <div class="price">R$ {{ product.price }}</div>
+        <div class="price"> {{ formatValue(product.price) }}</div>
     </div>
 </template>
 
 <script>
 export default {
     name: 'ProductCard',
-    props: ['product'],
+    props: ['product', 'fixSize'],
     components: {
     },
     data() {
@@ -24,6 +24,12 @@ export default {
     computed: {
     },
     methods: {
+        formatValue(value) {
+            return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+        },
+        fixLength: function (text) {
+            return text.length > 25 && this.fixSize ? text.substr(0, 25) + '...' : text
+        },
     },
     mounted() {
     }
@@ -44,30 +50,43 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.18);
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     transition: all linear .2s;
-    margin: 20px;
+    margin: 10px;
     height: min(500px, 100%);
+
+    &.fixedSize {
+        width: 300px;
+        height: 400px;
+
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+    }
 
     img {
         width: 100%;
-        height: 300px;
-        object-fit: contain;
+        height: 200px;
         border-radius: 5px;
+        object-fit: contain;
+        margin-top: 10px;
     }
 
     .name {
-        font-size: 16px;
+        font-size: 18px;
         margin: 10px 20px;
     }
 
     .categories {
         display: flex;
-        font-size: 14px;
+        font-size: 12px;
+        align-items: center;
 
         .category {
-            margin-right: 10px;
+            margin: 0px 10px;
             background: #D4F3DE;
             border-radius: 5px;
-            padding: 10px;
+            padding: 8px;
         }
     }
 
@@ -75,6 +94,7 @@ export default {
         color: var(--primaryColor);
         font-size: 22px;
         padding: 10px 0px;
+        font-weight: 600;
     }
 
     &:active{
