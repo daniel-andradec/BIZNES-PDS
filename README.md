@@ -8,7 +8,7 @@
 
 ## Tecnologias Utilizadas
 - Node JS com Typescript (Back-end)
-- Vue JS com Typescript (Front-end)
+- Vue JS com Javascript (Front-end)
 - SQLite (Banco de Dados)
 
 ## Objetivo do Projeto
