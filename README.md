@@ -165,9 +165,9 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [FE] Tela do carrinho  - conexão com o back
     
-    [BE] Rotas para cadastro de produtos no carrinho [Daniel]
+    [BE] Rotas para cadastro de produtos no carrinho [Arthur]
     
-    [BE] Testes automatizados [Daniel]
+    [BE] Testes automatizados [Arthur]
 
 ### -História #7: Como um comprador, quero conseguir pesquisar produtos utilizando palavras-chave, como nome e categoria.
     Tarefas e responsáveis:
