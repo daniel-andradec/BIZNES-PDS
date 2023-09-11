@@ -132,9 +132,9 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [FE] Tela de cadastro de usuário - conexão com o back
     
-    [BE] Rotas para CRUD do usuário
+    [BE] Rotas para CRUD do usuário [Daniel]
     
-    [BE] Testes automatizados
+    [BE] Testes automatizados [Daniel]
 
 ### -História #4: Como um vendedor, quero conseguir cadastrar minha loja no sistema
     Tarefas e responsáveis:
@@ -165,9 +165,9 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [FE] Tela do carrinho  - conexão com o back
     
-    [BE] Rotas para cadastro de produtos no carrinho
+    [BE] Rotas para cadastro de produtos no carrinho [Daniel]
     
-    [BE] Testes automatizados
+    [BE] Testes automatizados [Daniel]
 
 ### -História #7: Como um comprador, quero conseguir pesquisar produtos utilizando palavras-chave, como nome e categoria.
     Tarefas e responsáveis:
@@ -176,9 +176,9 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [FE] Tela de pesquisa- conexão com o back
     
-    [BE] Rotas para listagem de produtos
+    [BE] Rotas para listagem de produtos [Daniel]
     
-    [BE] Testes automatizados
+    [BE] Testes automatizados [Daniel]
 
 ### -História #8: Como um comprador, quero conseguir realizar a compra dos produtos do meu carrinho
     Tarefas e responsáveis:
@@ -187,8 +187,8 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [FE] Telas de compra - conexão com o back
     
-    [BE] Rotas para efetuação de compra [avelar]
+    [BE] Rotas para efetuação de compra [Avelar]
     
-    [BE] Testes automatizados [avelar]
+    [BE] Testes automatizados [Avelar]
 
 
