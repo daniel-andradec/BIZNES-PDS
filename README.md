@@ -121,9 +121,9 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [FE] Tela de login - conexão com o back
     
-    [BE] Rotas de Login [Arthur]
+    [BE] Rotas de Login [Avelar]
     
-    [BE] Autenticação Login com JWT: [Arthur]
+    [BE] Autenticação Login com JWT: [Avelar]
 
 ### -História #3: Como um comprador, quero conseguir me cadastrar no sistema
     Tarefas e responsáveis:
@@ -154,9 +154,9 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [FE] Tela de cadastro de produtos - conexão com o back
     
-    [BE] Rotas para cadastro de produtos: [Avelar]
+    [BE] Rotas para cadastro de produtos: [Arthur]
     
-    [BE] Testes automatizados: [Avelar]
+    [BE] Testes automatizados: [Arthur]
 
 ### -História #6: Como um comprador, quero conseguir cadastrar, editar e excluir produtos no meu carrinho
     Tarefas e responsáveis:
