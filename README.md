@@ -94,7 +94,7 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     -História #11: Como um administrador, quero visualizar o fluxo das transações (quantidade de vendas e montante) do aplicativo em um período de tempo
     
-    -História #12: Como um administrador, quero visualizar o fluxo das transações (quantidade de vendas e montante) do aplicativo em um período de tempo
+    -História #12: Como um comprador, quero ver sugestões de produtos da mesma categoria na página de um produto específico
     
     -História #13: Como um comprador, quero conseguir monitorar as minhas compras já efetuadas
     
