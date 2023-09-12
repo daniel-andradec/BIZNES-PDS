@@ -11,6 +11,13 @@ export interface VendorInterface extends Model<InferAttributes<VendorInterface>,
     devolutionPolicy: string;  
 }
 
+export interface VendorCreationAttributes extends InferCreationAttributes<VendorInterface> {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+}
+
 export const Vendor = sequelize.define<VendorInterface>('Vendors', {
     idVendor: {
         type: DataTypes.INTEGER,

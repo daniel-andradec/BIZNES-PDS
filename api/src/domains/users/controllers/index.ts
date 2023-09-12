@@ -23,7 +23,7 @@ router.post('/logout',
   },
 );
 
-router.post('/',
+/* router.post('/',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await UserService.create(req.body);
@@ -32,7 +32,7 @@ router.post('/',
       next(error);
     }
   },
-);
+); */
 
 router.get('/',
   verifyJWT,

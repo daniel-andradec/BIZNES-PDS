@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt';
 import { User, UserInterface } from '../models/User';
-import { Attributes } from 'sequelize/types';
+import { Attributes, CreationAttributes } from 'sequelize/types';
 import { userRoles } from '../constants/userRoles';
 import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
 import { PermissionError } from '../../../../errors/PermissionError';
@@ -14,7 +14,7 @@ class UserServiceClass {
     return encryptedPassword;
   }
 
-  async create(body: Attributes<UserInterface>) {
+  async create(body: CreationAttributes<UserInterface>) {
     if (body.role == userRoles.admin) {
       throw new PermissionError('Não é possível criar um usuário com cargo de administrador!');
     }
@@ -30,13 +30,12 @@ class UserServiceClass {
       email: body.email,
       password: body.password,
       role: body.role,
-      balance: body.balance,
     };
 
     newUser.password = await this.encryptPassword(newUser.password);
 
-    await User.create(newUser);
-    
+    const createdUser = await User.create(newUser);
+    return createdUser;
   }
 
   async getAll() {
