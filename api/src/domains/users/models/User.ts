@@ -35,7 +35,7 @@ export const User = sequelize.define<UserInterface>('Users', {
   },
   role: {
     type: DataTypes.ENUM,
-    values: [userRoles.admin, userRoles.customer, userRoles.seller],
+    values: [userRoles.admin, userRoles.customer, userRoles.vendor],
     allowNull: false,
   },
   balance: {
