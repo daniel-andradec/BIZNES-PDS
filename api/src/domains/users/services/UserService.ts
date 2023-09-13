@@ -66,7 +66,7 @@ class UserServiceClass {
     return user;
   }
 
-  async update(id: string, body: UserInterface, loggedUser: PayloadParams){
+  async update(id: string, body: CreationAttributes<UserInterface>, loggedUser: PayloadParams){
     if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
       throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
     }

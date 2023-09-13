@@ -9,6 +9,9 @@ export interface VendorInterface extends Model<InferAttributes<VendorInterface>,
     fantasyName: string;
     phone: string;
     devolutionPolicy: string;  
+    idUser: string;
+    createdAt: CreationOptional<Date>;
+    updatedAt: CreationOptional<Date>;
 }
 
 export interface VendorCreationAttributes extends InferCreationAttributes<VendorInterface> {
@@ -44,12 +47,27 @@ export const Vendor = sequelize.define<VendorInterface>('Vendors', {
     devolutionPolicy: {
         type: DataTypes.STRING,
         allowNull: false,
-    }
+    },
+    idUser: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
 });
 
 Vendor.belongsTo(User, { foreignKey: 'idUser' });
 
-User.hasOne(Vendor, { foreignKey: 'idUser' });
+User.hasOne(Vendor, { 
+    foreignKey: 'idUser',
+    onDelete: 'CASCADE',
+});
 
 Vendor.sync({alter: false, force: false})
   .then(() => {
