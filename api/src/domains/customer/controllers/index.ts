@@ -1,5 +1,4 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { CustomerService } from '../service/CustomerService';
 import { loginMiddleware,
     verifyJWT,
     notLoggedIn } from '../../../middlewares/auth-middlewares';
@@ -24,7 +23,7 @@ router.post('/logout',
 router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-        await CustomerService.create(req.body);
+        //await CustomerService.create(req.body);
         res.status(statusCodes.CREATED).end();
         } catch (error) {
         next(error);
