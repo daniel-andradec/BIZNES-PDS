@@ -29,3 +29,6 @@ app.use('/api/customer', customerRouter);
 
 import { router as vendorRouter } from '../src/domains/vendor/controllers/index';
 app.use('/api/vendor', vendorRouter);
+
+import { errorHandler } from '../src/middlewares/error-handler';
+app.use(errorHandler);

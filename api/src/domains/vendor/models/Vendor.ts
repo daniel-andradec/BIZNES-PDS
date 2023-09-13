@@ -3,7 +3,7 @@ import { sequelize } from '../../../../database/index';
 import { User } from '../../users/models/User';
 
 export interface VendorInterface extends Model<InferAttributes<VendorInterface>, InferCreationAttributes<VendorInterface>> {
-    idVendor: CreationOptional<number>;
+    idVendor: CreationOptional<string>;
     CNPJ: string;
     companyName: string;
     fantasyName: string;

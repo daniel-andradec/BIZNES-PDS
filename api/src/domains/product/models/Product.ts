@@ -7,8 +7,8 @@ export interface ProductInterface extends Model<InferAttributes<ProductInterface
     name: string;
     description: string;
     price: number;
-    idVendor: number;
     quantity: number;
+    idVendor: string;
     createdAt: CreationOptional<Date>;
     updatedAt: CreationOptional<Date>;
 };

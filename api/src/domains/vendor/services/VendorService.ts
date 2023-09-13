@@ -59,6 +59,9 @@ class VendorServiceClass {
                     attributes: ['name', 'email'],
                 }],
             });
+            if (!vendor) {
+                throw new QueryError(`Não há loja com o ID ${id}!`);
+            }
             return vendor;
         } catch (error) {
             throw(error);
@@ -68,13 +71,10 @@ class VendorServiceClass {
     async update(id: string, body: VendorCreationAttributes, loggedUser: PayloadParams){
         try {
             const vendor = await this.getById(id);
-            if (!vendor) {
-                throw new QueryError(`Não há loja com o ID ${id}!`);
-            }
-            if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
+            const user = await UserService.getById(vendor.idUser);
+            if (loggedUser.role != userRoles.admin && loggedUser.idUser != user.idUser) {
                 throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
             }
-            const user = await UserService.getById(vendor.idUser);
             const newVendor = {
                 CNPJ: body.CNPJ,
                 companyName: body.companyName,
@@ -98,9 +98,6 @@ class VendorServiceClass {
     async delete(id: string, loggedUser: PayloadParams) {  
         try {
             const vendor = await this.getById(id);
-            if (!vendor) {
-                throw new QueryError(`Não há loja com o ID ${id}!`);
-            }
             if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
             }
