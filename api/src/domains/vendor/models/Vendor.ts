@@ -44,7 +44,7 @@ export const Vendor = sequelize.define<VendorInterface>('Vendors', {
         allowNull: false,
     },
     devolutionPolicy: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1000),
         allowNull: false,
     },
     idUser: {
