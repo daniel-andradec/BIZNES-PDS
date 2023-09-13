@@ -5,6 +5,7 @@ import { Attributes, CreationAttributes } from 'sequelize/types';
 import { userRoles } from "../../users/constants/userRoles";
 import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
 import { QueryError } from '../../../../errors/QueryError';
+import { PayloadParams } from "../../users/types/PayloadParams";
 
 
 
@@ -23,7 +24,7 @@ class VendorServiceClass {
                 name: body.name,
                 email: body.email,
                 password: body.password,
-                role: body.role,
+                role: userRoles.vendor,
             };
             const user = await UserService.create(newUser);
             newVendor.idUser = user.idUser;
@@ -64,17 +65,14 @@ class VendorServiceClass {
         }
     }
 
-    async update(id: string, body: VendorCreationAttributes, loggedUser: UserInterface){
+    async update(id: string, body: VendorCreationAttributes, loggedUser: PayloadParams){
         try {
             const vendor = await this.getById(id);
             if (!vendor) {
-                throw new QueryError(`Não há um usuário com o ID ${id}!`);
+                throw new QueryError(`Não há loja com o ID ${id}!`);
             }
             if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
                 throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
-            }
-            if (body.role && loggedUser.role != userRoles.admin && loggedUser.role != body.role) {
-                throw new NotAuthorizedError('Você não tem permissão para editar seu cargo!');
             }
             const user = await UserService.getById(vendor.idUser);
             const newVendor = {
@@ -88,7 +86,7 @@ class VendorServiceClass {
                 name: body.name,
                 email: body.email,
                 password: body.password,
-                role: body.role,
+                role: userRoles.vendor,
             };
             await UserService.update(user.idUser, newUser, loggedUser);
             await vendor.update(body);
@@ -97,11 +95,11 @@ class VendorServiceClass {
         }
     }
 
-    async delete(id: string, loggedUser: UserInterface) {  
+    async delete(id: string, loggedUser: PayloadParams) {  
         try {
             const vendor = await this.getById(id);
             if (!vendor) {
-                throw new QueryError(`Não há um usuário com o ID ${id}!`);
+                throw new QueryError(`Não há loja com o ID ${id}!`);
             }
             if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
@@ -112,3 +110,5 @@ class VendorServiceClass {
         }
     } 
 }
+
+export const VendorService = new VendorServiceClass();

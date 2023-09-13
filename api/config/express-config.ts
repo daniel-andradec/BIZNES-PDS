@@ -26,3 +26,6 @@ app.use('/api/users', usersRouter);
 
 import { router as customerRouter } from '../src/domains/customer/controllers/index';
 app.use('/api/customer', customerRouter);
+
+import { router as vendorRouter } from '../src/domains/vendor/controllers/index';
+app.use('/api/vendor', vendorRouter);

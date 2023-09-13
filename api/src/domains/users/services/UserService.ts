@@ -85,11 +85,10 @@ class UserServiceClass {
   }
 
   async delete(id: string, idReqUser: string) {
-    if (idReqUser == id) {
-      throw new PermissionError('Não é possível deletar o próprio usuário!');
-    }
-    
     const user = await this.getById(id);
+    if (!user) {
+      throw new QueryError(`Não há um usuário com o ID ${id}!`);
+    }
     await user.destroy();
   }
 }
