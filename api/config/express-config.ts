@@ -30,5 +30,8 @@ app.use('/api/customer', customerRouter);
 import { router as vendorRouter } from '../src/domains/vendor/controllers/index';
 app.use('/api/vendor', vendorRouter);
 
+import { router as productRouter } from '../src/domains/product/controllers/index';
+app.use('/api/product', productRouter);
+
 import { errorHandler } from '../src/middlewares/error-handler';
 app.use(errorHandler);

@@ -1,9 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { VendorService } from '../services/VendorService';
-import { loginMiddleware,
-  verifyJWT,
-  checkRole,
-  notLoggedIn } from '../../../middlewares/auth-middlewares';
+import { verifyJWT, checkRole } from '../../../middlewares/auth-middlewares';
 import { userRoles } from '../../users/constants/userRoles';
 import { statusCodes } from '../../../../utils/constants/statusCodes';
 

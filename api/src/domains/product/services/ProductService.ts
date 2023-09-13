@@ -17,6 +17,7 @@ class ProductServiceClass {
                 description: body.description,
                 price: body.price,
                 quantity: body.quantity,
+                image: body.image,
                 idVendor: vendor.idVendor,
             };
             const product = await Product.create(newProduct);
@@ -53,7 +54,7 @@ class ProductServiceClass {
         try {
             const product = await this.getById(idProduct);
             const vendor = await VendorService.getById(user.idUser);
-            if (product.idVendor != vendor!.idVendor) {
+            if (product.idVendor != vendor!.idVendor && user.role != 'admin') {
                 throw new NotAuthorizedError('Você não tem permissão para editar esse produto!');
             }
             await product.update(body);
@@ -65,7 +66,7 @@ class ProductServiceClass {
         try {
             const product = await this.getById(idProduct);
             const vendor = await VendorService.getById(user.idUser);
-            if (product.idVendor != vendor!.idVendor) {
+            if (product.idVendor != vendor!.idVendor && user.role != 'admin') {
                 throw new NotAuthorizedError('Você não tem permissão para deletar esse produto!');
             }
             await product.destroy();
@@ -74,3 +75,5 @@ class ProductServiceClass {
         }
     }
 }
+
+export const ProductService = new ProductServiceClass();
