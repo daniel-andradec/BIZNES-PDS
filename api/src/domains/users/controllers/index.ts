@@ -23,7 +23,7 @@ router.post('/logout',
   },
 );
 
-router.post('/',
+/* router.post('/',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await UserService.create(req.body);
@@ -32,7 +32,7 @@ router.post('/',
       next(error);
     }
   },
-);
+); */
 
 router.get('/',
   verifyJWT,
@@ -71,7 +71,7 @@ router.get('/:id',
 );
 
 
-router.put('/:id',
+/* router.put('/:id',
   verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -81,9 +81,9 @@ router.put('/:id',
       next(error);
     }
   },
-);
+); */
 
-router.delete('/:id',
+/* router.delete('/:id',
   verifyJWT,
   checkRole([userRoles.admin]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -93,5 +93,5 @@ router.delete('/:id',
     } catch (err) {
       next(err);
     }
-  });
+  }); */
 

@@ -24,5 +24,18 @@ app.use(express.json());
 import { router as usersRouter } from '../src/domains/users/controllers/index';
 app.use('/api/users', usersRouter);
 
+import { router as customerRouter } from '../src/domains/customer/controllers/index';
+app.use('/api/customer', customerRouter);
+
+import { router as vendorRouter } from '../src/domains/vendor/controllers/index';
+app.use('/api/vendor', vendorRouter);
+
+import { router as productRouter } from '../src/domains/product/controllers/index';
+app.use('/api/product', productRouter);
+
+import { errorHandler } from '../src/middlewares/error-handler';
+app.use(errorHandler);
+
 import { router as testPhotoRouter } from '../src/domains/testUpload/controllers/index';
 app.use('/api/testPhoto', testPhotoRouter);
+
