@@ -57,11 +57,11 @@ export default {
                 },
                 {
                     name: 'Menor preço',
-                    icon: 'fa fa-arrow-down-wide-short',
+                    icon: 'fa fa-arrow-down-long',
                 },
                 {
                     name: 'Maior preço',
-                    icon: 'fa fa-arrow-up-wide-short',
+                    icon: 'fa fa-arrow-up-long',
                 },
                 {
                     name: 'Categoria',
@@ -132,12 +132,13 @@ export default {
             position: relative;
 
             i {
-                margin-left: 15px;
                 font-size: 25px;
+                margin-right: 10px;
             }
             p {
                 font-weight: normal;
                 font-size: 25px;
+                margin-right: 10px;
             }
 
             .sort-options {
@@ -152,6 +153,15 @@ export default {
                 .option {
                     padding: 10px 15px;
                     cursor: pointer;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    align-items: center;
+                    border-bottom: 1px solid #d3d3d3;
+
+                    &:last-of-type {
+                        border-bottom: none;
+                    }
 
                     &:hover {
                         background: #F4F4F4;

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="header">
-            <ConsumerHeader />
+            <CustomerHeader />
         </div> 
         <div class="products">
             <ProductsList :products="getProducts"/>
@@ -12,13 +12,13 @@
 
 <script>
 import ProductsList from '@/components/products/ProductsList.vue';
-import ConsumerHeader from '@/components/headers/ConsumerHeader.vue';
+import CustomerHeader from '@/components/headers/CustomerHeader.vue';
 import { mapGetters } from 'vuex';
 
 export default {
     name: 'HomeView',
     components: {
-        ConsumerHeader,
+        CustomerHeader,
         ProductsList
     },
     data() {

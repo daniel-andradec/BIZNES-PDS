@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="header">
-            <ConsumerHeader />
+            <CustomerHeader />
         </div> 
         <div class="products">
             <ProductsList :products="results" :search="this.$route.query.searchText"/>
@@ -12,12 +12,12 @@
 
 <script>
 import ProductsList from '@/components/products/ProductsList.vue';
-import ConsumerHeader from '@/components/headers/ConsumerHeader.vue';
+import CustomerHeader from '@/components/headers/CustomerHeader.vue';
 
 export default {
     name: 'SearchView',
     components: {
-        ConsumerHeader,
+        CustomerHeader,
         ProductsList
     },
     data() {

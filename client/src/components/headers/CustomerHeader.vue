@@ -1,5 +1,5 @@
 <template>
-    <div class="consumer-header">
+    <div class="customer-header">
         <img @click="this.$router.push('/')" alt="Vue logo" :src="logo">
 
         <div class="search">
@@ -26,17 +26,17 @@
             </div>
         </div>
 
-        <div class="cart">
+        <div class="cart" @click="this.$router.push('cart')">
             <i class="fa fa-shopping-cart"></i>
             <span>
-                Ir para <br> o carrinho
+                Ir para o carrinho
             </span>
         </div>
     </div>
 </template>
 <script>
 export default {
-    name: 'ConsumerHeader',
+    name: 'CustomerHeader',
     emits: ['input'],
     components: {
     },
@@ -61,7 +61,7 @@ export default {
 }
 </script>
 <style lang="less">
-.consumer-header {
+.customer-header {
     background: #F4F4F4;
     height: 90px;
     display: flex;

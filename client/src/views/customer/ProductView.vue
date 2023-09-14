@@ -3,7 +3,7 @@
         <CategoryMenu />
         
         <div class="header">
-            <ConsumerHeader />
+            <CustomerHeader />
         </div>
         <div class="select-categories">
             <i class="fas fa-bars" @click="toggleMenu"></i>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import ConsumerHeader from '@/components/headers/ConsumerHeader.vue'
+import CustomerHeader from '@/components/headers/CustomerHeader.vue'
 import CategoryMenu from '@/components/menus/CategoryMenu.vue'
 import ProductCard from '@/components/products/ProductCard.vue'
 
@@ -72,7 +72,7 @@ import { mapActions } from 'vuex'
 export default {
     name: 'ProductView',
     components: {
-        ConsumerHeader,
+        CustomerHeader,
         CategoryMenu,
         ProductCard
     },

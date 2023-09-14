@@ -3,10 +3,12 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
 
-// consumer routes
-import ProductView from '../views/consumer/ProductView.vue'
-import SearchView from '../views/consumer/SearchView.vue'
+// customer routes
+import ProductView from '../views/customer/ProductView.vue'
+import SearchView from '../views/customer/SearchView.vue'
+import CartView from '../views/customer/CartView.vue'
 
 const routes = [
     {
@@ -26,6 +28,14 @@ const routes = [
         component: LoginView
     },
     {
+        path: '/register/:userType',
+        name: 'register',
+        meta: {
+            title: 'Cadastro'
+        },
+        component: RegisterView
+    },
+    {
         path: '/product/:id',
         name: 'product',
         meta: {
@@ -33,7 +43,6 @@ const routes = [
         },
         component: ProductView
     },
-    // query to search
     {
         path: '/search',
         name: 'search',
@@ -41,6 +50,14 @@ const routes = [
             title: 'Pesquisa'
         },
         component: SearchView
+    },
+    {
+        path: '/cart',
+        name: 'cart',
+        meta: {
+            title: 'Carrinho'
+        },
+        component: CartView
     }
 ]
 

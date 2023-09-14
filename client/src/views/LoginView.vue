@@ -33,11 +33,11 @@
 
         <ModalComponent :modalOpen="registerModalOpen" @closeModal="registerModalOpen = false">
             <div class="register-options">
-                <div class="register-option">
+                <div class="register-option" @click="registerCostumer()">
                     <i class="fa fa-shopping-cart"></i>
                     <p>Quero <b>comprar</b> <br>no Biznes</p>
                 </div>
-                <div class="register-option">
+                <div class="register-option" @click="registerSeller()">
                     <i class="fa fa-chart-line"></i>
                     <p>Quero <b>vender</b> <br>no Biznes</p>
                 </div>
@@ -62,6 +62,12 @@ export default {
         }
     },
     methods: {
+        registerCostumer () {
+            this.$router.push({ name: 'register', params: { userType: 1 } })
+        },
+        registerSeller () {
+            this.$router.push({ name: 'register', params: { userType: 2 } })
+        }
     },
     mounted() {
     }
