@@ -8,7 +8,6 @@ export interface UserInterface extends Model<InferAttributes<UserInterface>, Inf
   email: string;
   password: string;
   role: string;
-  balance: number;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }
@@ -35,11 +34,7 @@ export const User = sequelize.define<UserInterface>('Users', {
   },
   role: {
     type: DataTypes.ENUM,
-    values: [userRoles.admin, userRoles.customer, userRoles.seller],
-    allowNull: false,
-  },
-  balance: {
-    type: DataTypes.FLOAT,
+    values: [userRoles.admin, userRoles.customer, userRoles.vendor],
     allowNull: false,
   },
   createdAt: {
