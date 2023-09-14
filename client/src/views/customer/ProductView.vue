@@ -54,9 +54,10 @@
 
             <div class="list" v-else>
                 <!-- Produtos mais vendidos -->
-                    <div class="list-item" v-for="(product, key) in this.$store.getters.getProducts" :key="key" @click="goToProduct(product)">
-                        <ProductCard :key="product.id" :product="product" :fixSize="true" />
-                    </div>
+                <div class="list-item" v-for="(product, key) in getBestSellers" :key="key" @click="goToProduct(product)">
+                    <ProductCard :key="product.id" :product="product" :fixSize="true" />
+                </div>
+                <span @click="this.$router.push('/')">Voltar à página inicial</span>
             </div>
         </div>
     </div>
@@ -67,7 +68,7 @@ import CustomerHeader from '@/components/headers/CustomerHeader.vue'
 import CategoryMenu from '@/components/menus/CategoryMenu.vue'
 import ProductCard from '@/components/products/ProductCard.vue'
 
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'ProductView',
@@ -101,6 +102,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(['getBestSellers', 'getCategoryProducts'])
     },
     mounted() {
         const productID = this.$route.params.id

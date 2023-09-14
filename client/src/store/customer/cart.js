@@ -18,6 +18,22 @@ export default {
                     price: 101,
                     img: 'https://images-na.ssl-images-amazon.com/images/I/81ZE1M+bueL._AC_UL900_SR615,900_.jpg'
                 },
+                {
+                    id: 16,
+                    name: 'Smartwatch Apple Watch Series 7',
+                    description: 'Smartwatch Apple Watch Series 7 com tela sempre ativa, monitor de saúde avançado e compatibilidade com apps de fitness',
+                    category: ['Eletrônicos', 'Smartwatches'],
+                    price: 399,
+                    img: 'https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/SP860/series7-480.png'
+                },
+                {
+                    id: 26,
+                    name: 'AirPods Pro',
+                    description: 'AirPods Pro com cancelamento de ruído, modo ambiente e equalização adaptativa',
+                    category: ['Eletrônicos', 'Áudio'],
+                    price: 1899,
+                    img: 'https://m.media-amazon.com/images/I/71zny7BTRlL._AC_UF1000,1000_QL80_.jpg'
+                }
             ]
         }
     },

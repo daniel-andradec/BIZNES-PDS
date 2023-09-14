@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="cart" @click="this.$router.push('cart')">
+        <div class="cart-header" @click="this.$router.push('cart')">
             <i class="fa fa-shopping-cart"></i>
             <span>
                 Ir para o carrinho
@@ -114,6 +114,7 @@ export default {
         align-self: center;
 
         .login {
+            cursor: pointer;
             margin: 10px 70px;
             color: var(--secondaryColor);
             font-size: 18px;
@@ -134,12 +135,12 @@ export default {
             box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
             z-index: 9;
             margin-left: 60px;
+            cursor: pointer;
 
             .option {
                 padding: 10px 15px;
                 display: flex;
                 align-items: center;
-                cursor: pointer;
 
                 &:hover {
                     background: #F4F4F4;
@@ -154,7 +155,7 @@ export default {
     }
     
 
-    .cart {
+    .cart-header {
         margin: 10px 0px;
         display: flex;
         flex-direction: row;
@@ -163,6 +164,7 @@ export default {
         color: var(--secondaryColor);
         font-size: 18px;
         font-weight: 500;
+        cursor: pointer;
 
         span {
             margin-left: 10px;
