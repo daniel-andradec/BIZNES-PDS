@@ -4,14 +4,13 @@ import { verifyJWT, checkRole } from '../../../middlewares/auth-middlewares';
 import { userRoles } from '../../users/constants/userRoles';
 import { statusCodes } from '../../../../utils/constants/statusCodes';
 
-
 export const router = Router();
 
 router.post('/',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await VendorService.create(req.body);
-      res.status(statusCodes.CREATED).end();
+      res.status(statusCodes.CREATED).json("User created").end();
     } catch (error) {
       next(error);
     }
