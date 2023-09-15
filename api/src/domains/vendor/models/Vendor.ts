@@ -70,6 +70,6 @@ User.hasOne(Vendor, {
 
 Vendor.sync({alter: false, force: false})
   .then(() => {
-    console.log('User table was (re)created');
+    console.log('Vendor table was (re)created');
   })
   .catch((err) => console.log(err));

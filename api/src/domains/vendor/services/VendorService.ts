@@ -6,12 +6,13 @@ import { userRoles } from "../../users/constants/userRoles";
 import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
 import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
-
+import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/functions/validation/validateVendor";
 
 
 class VendorServiceClass {
-    async create(body: VendorCreationAttributes) {
+    async create(body: VendorCreationAttributes) { 
         try {
+            validateRegisterVendor(body);  
             const newVendor  = {
                 CNPJ: body.CNPJ,
                 companyName: body.companyName,
@@ -70,6 +71,7 @@ class VendorServiceClass {
 
     async update(id: string, body: VendorCreationAttributes, loggedUser: PayloadParams){
         try {
+            validateUpdateVendor(body);
             const vendor = await this.getById(id);
             const user = await UserService.getById(vendor.idUser);
             if (loggedUser.role != userRoles.admin && loggedUser.idUser != user.idUser) {
