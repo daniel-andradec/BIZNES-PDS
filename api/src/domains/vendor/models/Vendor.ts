@@ -10,6 +10,8 @@ export interface VendorInterface extends Model<InferAttributes<VendorInterface>,
     phone: string;
     devolutionPolicy: string;  
     idUser: string;
+    photo: string;
+    awsKey: string;
     createdAt: CreationOptional<Date>;
     updatedAt: CreationOptional<Date>;
 }
@@ -46,6 +48,14 @@ export const Vendor = sequelize.define<VendorInterface>('Vendors', {
     devolutionPolicy: {
         type: DataTypes.STRING(1000),
         allowNull: false,
+    },
+    photo: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    awsKey: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     idUser: {
         type: DataTypes.INTEGER,

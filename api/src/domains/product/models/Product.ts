@@ -8,7 +8,8 @@ export interface ProductInterface extends Model<InferAttributes<ProductInterface
     description: string;
     price: number;
     quantity: number;
-    image: string;
+    photo: string;
+    awsKey: string;
     idVendor: string;
     createdAt: CreationOptional<Date>;
     updatedAt: CreationOptional<Date>;
@@ -37,7 +38,11 @@ export const Product = sequelize.define<ProductInterface>('Products', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    image: {
+    photo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    awsKey: {
         type: DataTypes.STRING,
         allowNull: false,
     },
