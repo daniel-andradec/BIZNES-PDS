@@ -4,9 +4,10 @@ import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
 import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { VendorService } from '../../vendor/services/VendorService';
+import { deleteObject } from '../../../../utils/functions/aws';
 
 class ProductServiceClass {
-    async create(body: CreationAttributes<ProductInterface>, user: PayloadParams) {
+    async create(body: CreationAttributes<ProductInterface>, user: PayloadParams, file: any) {
         try {
             const vendor = await VendorService.getById(user.idUser);
             if (!vendor) {
@@ -17,7 +18,8 @@ class ProductServiceClass {
                 description: body.description,
                 price: body.price,
                 quantity: body.quantity,
-                image: body.image,
+                photo: (file as Express.MulterS3.File).location,
+                awsKey: (file as Express.MulterS3.File).key,
                 idVendor: vendor.idVendor,
             };
             const product = await Product.create(newProduct);
@@ -69,6 +71,7 @@ class ProductServiceClass {
             if (product.idVendor != vendor!.idVendor && user.role != 'admin') {
                 throw new NotAuthorizedError('Você não tem permissão para deletar esse produto!');
             }
+            await deleteObject(product.awsKey);
             await product.destroy();
         } catch (error) {
             throw(error);

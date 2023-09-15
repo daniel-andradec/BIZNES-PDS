@@ -3,15 +3,17 @@ import { ProductService } from '../services/ProductService';
 import { verifyJWT, checkRole } from '../../../middlewares/auth-middlewares';
 import { userRoles } from '../../users/constants/userRoles';
 import { statusCodes } from '../../../../utils/constants/statusCodes';
+import { upload } from '../../../../utils/functions/aws';
 
 export const router = Router();
 
 router.post('/',
     verifyJWT,
     checkRole([userRoles.vendor]),
+    upload.single('photo'),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await ProductService.create(req.body, req.user!);
+            await ProductService.create(req.body, req.user!, req.file);
             res.status(statusCodes.CREATED).end();
         } catch (error) {
             next(error);
