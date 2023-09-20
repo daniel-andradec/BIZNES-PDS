@@ -36,6 +36,4 @@ app.use('/api/product', productRouter);
 import { errorHandler } from '../src/middlewares/error-handler';
 app.use(errorHandler);
 
-import { router as testPhotoRouter } from '../src/domains/testUpload/controllers/index';
-app.use('/api/testPhoto', testPhotoRouter);
 
