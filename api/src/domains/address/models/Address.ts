@@ -22,7 +22,7 @@ export interface AddressCreationAttributes extends InferCreationAttributes<Addre
     password: string;
 }
 
-export const Address = sequelize.define<AddressInterface>('addresses', {
+export const Address = sequelize.define<AddressInterface>('Addresses', {
     idAddress: {
         type: DataTypes.INTEGER,
         primaryKey: true,
