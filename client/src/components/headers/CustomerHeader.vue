@@ -26,15 +26,17 @@
             </div>
         </div>
 
-        <div class="cart-header" @click="this.$router.push('cart')">
-            <i class="fa fa-shopping-cart"></i>
+        <div class="cart-header" @click="this.$router.push('/cart')">
+            <i class="fa fa-shopping-cart"> <sup>{{ getCartTotalQuantity }}</sup></i>
             <span>
-                Ir para o carrinho
+                Carrinho 
             </span>
         </div>
     </div>
 </template>
+
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: 'CustomerHeader',
     emits: ['input'],
@@ -57,6 +59,9 @@ export default {
         hideDropdown() {
             this.isDropDownVisible = false
         }
+    },
+    computed: {
+        ...mapGetters(['getCartTotalQuantity'])
     }
 }
 </script>
@@ -158,7 +163,6 @@ export default {
     .cart-header {
         margin: 10px 0px;
         display: flex;
-        flex-direction: row;
         justify-content: center;
         align-items: center;
         color: var(--secondaryColor);
@@ -166,8 +170,8 @@ export default {
         font-weight: 500;
         cursor: pointer;
 
-        span {
-            margin-left: 10px;
+        i {
+            margin-right: 4px;
         }
     }
 }

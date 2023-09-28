@@ -105,6 +105,7 @@ export default {
     .list-header {
         display: flex;
         justify-content: space-between;
+        width: 100%;
 
         .select-categories {
             display: flex;
@@ -197,6 +198,22 @@ export default {
             color: var(--primaryColor);
             cursor: pointer;
             margin-left: 10px;
+        }
+    }
+
+    @media (max-width: 1090px) {
+        .list-header {
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+
+            .select-categories {
+                margin: 20px 50px 0px 50px;
+            }
+
+            .sort {
+                margin: 0px 50px;
+            }
         }
     }
 }

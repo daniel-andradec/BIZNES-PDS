@@ -13,15 +13,15 @@
             <h1>Carrinho de compras</h1>
         </div>
 
-        <div class="cart">
-            <div class="products">
-                <div class="list" v-if="Object.values(getCartProducts).length > 0">
+        <div class="cart" v-if="Object.values(getCartProducts).length > 0">
+            <div class="cart-products">
+                <div class="list">
                     <div class="list-item" v-for="(product, key) in getCartProducts" :key="key">
                         <div class="product-container">
-                            <img :src="product.img" />
+                            <img :src="product.img" @click="goToProduct(product)" />
 
                             <div class="product-info">
-                                <div class="name">{{ product.name }}</div>
+                                <div class="name" @click="goToProduct(product)">{{ product.name }}</div>
                                 <div class="categories">
                                     <div class="category" v-for="(category, key) in product.category" :key="key">
                                         {{ category }}
@@ -33,27 +33,28 @@
 
                             <div class="actions">
                                 <div class="edit">
-                                    <div class="button" @click="decreaseLimit">
+                                    <div class="button" @click="checkDecreaseQuantity(product.id)">
                                         <i class="fa fa-minus"></i>
                                     </div>
-                                    <input type="text" v-model="limit" />
-                                    <div class="button" @click="increaseLimit">
+                                    <input type="text" v-model="product.quantity" disabled />
+                                    <div class="button" @click="incrementProductQuantity(product.id)">
                                         <i class="fa fa-plus"></i>
                                     </div>
                                 </div>
                                 <div class="delete">
-                                    <i class="fa fa-trash-can fa-xl"></i>
+                                    <i class="fa-regular fa-trash-can fa-xl" @click="openRemoveProdModal(product)"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
             <div class="summary">
                 <h1>Resumo do pedido</h1>
                 <div class="product-sum">
-                    <h2>2 produtos</h2>
-                    <h2>R$ 20.689,00</h2>
+                    <h2 v-text="calculateTotalQuantity() + ' produtos'"></h2>
+                    <h2 v-text="formatValue(calculateTotalPrice())"></h2>
                 </div>
                 <div class="shipping">
                     <h2>Frete</h2>
@@ -63,8 +64,8 @@
                 </div>
 
                 <div class="total">
-                    <h2>R$ 20.689,00</h2>
-                    <p>em até 10x de R$1.029.9,00 sem juros </p>
+                    <h2 v-text="formatValue(calculateTotalPrice())"></h2>
+                    <p>em até 10x {{ formatValue(calculateTotalPrice() / 10) }} sem juros </p>
                 </div>
 
                 <div class="checkout">
@@ -72,6 +73,11 @@
                     <button class="choose">Escolher mais produtos</button>
                 </div>
             </div>
+        </div>
+
+        <div class="not-found" v-else>
+            <h2>Seu carrinho está vazio :(</h2>
+            <span @click="this.$router.push('/')">Voltar à página inicial</span>
         </div>
 
         <div class="other-products">
@@ -92,6 +98,18 @@
             </div>
         </div>
         
+
+        <ModalComponent :modalOpen="removeProdModalOpen" @closeModal="removeProdModalOpen = false">
+            <div class="remove-prod">
+                <i class="fa-regular fa-trash-can fa-2xl"></i>
+                <p>Deseja remover o produto do carrinho?</p>
+
+                <div class="options">
+                    <button class="btn btn-secondary" @click="removeProdModalOpen = false">Cancelar</button>
+                    <button class="btn btn-primary" @click="removeProduct()">Remover</button>
+                </div>
+            </div>
+        </ModalComponent>
     </div>
 </template>
 
@@ -99,6 +117,7 @@
 import CustomerHeader from '@/components/headers/CustomerHeader.vue';
 import ProductCard from '@/components/products/ProductCard.vue';
 import CategoryMenu from '@/components/menus/CategoryMenu.vue';
+import ModalComponent from '@/components/modals/ModalComponent.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -106,16 +125,46 @@ export default {
     components: {
         CustomerHeader,
         ProductCard,
-        CategoryMenu
+        CategoryMenu,
+        ModalComponent
     },
     data () {
         return {
+            removeProdModalOpen: false,
+            selectedProduct: {}
         }
     },
     methods: {
-        ...mapActions(['toggleCategoryMenu']),
+        ...mapActions(['toggleCategoryMenu', 'incrementProductQuantity', 'decrementProductQuantity', 'setProductQuantity', 'removeProductFromCart']),
         formatValue(value) {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+        },
+        checkDecreaseQuantity(productId) {
+            const product = this.getCartProducts.find(product => product.id === productId)
+            if (product.quantity > 1) {
+                this.decrementProductQuantity(productId)
+            } else {
+                this.openRemoveProdModal(product)
+            }
+        },
+        openRemoveProdModal(product) {
+            this.removeProdModalOpen = true
+            this.selectedProduct = product
+        },
+        removeProduct() {
+            this.removeProductFromCart(this.selectedProduct.id)
+            this.removeProdModalOpen = false
+
+            // todo: show toast
+        },
+        calculateTotalQuantity() {
+            return this.getCartProducts.reduce((acc, product) => acc + product.quantity, 0)
+        },
+        calculateTotalPrice() {
+            return this.getCartProducts.reduce((acc, product) => acc + (product.price * product.quantity), 0)
+        },
+        goToProduct(product) {
+            this.$router.push({ name: 'product', params: { id: product.id } })
         }
     },
     computed: {
@@ -123,6 +172,8 @@ export default {
     },
     mounted () {
         console.log(this.getCartProducts)
+        console.log(localStorage.getItem('cart'))
+        window.scrollTo(0, 0)
     }
 }
 </script>
@@ -163,7 +214,7 @@ export default {
         justify-content: center;
         gap: 100px;
 
-        .products {
+        .cart-products {
             padding-top: 0;
 
             .list {
@@ -192,6 +243,7 @@ export default {
                         border-radius: 5px;
                         object-fit: contain;
                         margin: 10px 40px;
+                        cursor: pointer;
                     }
 
                     .product-info {
@@ -206,10 +258,12 @@ export default {
                             font-size: 20px;
                             font-weight: 500;
                             margin: 15px 0px;
+                            cursor: pointer;
                         }
 
                         .categories {
                             display: flex;
+                            flex-wrap: wrap;
                             font-size: 14px;
                             align-items: center;
                             margin: 15px 0px;
@@ -219,6 +273,7 @@ export default {
                                 border-radius: 5px;
                                 padding: 8px;
                                 margin-right: 10px;
+                                margin-top: 5px;
                             }
                         }
 
@@ -384,6 +439,22 @@ export default {
         }
     }
 
+    .not-found {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0px 50px;
+        margin-bottom: 20px;
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        span {
+            color: var(--primaryColor);
+            cursor: pointer;
+        }
+    }
     
     .other-products {
         margin-bottom: 50px;
@@ -427,6 +498,60 @@ export default {
             gap: 20px;
             margin-top: 20px;
             max-width: 100%;
+        }
+    }
+
+    .remove-prod {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+
+        i {
+            color: var(--primaryColor);
+        }
+
+        p {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            gap: 20px;
+
+            button {
+                width: 150px;
+                height: 50px;
+                border-radius: 5px;
+                border: none;
+                font-size: 18px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+        }
+    }
+
+
+    // media - width less than 1200px puts the summary below the products list
+    @media (max-width: 800px) {
+        .cart {
+            flex-direction: column;
+            gap: 0px;
+
+            .cart-products {
+                .list {
+                    width: 100%;
+                    margin-left: 0px;
+                }
+            }
+
+            .summary {
+                width: 100%;
+                margin-right: 0px;
+                margin-top: 30px;
+            }
         }
     }
 

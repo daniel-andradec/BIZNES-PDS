@@ -34,7 +34,7 @@
     
                 <div class="actions">
                     <button class="btn btn-primary">Comprar</button>
-                    <button class="btn btn-secondary">
+                    <button class="btn btn-secondary" @click="addToCart()">
                         <i class="fas fa-shopping-cart"></i>
                     </button>
                 </div>
@@ -84,7 +84,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['toggleCategoryMenu']),
+        ...mapActions(['toggleCategoryMenu', 'addProductToCart']),
         toggleMenu() {
             this.toggleCategoryMenu()
         },
@@ -99,6 +99,10 @@ export default {
         },
         goToProduct(prod) {
             this.$router.push({ name: 'product', params: { id: prod.id } })
+        },
+        addToCart() {
+            this.addProductToCart(this.product)
+            // todo: show toast
         }
     },
     computed: {
