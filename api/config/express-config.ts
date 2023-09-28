@@ -35,5 +35,3 @@ app.use('/api/product', productRouter);
 
 import { errorHandler } from '../src/middlewares/error-handler';
 app.use(errorHandler);
-
-
