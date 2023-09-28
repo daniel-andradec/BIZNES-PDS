@@ -69,8 +69,8 @@
                 </div>
 
                 <div class="checkout">
-                    <button>Finalizar compra</button>
-                    <button class="choose">Escolher mais produtos</button>
+                    <button @click="goToCheckout">Finalizar compra</button>
+                    <button @click="goToHome" class="choose">Escolher mais produtos</button>
                 </div>
             </div>
         </div>
@@ -165,6 +165,12 @@ export default {
         },
         goToProduct(product) {
             this.$router.push({ name: 'product', params: { id: product.id } })
+        },
+        goToCheckout() {
+            this.$router.push('/checkout')
+        },
+        goToHome() {
+            this.$router.push('/')
         }
     },
     computed: {
@@ -351,7 +357,7 @@ export default {
 
             h1 {
                 font-weight: 500;
-                font-size: 30px;
+                font-size: 25px;
                 text-align: left;
                 margin: 30px 0px 20px 50px;
             }
