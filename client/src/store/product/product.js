@@ -201,6 +201,14 @@ export default {
                 price: 799,
                 img: 'https://images.samsung.com/is/image/samsung/p6pim/br/2307/gallery/br-galaxy-watch6-r935-sm-r930nzepzto-537403033?$650_519_PNG$'
             },
+            {
+                id: 26,
+                name: 'AirPods Pro',
+                description: 'AirPods Pro com cancelamento de ruído, modo ambiente e equalização adaptativa',
+                category: ['Eletrônicos', 'Áudio'],
+                price: 1899,
+                img: 'https://m.media-amazon.com/images/I/71zny7BTRlL._AC_UF1000,1000_QL80_.jpg'
+            }
         ]
     },
     mutations: {
@@ -225,6 +233,10 @@ export default {
             // get products that contain the search term in the name or description or category
             console.log(search)
             return state.products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()) || product.description.toLowerCase().includes(search.toLowerCase()) || product.category.some(category => category.toLowerCase().includes(search.toLowerCase())))
+        },
+        // best sellers products - by now, just return the products from index 3 to 7
+        getBestSellers: state => {
+            return state.products.slice(3, 7)
         }
     }
 }

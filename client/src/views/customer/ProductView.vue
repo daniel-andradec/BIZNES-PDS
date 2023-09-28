@@ -34,7 +34,7 @@
     
                 <div class="actions">
                     <button class="btn btn-primary">Comprar</button>
-                    <button class="btn btn-secondary">
+                    <button class="btn btn-secondary" @click="addToCart()">
                         <i class="fas fa-shopping-cart"></i>
                     </button>
                 </div>
@@ -54,9 +54,10 @@
 
             <div class="list" v-else>
                 <!-- Produtos mais vendidos -->
-                    <div class="list-item" v-for="(product, key) in this.$store.getters.getProducts" :key="key" @click="goToProduct(product)">
-                        <ProductCard :key="product.id" :product="product" :fixSize="true" />
-                    </div>
+                <div class="list-item" v-for="(product, key) in getBestSellers" :key="key" @click="goToProduct(product)">
+                    <ProductCard :key="product.id" :product="product" :fixSize="true" />
+                </div>
+                <span @click="this.$router.push('/')">Voltar à página inicial</span>
             </div>
         </div>
     </div>
@@ -67,7 +68,7 @@ import CustomerHeader from '@/components/headers/CustomerHeader.vue'
 import CategoryMenu from '@/components/menus/CategoryMenu.vue'
 import ProductCard from '@/components/products/ProductCard.vue'
 
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'ProductView',
@@ -83,7 +84,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['toggleCategoryMenu']),
+        ...mapActions(['toggleCategoryMenu', 'addProductToCart']),
         toggleMenu() {
             this.toggleCategoryMenu()
         },
@@ -98,9 +99,14 @@ export default {
         },
         goToProduct(prod) {
             this.$router.push({ name: 'product', params: { id: prod.id } })
+        },
+        addToCart() {
+            this.addProductToCart(this.product)
+            // todo: show toast
         }
     },
     computed: {
+        ...mapGetters(['getBestSellers', 'getCategoryProducts'])
     },
     mounted() {
         const productID = this.$route.params.id
