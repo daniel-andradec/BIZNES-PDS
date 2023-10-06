@@ -230,7 +230,6 @@ export default {
         display: flex;
         flex-wrap: wrap;
         margin-bottom: 20px;
-        width: 100vw;
         align-items: center;
         justify-content: center;
         width: 50vw;

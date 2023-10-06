@@ -18,6 +18,11 @@ export default {
 @primaryColor: #57A06F;
 @secondaryColor: #858586;
 
+body {
+  min-width: 1000px;
+  overflow-x: scroll;
+}
+
 #app {
   font-family: Gellix;
   -webkit-font-smoothing: antialiased;

@@ -14,7 +14,7 @@
                         <p>Belo Horizonte, MG</p>
                         <p>30130-171</p>
                     </div>
-                    <button @click="changeAddress">Alterar</button>
+                    <button @click="changeAddressModalOpen = true">Alterar</button>
                 </div>
 
                 <h1>Envio</h1>
@@ -79,19 +79,22 @@
                     <button @click="checkout">Finalizar compra</button>
                 </div>
             </div>
-
         </div>
+
+        <ChangeAddressModal :modalOpen="changeAddressModalOpen" @closeModal="changeAddressModalOpen = false" @updateAddress="updateAddress"  />
     </div>
 </template>
 
 <script>
 import CheckoutHeader from '@/components/headers/CheckoutHeader.vue';
-import { mapGetters } from 'vuex'
+import ChangeAddressModal from '@/components/modals/customer/ChangeAddressModal.vue';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: "CheckoutView",
     components: {
-        CheckoutHeader
+        CheckoutHeader,
+        ChangeAddressModal
     },
     data() {
         return {
@@ -114,13 +117,15 @@ export default {
                 { value: 9, label: '9x' },
                 { value: 10, label: '10x' },
             ],
-            installments: 1
+            installments: 1,
+            changeAddressModalOpen: false
         }
     },
     computed: {
-        ...mapGetters(['getCartProducts']),
+        ...mapGetters(['getCartProducts', 'clearCart']),
     },
     methods: {
+        ...mapActions(['setOrderData']),
         formatValue(value) {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
         },
@@ -150,9 +155,50 @@ export default {
             }
             return value
         },
+        selectedPaymentString() {
+            if (this.selectedPayment === 'pix') return 'Pix'
+            if (this.selectedPayment === 'card') return 'Cartão de Crédito'
+            if (this.selectedPayment === 'boleto') return 'Boleto'
+            return ''
+        },
         checkout() {
-            // loga os valores dos inputs do cartao
+            // check if there is a selected payment method
+            if (!this.selectedPayment) {
+                this.$toast.open({
+                    message: 'Selecione uma forma de pagamento',
+                    type: 'warning',
+                    duration: 5000,
+                    position: 'top-right'
+                })
+
+                return
+            }
+            
+            // card inputs
             console.log(this.cardInputs.map(input => input.value))
+
+            // save order
+            // todo
+
+            // set order data
+            const data = {
+                products: this.getCartProducts,
+                totalPrice: this.calculateTotalPrice(),
+                deliveryDate: this.deliveryDate(),
+                paymentMethod: this.selectedPaymentString(),
+            }
+            this.setOrderData(data)
+
+
+            // clear cart - if order saving is successful
+            // this.clearCart() // not going to clear cart for now because we are building other features
+
+            // redirect to order success page
+            this.$router.push('/order-confirmation')
+        },
+        updateAddress (address) {
+            this.changeAddressModalOpen = false
+            console.log(address)
         }
     },
 }
@@ -272,10 +318,8 @@ export default {
             }
             
             .installments {
-                margin-top: 20px;
-
                 select {
-                    height: 40px;
+                    height: 42px;
                     border-radius: 5px;
                     border: 1px solid rgba(0, 0, 0, 0.18);
                     padding: 0px 10px;

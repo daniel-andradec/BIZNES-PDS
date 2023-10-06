@@ -74,7 +74,7 @@ export default {
     justify-content: space-evenly;
     padding: 0 20px;
     position: fixed;
-    z-index: 999;
+    z-index: 8;
     top: 0;
     left: 0;
     right: 0;
@@ -106,6 +106,7 @@ export default {
             font-size: 16px;
             font-family: Gellix;
             width: 100%;
+            padding-right: 25px;
         }
 
         i {

@@ -37,6 +37,12 @@ export default {
 
             // save cart in localStorage
             localStorage.setItem('cart', JSON.stringify(state.cart))
+        },
+        clearCart(state) {
+            state.cart.products = []
+
+            // save cart in localStorage
+            localStorage.setItem('cart', JSON.stringify(state.cart))
         }
     },
     actions: {
@@ -51,6 +57,9 @@ export default {
         },
         decrementProductQuantity({ commit }, id) {
             commit('decrementProductQuantity', id)
+        },
+        clearCart({ commit }) {
+            commit('clearCart')
         }
     },
     getters: {

@@ -216,15 +216,16 @@ export default {
 
     .cart {
         margin-top: 30px;
+        margin-right: 70px;
+        margin-left: 70px;
         display: flex;
         justify-content: center;
-        gap: 100px;
+        gap: 30px;
 
         .cart-products {
             padding-top: 0;
 
             .list {
-                width: 50vw;
                 margin-left: 50px;
 
                 .list-item {
@@ -237,6 +238,7 @@ export default {
                     display: grid;
                     grid-template-columns: 1fr 1.3fr 1fr;
                     width: 100%;
+                    min-width: 500px;
                     text-align: center;
                     border-radius: 5px;
                     border: 1px solid rgba(0, 0, 0, 0.18);
@@ -349,6 +351,8 @@ export default {
 
         .summary {
             width: 30vw;
+            min-width: 450px;
+            max-width: 600px;
             height: fit-content;
             margin-right: 50px;
             border-radius: 5px;
