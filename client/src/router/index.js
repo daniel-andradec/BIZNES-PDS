@@ -9,6 +9,8 @@ import RegisterView from '../views/RegisterView.vue'
 import ProductView from '../views/customer/ProductView.vue'
 import SearchView from '../views/customer/SearchView.vue'
 import CartView from '../views/customer/CartView.vue'
+import CheckoutView from '../views/customer/CheckoutView.vue'
+import OrderConfirmationView from '../views/customer/OrderConfirmationView.vue'
 
 const routes = [
     {
@@ -58,6 +60,22 @@ const routes = [
             title: 'Carrinho'
         },
         component: CartView
+    },
+    {
+        path: '/checkout',
+        name: 'checkout',
+        meta: {
+            title: 'Checkout'
+        },
+        component: CheckoutView
+    },
+    {
+        path: '/order-confirmation',
+        name: 'order-confirmation',
+        meta: {
+            title: 'Confirmação de Pedido'
+        },
+        component: OrderConfirmationView
     }
 ]
 

@@ -106,6 +106,7 @@ export default {
         display: flex;
         justify-content: space-between;
         width: 100%;
+        min-width: 1100px;
 
         .select-categories {
             display: flex;
@@ -201,21 +202,21 @@ export default {
         }
     }
 
-    @media (max-width: 1090px) {
-        .list-header {
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
+    // @media (max-width: 1090px) {
+    //     .list-header {
+    //         flex-direction: column;
+    //         align-items: flex-start;
+    //         justify-content: flex-start;
 
-            .select-categories {
-                margin: 20px 50px 0px 50px;
-            }
+    //         .select-categories {
+    //             margin: 20px 50px 0px 50px;
+    //         }
 
-            .sort {
-                margin: 0px 50px;
-            }
-        }
-    }
+    //         .sort {
+    //             margin: 0px 50px;
+    //         }
+    //     }
+    // }
 }
     
 </style>

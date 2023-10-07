@@ -32,7 +32,7 @@ export default {
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    z-index: 3;
+    z-index: 11;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     background-color: white;
     height: max-content;
@@ -46,6 +46,6 @@ export default {
     width: 100vw;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.3);
-    z-index: 2;
+    z-index: 10;
 }
 </style>
