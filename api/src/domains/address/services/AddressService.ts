@@ -1,16 +1,9 @@
-import { Address, AddressInterface, AddressCreationAttributes } from "../models/Address";
-import { UserService } from "../../users/services/UserService";
-import { User, UserInterface } from "../../users/models/User";
+import { Address, AddressInterface} from "../models/Address";
 import { Attributes, CreationAttributes } from 'sequelize/types';
-import { userRoles } from "../../users/constants/userRoles";
-import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
-import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
-import { validateRegisterCustomer, validateUpdateCustomer } from "../../../../utils/functions/validation/validateCustomer";
-import { deleteObject } from "../../../../utils/functions/aws";
 
 class AddressServiceClass {
-    async create(body: AddressCreationAttributes, user: PayloadParams) {
+    async create(body: CreationAttributes<AddressInterface>, user: PayloadParams) {
         try {
             const newAddress: CreationAttributes<AddressInterface> = {
                 street: body.street,
@@ -31,16 +24,30 @@ class AddressServiceClass {
 
     async getAddress(user: PayloadParams) {
         try {
-            const addresses = await Address.findAll({
+            const address = await Address.findOne({
                 where: {
                     idUser: user.idUser,
-                },
+                }
             });
-            return addresses;
+            return address;
         } catch (error) {
             throw(error);
         }
     }
+
+    async update(body: CreationAttributes<AddressInterface>, user: PayloadParams) {
+        try {
+            const updatedAddress = await Address.update(body, {
+                where: {
+                    idUser: user.idUser,
+                }
+            });
+            return updatedAddress;
+        } catch (error) {
+            throw(error);
+        }
+    }
+
 
 }
 

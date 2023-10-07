@@ -16,12 +16,6 @@ export interface AddressInterface extends Model<InferAttributes<AddressInterface
     updatedAt: CreationOptional<Date>;
 }
 
-export interface AddressCreationAttributes extends InferCreationAttributes<AddressInterface> {
-    name: string;
-    email: string;
-    password: string;
-}
-
 export const Address = sequelize.define<AddressInterface>('Addresses', {
     idAddress: {
         type: DataTypes.INTEGER,
