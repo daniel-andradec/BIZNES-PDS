@@ -10,7 +10,6 @@ router.post('/',
   verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.body);
       await AddressService.create(req.body, req.user!);
       res.status(statusCodes.CREATED).end();
     } catch (error) {
