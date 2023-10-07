@@ -13,6 +13,10 @@ import CheckoutView from '../views/customer/CheckoutView.vue'
 import OrderConfirmationView from '../views/customer/OrderConfirmationView.vue'
 import CustomerProfileView from '../views/customer/CustomerProfileView.vue'
 
+// vendor routes
+import VendorPanelView from '../views/vendor/VendorPanelView.vue'
+import StoreRegistrationView from '../views/vendor/StoreRegistrationView.vue'
+
 const routes = [
     {
         path: '/',
@@ -85,6 +89,22 @@ const routes = [
             title: 'Perfil'
         },
         component: CustomerProfileView
+    },
+    {
+        path: '/vendor-panel',
+        name: 'panel',
+        meta: {
+            title: 'Painel do Vendedor'
+        },
+        component: VendorPanelView
+    },
+    {
+        path: '/store-registration',
+        name: 'store-registration',
+        meta: {
+            title: 'Cadastro da Loja'
+        },
+        component: StoreRegistrationView
     }
 ]
 

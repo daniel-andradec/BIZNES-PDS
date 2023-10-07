@@ -1,23 +1,18 @@
 <template>
-    <div class="customer-header">
-        <img @click="this.$router.push('/')" alt="Vue logo" :src="logo">
-
-        <div class="search">
-            <input type="text" placeholder="Buscar no Biznes" v-model="searchText" @keyup.enter="search()"/>
-            <i class="fa fa-search icon" @click="search()"></i>
-        </div>
+    <div class="vendor-header">
+        <img @click="this.$router.push('/vendor-panel')" alt="Vue logo" :src="logo">
 
         <div class="login-container" @mouseover="showDropdown" @mouseleave="hideDropdown">
             <div class="login">
-                <i class="fa-regular fa-user"></i>
-                Olá, <span>Pedro</span>
+                <i class="fa-solid fa-store"></i>
+                <span>{{ store.name }}</span>
             </div>
             <!-- Olá, faça seu <br><span>login</span> -->
 
             <div class="options" v-if="isDropDownVisible">
-                <div class="option" @click="this.$router.push('/customer-profile')">
-                    <i class="fa fa-user-circle"></i>
-                    Minha conta
+                <div class="option" @click="this.$router.push('/store-registration')">
+                    <i class="fa fa-gear"></i>
+                    Cadastro da Loja
                 </div>
                 <div class="option">
                     <i class="fa fa-sign-out-alt"></i>
@@ -25,34 +20,26 @@
                 </div>
             </div>
         </div>
-
-        <div class="cart-header" @click="this.$router.push('/cart')">
-            <i class="fa fa-shopping-cart"> <sup>{{ getCartTotalQuantity }}</sup></i>
-            <span>
-                Carrinho 
-            </span>
-        </div>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    name: 'CustomerHeader',
-    emits: ['input'],
+    name: 'VendorHeader',
     components: {
     },
     data() {
         return {
             logo: require('@/assets/images/logo.png'),
             searchText: '',
-            isDropDownVisible: false
+            isDropDownVisible: false,
+            store: {
+                name: 'Fastsell'
+            }
         }
     },
     methods: {
-        search() {
-            this.$router.push({ name: 'search', query: { searchText: this.searchText } })
-        },
         showDropdown() {
             this.isDropDownVisible = true
         },
@@ -66,12 +53,12 @@ export default {
 }
 </script>
 <style lang="less">
-.customer-header {
+.vendor-header {
     background: #F4F4F4;
     height: 90px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     padding: 0 20px;
     position: fixed;
     z-index: 8;
@@ -80,50 +67,19 @@ export default {
     right: 0;
 
     img {
-        margin-right: 20px;
+        margin-left: 20px;
         cursor: pointer;
-    }
-
-    .search {
-        display: flex;
-        align-items: center;
-        background-color: #fff;
-        border-radius: 5px;
-        box-sizing: border-box;
-        border: 1px solid var(--secondaryColor);
-        padding: 10px 10px;
-        position: relative;
-        margin: 20px 20px;
-
-        //sizing
-        width: 40vw;
-        height: 40px;
-        
-        input {
-            border: none;
-            outline: none;
-            background-color: transparent;
-            font-size: 16px;
-            font-family: Gellix;
-            width: 100%;
-            padding-right: 25px;
-        }
-
-        i {
-            position: absolute;
-            right: 10px;
-            color: gray;
-        }
     }
 
     .login-container {
         align-self: center;
+        margin-right: 20px;
 
         .login {
             cursor: pointer;
             margin: 10px 70px;
             color: var(--secondaryColor);
-            font-size: 18px;
+            font-size: 25px;
             font-weight: 500;
 
             i {
@@ -157,22 +113,6 @@ export default {
                     color: var(--secondaryColor);
                 }
             }
-        }
-    }
-    
-
-    .cart-header {
-        margin: 10px 0px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: var(--secondaryColor);
-        font-size: 18px;
-        font-weight: 500;
-        cursor: pointer;
-
-        i {
-            margin-right: 4px;
         }
     }
 }

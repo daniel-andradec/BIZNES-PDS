@@ -20,7 +20,6 @@ export default {
 
 body {
   min-width: 1000px;
-  overflow-x: scroll;
 }
 
 #app {
