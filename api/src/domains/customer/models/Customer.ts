@@ -20,7 +20,7 @@ export interface CustomerCreationAttributes extends InferCreationAttributes<Cust
     password: string;
 }
 
-export const Customer = sequelize.define<CustomerInterface>('customers', {
+export const Customer = sequelize.define<CustomerInterface>('Customers', {
     idCustomer: {
         type: DataTypes.INTEGER,
         primaryKey: true,

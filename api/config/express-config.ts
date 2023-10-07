@@ -33,7 +33,8 @@ app.use('/api/vendor', vendorRouter);
 import { router as productRouter } from '../src/domains/product/controllers/index';
 app.use('/api/product', productRouter);
 
+import { router as addressRouter } from '../src/domains/address/controllers/index';
+app.use('/api/address', addressRouter);
+
 import { errorHandler } from '../src/middlewares/error-handler';
 app.use(errorHandler);
-
-
