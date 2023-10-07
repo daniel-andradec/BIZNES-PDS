@@ -178,12 +178,31 @@ export default {
                 });
             }
         },
-        submitForm() {
-            console.log(this.formData);
-            //formData without passwordConfirmation
-            const { passwordConfirmation, ...formData } = this.formData;
-            registerCustomer(formData);
-            // Aqui você pode fazer o que quiser com os dados, como enviá-los para uma API
+        submitForm: async function () {
+            const customer = { ...this.formData }
+            delete customer.passwordConfirmation
+
+            await registerCustomer(customer).then((res) => {
+                console.log(res)
+                if (res) {
+                    this.$toast.open({
+                        message: 'Cadastro realizado com sucesso! Faça login para continuar.',
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top-right'
+                    });
+                    this.$router.push('/login')
+                } else {
+                    this.$toast.open({
+                        message: 'Erro ao cadastrar usuário. Verifique os dados e tente novamente.',
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top-right'
+                    });
+                }
+            }).catch(err => {
+                console.log(err)
+            })
         }
     }
 }

@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="category-menu">
+    <div class="vendor-menu">
         <div v-if="vendorMenu.isVisible" class="menu">
             <div class="overlay" @click="toggleVendorMenu">
             </div>
@@ -49,7 +49,7 @@ export default {
 }
 </script>
 <style lang="less">
-.category-menu {
+.vendor-menu {
     .overlay {
         position: fixed;
         top: 0;
