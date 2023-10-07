@@ -80,22 +80,8 @@
             <span @click="this.$router.push('/')">Voltar à página inicial</span>
         </div>
 
-        <div class="other-products">
-            <h2>Outros usuários também compraram</h2>
-            <div class="list" v-if="Object.values(getBestSellers).length > 0">
-                <div class="list-item" v-for="(product, key) in getBestSellers" :key="key" @click="goToProduct(product)">
-                    <ProductCard :key="product.id" :product="product" :fixSize="true" />
-                </div>
-                    
-                <span @click="this.$router.push('/')">Outros produtos</span>
-            </div>
-
-            <div class="list" v-else>
-                <!-- Produtos mais vendidos -->
-                    <div class="list-item" v-for="(product, key) in this.$store.getters.getBestSellers" :key="key" @click="goToProduct(product)">
-                        <ProductCard :key="product.id" :product="product" :fixSize="true" />
-                    </div>
-            </div>
+        <div>
+            <BestSellersList />
         </div>
         
 
@@ -115,18 +101,18 @@
 
 <script>
 import CustomerHeader from '@/components/headers/CustomerHeader.vue';
-import ProductCard from '@/components/products/ProductCard.vue';
 import CategoryMenu from '@/components/menus/CategoryMenu.vue';
 import ModalComponent from '@/components/modals/ModalComponent.vue';
+import BestSellersList from '@/components/lists/BestSellersList.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'CartView',
     components: {
         CustomerHeader,
-        ProductCard,
         CategoryMenu,
-        ModalComponent
+        ModalComponent,
+        BestSellersList
     },
     data () {
         return {
@@ -463,51 +449,6 @@ export default {
         span {
             color: var(--primaryColor);
             cursor: pointer;
-        }
-    }
-    
-    .other-products {
-        margin-bottom: 50px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        // margin-left: 50px;
-        gap: 20px;
-
-        h2 {
-            font-size: 30px;
-            font-weight: 500;
-        }
-
-        .list {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            // max 4 products in the row
-            flex-wrap: wrap;
-            gap: 20px;
-
-            span {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 25px;
-                font-weight: 600;
-                color: var(--primaryColor);
-                cursor: pointer;
-            }
-        }
-
-        .list-item {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            max-width: 100%;
         }
     }
 

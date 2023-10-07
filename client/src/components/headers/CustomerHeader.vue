@@ -15,7 +15,7 @@
             <!-- Olá, faça seu <br><span>login</span> -->
 
             <div class="options" v-if="isDropDownVisible">
-                <div class="option">
+                <div class="option" @click="this.$router.push('/customer-profile')">
                     <i class="fa fa-user-circle"></i>
                     Minha conta
                 </div>
