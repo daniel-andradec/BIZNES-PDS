@@ -18,6 +18,14 @@ export interface CustomerCreationAttributes extends InferCreationAttributes<Cust
     name: string;
     email: string;
     password: string;
+    street: string;
+    number: number;
+    complement: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    cep: string;
+
 }
 
 export const Customer = sequelize.define<CustomerInterface>('Customers', {
