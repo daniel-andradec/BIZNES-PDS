@@ -50,7 +50,7 @@ router.get('/:id',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await CustomerService.getById(req.params.idUser!);
+            const user = await CustomerService.getById(req.params.id!);
             res.status(statusCodes.SUCCESS).json(user);
         } catch (error) {
             next(error);
@@ -62,7 +62,7 @@ router.put('/:id',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await CustomerService.update(req.params.idUser!, req.body, req.user!);;
+            await CustomerService.update(req.params.id!, req.body, req.user!);;
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);
@@ -74,7 +74,7 @@ router.delete('/:id',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await CustomerService.delete(req.params.idUser!, req.user!);
+            await CustomerService.delete(req.params.id!, req.user!);
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);

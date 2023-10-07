@@ -62,7 +62,7 @@ router.get('/:id',
   verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await UserService.getById(req.params.idUser!);
+      const user = await UserService.getById(req.params.id!);
       res.status(statusCodes.SUCCESS).json(user);
     } catch (error) {
       next(error);

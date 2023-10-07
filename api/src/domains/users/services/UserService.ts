@@ -46,7 +46,7 @@ class UserServiceClass {
     try{
       const users = await User.findAll({
 
-        attributes: ['id', 'name', 'email', 'role'],
+        attributes: ['idUser', 'name', 'email', 'role'],
   
       });
   
