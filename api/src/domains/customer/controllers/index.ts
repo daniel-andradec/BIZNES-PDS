@@ -8,20 +8,6 @@ import { upload } from '../../../../utils/functions/aws';
 
 export const router = Router();
 
-router.post('/login', notLoggedIn, loginMiddleware);
-
-router.post('/logout',
-    verifyJWT,
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            res.clearCookie('jwt');
-            res.status(statusCodes.NO_CONTENT).end();
-        } catch (error) {
-            next(error);
-        }
-    },
-);
-
 router.post('/',
     upload.single('photo'),
     async (req: Request, res: Response, next: NextFunction) => {
