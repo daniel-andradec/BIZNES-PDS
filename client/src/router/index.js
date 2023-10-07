@@ -11,6 +11,7 @@ import SearchView from '../views/customer/SearchView.vue'
 import CartView from '../views/customer/CartView.vue'
 import CheckoutView from '../views/customer/CheckoutView.vue'
 import OrderConfirmationView from '../views/customer/OrderConfirmationView.vue'
+import CustomerProfileView from '../views/customer/CustomerProfileView.vue'
 
 const routes = [
     {
@@ -76,6 +77,14 @@ const routes = [
             title: 'Confirmação de Pedido'
         },
         component: OrderConfirmationView
+    },
+    {
+        path: '/customer-profile',
+        name: 'customer-profile',
+        meta: {
+            title: 'Perfil'
+        },
+        component: CustomerProfileView
     }
 ]
 
