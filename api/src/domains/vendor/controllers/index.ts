@@ -12,7 +12,7 @@ router.post('/',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await VendorService.create(req.body, req.file);
-      res.status(statusCodes.CREATED).json("User created").end();
+      res.status(statusCodes.CREATED).json("Vendor created").end();
     } catch (error) {
       next(error);
     }

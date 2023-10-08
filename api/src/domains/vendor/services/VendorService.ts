@@ -1,6 +1,7 @@
 import { Vendor, VendorInterface, VendorCreationAttributes } from "../models/Vendor";
 import { UserService } from "../../users/services/UserService";
 import { User, UserInterface } from "../../users/models/User";
+import { Address, AddressInterface } from "../../address/models/Address";
 import { Attributes, CreationAttributes } from 'sequelize/types';
 import { userRoles } from "../../users/constants/userRoles";
 import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
@@ -23,15 +24,33 @@ class VendorServiceClass {
                 awsKey: (file as Express.MulterS3.File).key,    
                 idUser: '',
             };
+
             const newUser: CreationAttributes<UserInterface> = {
                 name: body.name,
                 email: body.email,
                 password: body.password,
                 role: userRoles.vendor,
             };
+            
+            const newAddress: CreationAttributes<AddressInterface> = {
+                street: body.street,
+                number: body.number,
+                complement: body.complement,
+                neighborhood: body.neighborhood,
+                city: body.city,
+                state: body.state,
+                cep: body.cep,
+                idUser: '',
+            };
+
             const user = await UserService.create(newUser);
+            
             newVendor.idUser = user.idUser;
             const vendor = await Vendor.create(newVendor);
+
+            newAddress.idUser = user.idUser;
+            const address = await Address.create(newAddress);
+
             return vendor;
         } catch (error) {
             throw(error);

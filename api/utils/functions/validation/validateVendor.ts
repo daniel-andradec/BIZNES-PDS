@@ -12,6 +12,13 @@ export const validateRegisterVendor = (vendor: VendorCreationAttributes) => {
         fantasyName: Joi.string().min(3).max(255).required(),
         phone: Joi.string().min(3).max(255).required(),
         devolutionPolicy: Joi.string().min(3).max(255).required(),
+        street: Joi.string().min(3).max(255).required(),
+        number: Joi.string().required(),
+        complement: Joi.string().min(3).max(255),
+        neighborhood: Joi.string().min(3).max(255).required(),
+        city: Joi.string().min(3).max(255).required(),
+        state: Joi.string().min(2).max(255).required(),
+        cep: Joi.string().min(3).max(255).required(),
     });
 
     const { error } = schema.validate(vendor);
