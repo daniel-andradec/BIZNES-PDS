@@ -9,10 +9,9 @@ import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
 import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/functions/validation/validateVendor";
-import { deleteObject } from "../../../../utils/functions/aws";
 
 class VendorServiceClass {
-    async create(body: VendorCreationAttributes, file: any) { 
+    async create(body: VendorCreationAttributes) { 
         try {
             validateRegisterVendor(body);  
             const newVendor  = {
@@ -20,9 +19,7 @@ class VendorServiceClass {
                 companyName: body.companyName,
                 fantasyName: body.fantasyName,
                 phone: body.phone,
-                devolutionPolicy: body.devolutionPolicy,
-                photo: (file as Express.MulterS3.File).location,
-                awsKey: (file as Express.MulterS3.File).key,    
+                devolutionPolicy: body.devolutionPolicy,   
                 idUser: '',
             };
 
@@ -138,7 +135,7 @@ class VendorServiceClass {
             if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
             }
-            await deleteObject(vendor.awsKey);
+
             await UserService.delete(vendor.idUser, loggedUser.idUser);
         } catch (error) {
             throw(error);

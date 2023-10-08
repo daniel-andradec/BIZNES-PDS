@@ -3,15 +3,13 @@ import { VendorService } from '../services/VendorService';
 import { verifyJWT, checkRole } from '../../../middlewares/auth-middlewares';
 import { userRoles } from '../../users/constants/userRoles';
 import { statusCodes } from '../../../../utils/constants/statusCodes';
-import { upload } from '../../../../utils/functions/aws';
 
 export const router = Router();
 
 router.post('/',
-  upload.single('photo'),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const vendor = await VendorService.create(req.body, req.file);
+      const vendor = await VendorService.create(req.body);
       res.status(statusCodes.CREATED).json(vendor).end();
     } catch (error) {
       next(error);
@@ -61,7 +59,6 @@ router.put('/:id',
 
 router.delete('/:id',
     verifyJWT,
-    //checkRole([userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await VendorService.delete(req.params.idUser!, req.user!);
