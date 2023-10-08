@@ -18,6 +18,7 @@ class ProductServiceClass {
                 description: body.description,
                 price: body.price,
                 quantity: body.quantity,
+                options: body.options,
                 photo: (file as Express.MulterS3.File).location,
                 awsKey: (file as Express.MulterS3.File).key,
                 idVendor: vendor.idVendor,
