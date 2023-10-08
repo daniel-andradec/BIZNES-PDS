@@ -7,9 +7,7 @@ export interface CustomerInterface extends Model<InferAttributes<CustomerInterfa
     phone: string;
     CPF: string;
     birthDate: string;
-    photo: string;
     idUser: string;
-    awsKey: string;
     createdAt: CreationOptional<Date>;
     updatedAt: CreationOptional<Date>;
 }
@@ -53,14 +51,6 @@ export const Customer = sequelize.define<CustomerInterface>('Customers', {
     },
     createdAt: {
         type: DataTypes.DATE,
-        allowNull: true,
-    },
-    photo: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    awsKey: {
-        type: DataTypes.STRING,
         allowNull: true,
     },
     updatedAt: {

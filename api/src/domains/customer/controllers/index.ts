@@ -9,10 +9,9 @@ import { upload } from '../../../../utils/functions/aws';
 export const router = Router();
 
 router.post('/',
-    upload.single('photo'),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-        const costumer = await CustomerService.create(req.body, req.file);
+        const costumer = await CustomerService.create(req.body);
         res.status(statusCodes.CREATED).send(costumer);
         } catch (error) {
         next(error);
