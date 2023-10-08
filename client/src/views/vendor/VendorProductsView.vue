@@ -65,7 +65,6 @@ export default {
     methods: {
         ...mapActions(['toggleVendorMenu']),
         searchProduct() {
-            console.log(this.searchText)
             if (this.searchText === '') {
                 this.products = this.getVendorStock.map((prod) => {
                     return {

@@ -17,6 +17,7 @@ import CustomerProfileView from "../views/customer/CustomerProfileView.vue";
 import VendorPanelView from "../views/vendor/VendorPanelView.vue";
 import VendorProfileView from "../views/vendor/VendorProfileView.vue";
 import VendorProducstView from "../views/vendor/VendorProductsView.vue";
+import VendorSalesView from "../views/vendor/VendorSalesView.vue";
 
 const routes = [
   {
@@ -115,6 +116,14 @@ const routes = [
     },
     component: VendorProducstView,
   },
+  {
+    path: "/vendor-sales",
+    name: "vendor-sales",
+    meta: {
+      title: "Vendas",
+    },
+    component: VendorSalesView,
+  }
 ];
 
 const router = createRouter({

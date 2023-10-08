@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
     name: 'VendorHeader',
     components: {
@@ -48,7 +47,6 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getCartTotalQuantity'])
     }
 }
 </script>

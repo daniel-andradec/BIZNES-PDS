@@ -10,7 +10,7 @@
                 </div>
                 <div class="menu-content">
                     <div class=categories>
-                        <div class="category" v-for="(item, key) in vendorMenu.items" :key="key">
+                        <div class="category" v-for="(item, key) in vendorMenu.items" :key="key" @click="navigate(item)">
                             <i :class="item.icon"></i>
                             {{ item.display }}
                         </div>
@@ -38,6 +38,10 @@ export default {
     methods: {
         ...mapActions(['toggleVendorMenu']),
         toggleMenu() {
+            this.toggleVendorMenu()
+        },
+        navigate(item) {
+            this.$router.push(item.route)
             this.toggleVendorMenu()
         }
     },

@@ -88,7 +88,7 @@ export default {
             {
                 display: 'Minhas Vendas',
                 image: 'vendor_sales',
-                route: '/vendor-orders'
+                route: '/vendor-sales'
             }
         ]
         }
