@@ -20,6 +20,14 @@ export interface VendorCreationAttributes extends InferCreationAttributes<Vendor
     name: string;
     email: string;
     password: string;
+    street: string;
+    number: number;
+    complement: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    cep: string;
+    idUser: string;
 }
 
 export const Vendor = sequelize.define<VendorInterface>('Vendors', {

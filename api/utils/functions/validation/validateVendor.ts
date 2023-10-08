@@ -12,6 +12,13 @@ export const validateRegisterVendor = (vendor: VendorCreationAttributes) => {
         fantasyName: Joi.string().min(3).max(255).required(),
         phone: Joi.string().min(3).max(255).required(),
         devolutionPolicy: Joi.string().min(3).max(255).required(),
+        street: Joi.string().min(3).max(255).required(),
+        number: Joi.string().required(),
+        complement: Joi.string().min(3).max(255),
+        neighborhood: Joi.string().min(3).max(255).required(),
+        city: Joi.string().min(3).max(255).required(),
+        state: Joi.string().min(2).max(255).required(),
+        cep: Joi.string().min(3).max(255).required(),
     });
 
     const { error } = schema.validate(vendor);
@@ -30,7 +37,14 @@ export const validateUpdateVendor = (vendor: VendorCreationAttributes) => {
         companyName: Joi.string().min(3).max(255),
         fantasyName: Joi.string().min(3).max(255),
         phone: Joi.string().min(3).max(255),
-        devolutionPolicy: Joi.string().min(3).max(255)
+        devolutionPolicy: Joi.string().min(3).max(255),
+        street: Joi.string().min(3).max(255),
+        number: Joi.string(),
+        complement: Joi.string().min(3).max(255),
+        neighborhood: Joi.string().min(3).max(255),
+        city: Joi.string().min(3).max(255),
+        state: Joi.string().min(2).max(255),
+        cep: Joi.string().min(3).max(255),
     });
 
     const { error } = schema.validate(vendor);
