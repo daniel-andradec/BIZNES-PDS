@@ -1,122 +1,131 @@
-import { nextTick } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { nextTick } from "vue";
+import { createRouter, createWebHashHistory } from "vue-router";
 
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import RegisterView from '../views/RegisterView.vue'
+import HomeView from "../views/HomeView.vue";
+import LoginView from "../views/LoginView.vue";
+import RegisterView from "../views/RegisterView.vue";
 
 // customer routes
-import ProductView from '../views/customer/ProductView.vue'
-import SearchView from '../views/customer/SearchView.vue'
-import CartView from '../views/customer/CartView.vue'
-import CheckoutView from '../views/customer/CheckoutView.vue'
-import OrderConfirmationView from '../views/customer/OrderConfirmationView.vue'
-import CustomerProfileView from '../views/customer/CustomerProfileView.vue'
+import ProductView from "../views/customer/ProductView.vue";
+import SearchView from "../views/customer/SearchView.vue";
+import CartView from "../views/customer/CartView.vue";
+import CheckoutView from "../views/customer/CheckoutView.vue";
+import OrderConfirmationView from "../views/customer/OrderConfirmationView.vue";
+import CustomerProfileView from "../views/customer/CustomerProfileView.vue";
 
 // vendor routes
-import VendorPanelView from '../views/vendor/VendorPanelView.vue'
-import StoreRegistrationView from '../views/vendor/StoreRegistrationView.vue'
+import VendorPanelView from "../views/vendor/VendorPanelView.vue";
+import VendorProfileView from "../views/vendor/VendorProfileView.vue";
+import VendorProducstView from "../views/vendor/VendorProductsView.vue";
 
 const routes = [
-    {
-        path: '/',
-        name: 'home',
-        meta: {
-            title: 'Home'
-        },
-        component: HomeView
+  {
+    path: "/",
+    name: "home",
+    meta: {
+      title: "Home",
     },
-    {
-        path: '/login',
-        name: 'login',
-        meta: {
-            title: 'Login'
-        },
-        component: LoginView
+    component: HomeView,
+  },
+  {
+    path: "/login",
+    name: "login",
+    meta: {
+      title: "Login",
     },
-    {
-        path: '/register/:userType',
-        name: 'register',
-        meta: {
-            title: 'Cadastro'
-        },
-        component: RegisterView
+    component: LoginView,
+  },
+  {
+    path: "/register/:userType",
+    name: "register",
+    meta: {
+      title: "Cadastro",
     },
-    {
-        path: '/product/:id',
-        name: 'product',
-        meta: {
-            title: 'Produto'
-        },
-        component: ProductView
+    component: RegisterView,
+  },
+  {
+    path: "/product/:id",
+    name: "product",
+    meta: {
+      title: "Produto",
     },
-    {
-        path: '/search',
-        name: 'search',
-        meta: {
-            title: 'Pesquisa'
-        },
-        component: SearchView
+    component: ProductView,
+  },
+  {
+    path: "/search",
+    name: "search",
+    meta: {
+      title: "Pesquisa",
     },
-    {
-        path: '/cart',
-        name: 'cart',
-        meta: {
-            title: 'Carrinho'
-        },
-        component: CartView
+    component: SearchView,
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    meta: {
+      title: "Carrinho",
     },
-    {
-        path: '/checkout',
-        name: 'checkout',
-        meta: {
-            title: 'Checkout'
-        },
-        component: CheckoutView
+    component: CartView,
+  },
+  {
+    path: "/checkout",
+    name: "checkout",
+    meta: {
+      title: "Checkout",
     },
-    {
-        path: '/order-confirmation',
-        name: 'order-confirmation',
-        meta: {
-            title: 'Confirmação de Pedido'
-        },
-        component: OrderConfirmationView
+    component: CheckoutView,
+  },
+  {
+    path: "/order-confirmation",
+    name: "order-confirmation",
+    meta: {
+      title: "Confirmação de Pedido",
     },
-    {
-        path: '/customer-profile',
-        name: 'customer-profile',
-        meta: {
-            title: 'Perfil'
-        },
-        component: CustomerProfileView
+    component: OrderConfirmationView,
+  },
+  {
+    path: "/customer-profile",
+    name: "customer-profile",
+    meta: {
+      title: "Perfil",
     },
-    {
-        path: '/vendor-panel',
-        name: 'panel',
-        meta: {
-            title: 'Painel do Vendedor'
-        },
-        component: VendorPanelView
+    component: CustomerProfileView,
+  },
+  {
+    path: "/vendor-panel",
+    name: "panel",
+    meta: {
+      title: "Painel do Vendedor",
     },
-    {
-        path: '/store-registration',
-        name: 'store-registration',
-        meta: {
-            title: 'Cadastro da Loja'
-        },
-        component: StoreRegistrationView
-    }
-]
+    component: VendorPanelView,
+  },
+  {
+    path: "/store-registration",
+    name: "store-registration",
+    meta: {
+      title: "Cadastro da Loja",
+    },
+    component: VendorProfileView,
+  },
+  {
+    path: "/vendor-products",
+    name: "vendor-products",
+    meta: {
+      title: "Produtos",
+    },
+    component: VendorProducstView,
+  },
+];
 
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes
-})
+  history: createWebHashHistory(),
+  routes,
+});
 
 router.afterEach((to) => {
-    nextTick(() => {
-        document.title = to.meta.title || 'Biznes'
-    })
-})
+  nextTick(() => {
+    document.title = to.meta.title || "Biznes";
+  });
+});
 
-export default router
+export default router;

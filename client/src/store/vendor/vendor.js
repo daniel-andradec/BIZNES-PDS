@@ -17,14 +17,48 @@ export default {
                 state: 'MG',
                 zipCode: '30130171'
             }
-        }
+        },
+        // estoque mockado
+        vendorStock: [
+            {
+                id: 1,
+                quantity: 30,
+            },
+            {
+                id: 2,
+                quantity: 2,
+            },
+            {
+                id: 3,
+                quantity: 45,
+            },
+            {
+                id: 4,
+                quantity: 7,
+            },
+            {
+                id: 5,
+                quantity: 15,
+            },
+            {
+                id: 6,
+                quantity: 2,
+            },
+            {
+                id: 7,
+                quantity: 16,
+            }
+        ],
     },
     mutations: {
     },
     actions: {},
     getters: {
         getVendorData(state) {
-            return state.vendor;
+            return state.vendor
+        },
+        getVendorStock(state) {
+            return state.vendorStock
         }
     }
 }

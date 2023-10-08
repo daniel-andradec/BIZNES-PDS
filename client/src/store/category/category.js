@@ -78,9 +78,14 @@ export default {
             }
         ]
     },
-    mutations: {},
-    actions: {},
+    mutations: {
+    },
+    actions: {
+    },
     getters: {
-        getCategories: state => state.categories
+        getCategories: state => state.categories,
+        getCategory: state => categoryName => {
+            return state.categories.find(category => category.name === categoryName)
+        }
     },
 }
