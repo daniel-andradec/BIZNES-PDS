@@ -11,8 +11,8 @@ router.post('/',
   upload.single('photo'),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await VendorService.create(req.body, req.file);
-      res.status(statusCodes.CREATED).json("Vendor created").end();
+      const vendor = await VendorService.create(req.body, req.file);
+      res.status(statusCodes.CREATED).json(vendor).end();
     } catch (error) {
       next(error);
     }
@@ -50,8 +50,9 @@ router.put('/:id',
   verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await VendorService.update(req.params.idUser!, req.body, req.user!);
-      res.status(statusCodes.NO_CONTENT).end();
+      const vendor = await VendorService.update(req.params.id!, req.body, req.user!);
+      console.log(vendor);
+      res.status(statusCodes.SUCCESS).json(vendor).end();
     } catch (error) {
       next(error);
     }
