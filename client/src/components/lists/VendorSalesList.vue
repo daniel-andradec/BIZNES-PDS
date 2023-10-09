@@ -165,6 +165,9 @@ export default {
         gap: 10px;
         align-items: center;
         padding: 10px;
+        border-bottom: 1px solid #C8C8C8;
+        text-align: center;
+        margin-bottom: 20px;
 
         h2 {
             font-size: 16px;

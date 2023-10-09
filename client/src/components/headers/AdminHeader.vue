@@ -1,11 +1,12 @@
 <template>
     <div class="admin-header">
-        <img @click="this.$router.push('/vendor-panel')" alt="Vue logo" :src="logo">
+        <img @click="this.$router.push('/admin-panel')" alt="Vue logo" :src="logo">
 
         <div class="login-container">
             <div class="login">
                 <i class="fa fa-gear"></i>
                 <span> Biznes ADM </span>
+                <span> (admin) </span>
             </div>
             <div class="logout">
                 <button class="adm-logout" @click="logout">Sair</button>

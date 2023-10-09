@@ -25,34 +25,48 @@
         <div class="search">
             <input type="text" 
             :placeholder="currentTab === 'users' ? 'Pesquisar Usuários' : 'Pesquisar Lojas'" 
-            v-model="searchText" @input="searchSale()"/>
-            <i class="fa fa-search icon" @click="searchProduct()"></i>
+            v-model="searchText" @input="search()"/>
+            <i class="fa fa-search icon" @click="search()"></i>
         </div>
 
         <div class="users" v-if="currentTab === 'users'">
-
+            <ManageCustomer :searchText="searchUser"/>
         </div>
 
         <div class="stores" v-else>
-
+            <ManageVendor :searchText="searchStore"/>
         </div>
     </div>
 </template>
 
 <script>
-import AdminHeader from '@/components/headers/AdminHeader.vue';
+import AdminHeader from '@/components/headers/AdminHeader.vue'
+import ManageCustomer from '@/components/admin/ManageCustomer.vue'
+import ManageVendor from '@/components/admin/ManageVendor.vue'
 
 export default {
     name: 'AdminPanelView',
     components: {
-        AdminHeader
+        AdminHeader,
+        ManageCustomer,
+        ManageVendor
     },
     data() {
         return {
-            currentTab: 'users'
+            currentTab: 'users',
+            searchText: '',
+            searchUser: '',
+            searchStore: ''
         }
     },
     methods: {
+        search () {
+            if (this.currentTab === 'users') {
+                this.searchUser = this.searchText
+            } else {
+                this.searchStore = this.searchText
+            }
+        }
     },
     computed: {
     },

@@ -63,7 +63,7 @@ export default {
                     display: 'Produto mais vendido',
                     name: 'bestSellingProduct',
                     value: 'Apple iPhone 14 Pro Max',
-                    icon: 'fa-solid fa-star',
+                    icon: 'fa-solid fa-medal',
                     fixLength: true
                 },
                 {

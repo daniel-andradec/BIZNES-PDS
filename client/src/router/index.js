@@ -19,6 +19,9 @@ import VendorProfileView from "../views/vendor/VendorProfileView.vue";
 import VendorProducstView from "../views/vendor/VendorProductsView.vue";
 import VendorSalesView from "../views/vendor/VendorSalesView.vue";
 
+// admin routes
+import AdminPanelView from "../views/admin/AdminPanelView.vue";
+
 const routes = [
   {
     path: "/",
@@ -123,7 +126,15 @@ const routes = [
       title: "Vendas",
     },
     component: VendorSalesView,
-  }
+  },
+  {
+    path: "/admin-panel",
+    name: "admin-panel",
+    meta: {
+      title: "Painel de Administrador",
+    },
+    component: AdminPanelView,
+  },
 ];
 
 const router = createRouter({
