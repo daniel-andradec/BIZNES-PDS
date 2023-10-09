@@ -140,8 +140,12 @@ export default {
         removeProduct() {
             this.removeProductFromCart(this.selectedProduct.id)
             this.removeProdModalOpen = false
-
-            // todo: show toast
+            this.$toast.open({
+                message: 'Produto removido do carrinho!',
+                type: 'success',
+                position: 'top-right',
+                duration: 3000
+            })
         },
         calculateTotalQuantity() {
             return this.getCartProducts.reduce((acc, product) => acc + product.quantity, 0)

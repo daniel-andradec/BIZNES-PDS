@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
     name: 'CustomerHeader',
     emits: ['input'],
@@ -50,6 +50,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(['loadCart']),
         search() {
             this.$router.push({ name: 'search', query: { searchText: this.searchText } })
         },
@@ -61,7 +62,11 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getCartTotalQuantity'])
+        ...mapGetters(['getCartTotalQuantity', 'getCartProducts'])
+    },
+    mounted() {
+        // update getCartTotalQuantity when cart is updated
+        this.loadCart()
     }
 }
 </script>

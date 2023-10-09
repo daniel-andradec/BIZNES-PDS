@@ -271,7 +271,7 @@ export default {
         width: 100vw;
         align-items: center;
         justify-content: center;
-        width: 50vw;
+        width: 70vw;
 
         .section-field {
             padding-bottom: 20px;

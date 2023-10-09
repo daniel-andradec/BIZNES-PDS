@@ -238,8 +238,32 @@ export default {
         ]
     },
     mutations: {
+        sortProducts(state, option) {
+            switch (option) {
+                case 'lowestPrice':
+                    state.products.sort((a, b) => a.price - b.price)
+                    break
+                case 'highestPrice':
+                    state.products.sort((a, b) => b.price - a.price)
+                    break
+                case 'name':
+                    state.products.sort((a, b) => a.name.localeCompare(b.name))
+                    break
+                case 'category':
+                    state.products.sort((a, b) => a.category[0].localeCompare(b.category[0]))
+                    break
+                case 'bestSellers':
+                    state.products.sort((a, b) => a.id - b.id) // todo - sort by best sellers
+                    break
+                default:
+                    break
+            }
+        }
     },
     actions: {
+        sortProducts({ commit }, option) {
+            commit('sortProducts', option)
+        }
     },
     getters: {
         getProducts: state => state.products,

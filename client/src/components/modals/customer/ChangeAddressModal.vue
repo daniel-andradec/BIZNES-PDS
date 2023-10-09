@@ -43,6 +43,14 @@ export default {
         return {
             addressData: [
                 {
+                    ref: 'recipientName',
+                    label: 'Nome do destinatário',
+                    type: 'text',
+                    placeholder: 'Nome do destinatário',
+                    value: '',
+                    required: true
+                },
+                {
                     ref: 'cep',
                     label: 'CEP', 
                     type: 'text',

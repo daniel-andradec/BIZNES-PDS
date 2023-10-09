@@ -10,7 +10,7 @@
                     <i class="fa-regular fa-circle-xmark fa-lg" @click="toggleCategoryMenu"></i>
                 </div>
                 <div class=categories>
-                    <div class="category" v-for="(category, key) in getCategories" :key="key">
+                    <div class="category" v-for="(category, key) in getCategories" :key="key" @click="searchByCategory(category.name)">
                         <CategoryMenuItem :category="category" />
                     </div>
                 </div>
@@ -36,6 +36,10 @@ export default {
         ...mapActions(['toggleCategoryMenu']),
         toggleMenu() {
             this.toggleCategoryMenu()
+        },
+        searchByCategory(category) {
+            this.toggleCategoryMenu()
+            this.$router.push({ name: 'search', query: { searchText: category } })
         }
     },
     computed: {
@@ -73,12 +77,13 @@ export default {
         flex-direction: column;
         justify-content: flex-start !important;
         border-top: 1px solid #DEDEDE;
-        max-width: 450px;
+        max-width: 500px;
         
         .categories {
             display: grid;
             grid-template-columns: 1fr 1fr;
             margin-bottom: 20px;
+            padding: 0px 20px;
         }
         .title {
             display: flex;

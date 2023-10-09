@@ -43,6 +43,13 @@ export default {
 
             // save cart in localStorage
             localStorage.setItem('cart', JSON.stringify(state.cart))
+        },
+        loadCart(state) {
+            if (localStorage.getItem('cart')) {
+                state.cart = JSON.parse(localStorage.getItem('cart'))
+            } else {
+                localStorage.setItem('cart', JSON.stringify(state.cart))
+            }
         }
     },
     actions: {
@@ -60,6 +67,9 @@ export default {
         },
         clearCart({ commit }) {
             commit('clearCart')
+        },
+        loadCart({ commit }) {
+            commit('loadCart')
         }
     },
     getters: {

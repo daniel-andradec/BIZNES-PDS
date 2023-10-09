@@ -332,6 +332,8 @@ export default {
 
         .summary {
             width: 30vw;
+            min-width: 450px;
+            max-width: 600px;
             height: fit-content;
             border-radius: 5px;
             border: 1px solid rgba(0, 0, 0, 0.18);

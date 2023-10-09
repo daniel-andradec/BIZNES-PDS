@@ -16,9 +16,9 @@
 
                 <!-- Dropdown Menu -->
                 <div class="sort-options" v-if="isSortDropdownVisible">
-                    <div class="option" v-for="(option, key) in sortOptions" :key="key">
+                    <div class="option" v-for="(option, key) in sortOptions" :key="key" @click="sortProducts(option.name)">
                         <i :class="option.icon"></i>
-                        {{ option.name }}
+                        {{ option.display }}
                     </div>
                 </div>
             </div>
@@ -52,23 +52,28 @@ export default {
             isSortDropdownVisible: false,
             sortOptions: [
                 {
-                    name: 'Mais vendidos',
+                    display: 'Mais vendidos',
+                    name: 'bestSellers',
                     icon: 'fa-regular fa-star',
                 },
                 {
-                    name: 'Menor preço',
+                    display: 'Menor preço',
+                    name: 'lowestPrice',
                     icon: 'fa fa-arrow-down-long',
                 },
                 {
-                    name: 'Maior preço',
+                    display: 'Maior preço',
+                    name: 'highestPrice',
                     icon: 'fa fa-arrow-up-long',
                 },
                 {
-                    name: 'Categoria',
+                    display: 'Categoria',
+                    name: 'category',
                     icon: 'fa fa-bars'
                 },
                 {
-                    name: 'Nome',
+                    display: 'Nome',
+                    name: 'name',
                     icon: 'fa fa-font'
                 }
             ]
@@ -89,6 +94,9 @@ export default {
         },
         goToProduct(product) {
             this.$router.push({ name: 'product', params: { id: product.id } })
+        },
+        sortProducts(option) {
+            this.$store.dispatch('sortProducts', option)
         }
     },
     mounted() {

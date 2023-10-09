@@ -14,7 +14,7 @@
         </div>
 
         <div class="panel-data">
-            <div class="data" v-for="(field, fkey) in panelData" :key="fkey">
+            <div class="data" v-for="(field, fkey) in panelData" :key="fkey" @click="this.$router.push('/vendor-sales')">
                 <i :class="field.icon"></i>
                 <div class="data-info">
                     <p>{{ field.display }}</p>

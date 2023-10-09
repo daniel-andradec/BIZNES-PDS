@@ -102,7 +102,12 @@ export default {
         },
         addToCart() {
             this.addProductToCart(this.product)
-            // todo: show toast
+            this.$toast.open({
+                message: 'Produto adicionado ao carrinho!',
+                type: 'success',
+                position: 'top-right',
+                duration: 3000
+            })
         }
     },
     computed: {
