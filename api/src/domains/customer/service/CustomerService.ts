@@ -8,9 +8,10 @@ import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { validateRegisterCustomer, validateUpdateCustomer } from "../../../../utils/functions/validation/validateCustomer";
 import { deleteObject } from "../../../../utils/functions/aws";
+import { AddressService } from "../../address/services/AddressService";
 
 class CustomerServiceClass {
-    async create(body: CustomerCreationAttributes, file: any) {
+    async create(body: CustomerCreationAttributes) {
         try {
             validateRegisterCustomer(body);
             const newUser: CreationAttributes<UserInterface> = {
@@ -24,10 +25,19 @@ class CustomerServiceClass {
                 phone: body.phone,
                 CPF: body.CPF,
                 birthDate: body.birthDate,
-                photo: (file as Express.MulterS3.File).location,
-                awsKey: (file as Express.MulterS3.File).key,
                 idUser: user.idUser,
             };
+            const address = {
+                street: body.street,
+                number: body.number,
+                complement: body.complement,
+                neighborhood: body.neighborhood,
+                city: body.city,
+                state: body.state,
+                cep: body.cep,
+                idUser: user.idUser,
+            }
+            await AddressService.create(address, user);
             const customer = await Customer.create(newCustomer);
             return customer;
         } catch (error) {
@@ -105,7 +115,6 @@ class CustomerServiceClass {
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
             }
 
-            await deleteObject(customer.awsKey);
             await UserService.delete(customer.idUser, loggedUser.idUser);
         } catch (error) {
             throw(error);

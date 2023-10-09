@@ -10,6 +10,13 @@ export const validateRegisterCustomer = (customer: CustomerCreationAttributes) =
         phone: Joi.string().min(3).max(255).required(),
         CPF: Joi.string().min(11).max(11).required(),
         birthDate: Joi.string().min(3).max(255).required(),
+        street: Joi.string().min(3).max(255).required(),
+        number: Joi.string().required(),
+        complement: Joi.string().min(0).max(255),
+        neighborhood: Joi.string().min(1).max(255).required(),
+        city: Joi.string().min(1).max(255).required(),
+        state: Joi.string().min(1).max(255).required(),
+        cep: Joi.string().min(3).max(255).required(),
     });
 
     const { error } = schema.validate(customer);
@@ -27,6 +34,13 @@ export const validateUpdateCustomer = (customer: CustomerCreationAttributes) => 
         phone: Joi.string().min(3).max(255),
         CPF: Joi.string().min(11).max(11),
         birthDate: Joi.string().min(3).max(255),
+        street: Joi.string().min(3).max(255).required(),
+        number: Joi.string().required(),
+        complement: Joi.string().min(1).max(255),
+        neighborhood: Joi.string().min(1).max(255).required(),
+        city: Joi.string().min(1).max(255).required(),
+        state: Joi.string().min(1).max(255).required(),
+        cep: Joi.string().min(1).max(255).required(),
     });
 
     const { error } = schema.validate(customer);

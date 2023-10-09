@@ -6,7 +6,6 @@ export default {
     },
     mutations: {
         toggleCategoryMenu(state) {
-            console.log('toggleCategoryMenu')
             state.categoryMenu.isVisible = !state.categoryMenu.isVisible
             const body = document.querySelector('body')
             body.style.overflow = state.categoryMenu.isVisible ? 'hidden' : 'auto'

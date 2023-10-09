@@ -31,6 +31,7 @@
 
 <script>
 import axios from 'axios';
+import { registerCustomer } from '../../controllers/CustomerController'
 
 export default {
     name: 'CustomerRegisterComponent',
@@ -53,14 +54,14 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'cpf',
+                        ref: 'CPF',
                         label: 'CPF', 
                         type: 'text',
                         placeholder: 'CPF',
                         required: true
                     },
                     {
-                        ref: 'cellphone',
+                        ref: 'phone',
                         label: 'Celular', 
                         type: 'tel',
                         placeholder: 'Celular',
@@ -101,7 +102,7 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'addressName',
+                        ref: 'street',
                         label: 'Logradouro', 
                         type: 'text',
                         placeholder: 'Logradouro',
@@ -109,7 +110,7 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'addressNumber',
+                        ref: 'number',
                         label: 'Número', 
                         type: 'text',
                         placeholder: 'Número',
@@ -147,14 +148,14 @@ export default {
             formData: {
                 name: '',
                 birthDate: '',
-                cpf: '',
-                cellphone: '',
+                CPF: '',
+                phone: '',
                 email: '',
                 password: '',
                 passwordConfirmation: '',
                 cep: '',
-                addressName: '',
-                addressNumber: '',
+                street: '',
+                number: '',
                 complement: '',
                 city: '',
                 state: '',
@@ -169,7 +170,7 @@ export default {
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
                     console.log(resp.data)
                     this.formData.cep = resp.data.cep;
-                    this.formData.addressName = resp.data.logradouro;
+                    this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
                 }).catch(err => {
@@ -177,9 +178,31 @@ export default {
                 });
             }
         },
-        submitForm() {
-            console.log(this.formData);
-            // Aqui você pode fazer o que quiser com os dados, como enviá-los para uma API
+        submitForm: async function () {
+            const customer = { ...this.formData }
+            delete customer.passwordConfirmation
+
+            await registerCustomer(customer).then((res) => {
+                console.log(res)
+                if (res) {
+                    this.$toast.open({
+                        message: 'Cadastro realizado com sucesso! Faça login para continuar.',
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top-right'
+                    });
+                    this.$router.push('/login')
+                } else {
+                    this.$toast.open({
+                        message: 'Erro ao cadastrar usuário. Verifique os dados e tente novamente.',
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top-right'
+                    });
+                }
+            }).catch(err => {
+                console.log(err)
+            })
         }
     }
 }

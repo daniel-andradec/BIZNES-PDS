@@ -13,7 +13,7 @@ class AddressServiceClass {
                 city: body.city,
                 state: body.state,
                 cep: body.cep,
-                idUser: user.idUser,
+                idUser: body.idUser,
             };
             const address = await Address.create(newAddress);
             return address;
