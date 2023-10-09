@@ -6,7 +6,7 @@
         <div class="order-card">
             <div class="order-products">
                 <div>
-                    <div class="product" v-for="product in products" :key="product.id">
+                    <div class="order-product" v-for="product in products" :key="product.id">
                         <div class="product-image">
                             <img :src="product.img" alt="product image">
                         </div>
@@ -134,7 +134,7 @@ export default {
             flex-direction: column;
             justify-content: space-between;
 
-            .product {
+            .order-product {
                 width: 100%;
                 display: flex;
                 flex-direction: row;

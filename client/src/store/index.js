@@ -8,10 +8,13 @@ import order from './customer/order'
 import customer from './customer/customer'
 
 // vendor
-import vendorInfra from './vendor/vendorInfra'
 import vendor from './vendor/vendor'
 
+// admin
+import admin from './admin/admin'
+
 // infrastructure
+import vendorInfra from './vendor/vendorInfra'
 import categoryInfra from './category/categoryInfra'
 
 export default createStore({
@@ -23,6 +26,7 @@ export default createStore({
         order,
         customer,
         vendor,
-        vendorInfra
+        vendorInfra,
+        admin
     }
 })
