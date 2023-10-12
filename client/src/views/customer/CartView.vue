@@ -27,6 +27,9 @@
                                         {{ category }}
                                     </div>
                                 </div>
+                                <div v-if="product.selectedOption" class="selected-option">
+                                    Opção selecionada: <b>{{ product.selectedOption }}</b>
+                                </div>
                                 <div>Vendido por <b>FastShop</b></div>
                                 <div class="price"> Total: <span>{{ formatValue(product.price) }}</span></div>
                             </div>
@@ -257,6 +260,10 @@ export default {
                             font-weight: 500;
                             margin: 15px 0px;
                             cursor: pointer;
+                        }
+
+                        .selected-option {
+                            margin: 15px 0px;
                         }
 
                         .categories {

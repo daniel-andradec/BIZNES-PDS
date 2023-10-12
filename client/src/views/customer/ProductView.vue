@@ -32,6 +32,17 @@
                     Entrega Gratuita: {{ calcDeliveryDate() }}
                 </p>
     
+                <div class="options" v-if="product.options?.length > 0">
+                    <label for="color-options">Opção:</label>
+                    <select id="color-options" v-model="selectedOption">
+                        <option value="" disabled selected>Selecione uma opção</option>
+                        <option v-for="(option, index) in product.options" :key="index" :value="option">
+                            {{ option }}
+                        </option>
+                    </select>
+                </div>
+
+
                 <div class="actions">
                     <button class="btn btn-primary">Comprar</button>
                     <button class="btn btn-secondary" @click="addToCart()">
@@ -80,7 +91,8 @@ export default {
     data() {
         return {
             product: {},
-            categoryProducts: []
+            categoryProducts: [],
+            selectedOption: ''
         }
     },
     methods: {
@@ -101,6 +113,13 @@ export default {
             this.$router.push({ name: 'product', params: { id: prod.id } })
         },
         addToCart() {
+            if (!this.selectedOption && this.product.options?.length > 0) return this.$toast.open({
+                message: 'Selecione uma opção!',
+                type: 'error',
+                position: 'top-right',
+                duration: 3000
+            })
+            this.product.selectedOption = this.selectedOption
             this.addProductToCart(this.product)
             this.$toast.open({
                 message: 'Produto adicionado ao carrinho!',
@@ -222,6 +241,31 @@ export default {
                 }
             }
     
+            .options {
+                margin-top: 20px;
+                margin-bottom: 20px;
+
+                label {
+                    font-size: 20px;
+                    margin-right: 10px;
+                }
+
+                select {
+                    padding: 10px;
+                    font-size: 18px;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                    appearance: none; /* Remove a seta padrão do seletor */
+                    background-color: #f9f9f9;
+                    cursor: pointer;
+                }
+
+                select:focus {
+                    border-color: var(--primaryColor);
+                    outline: none;
+                }
+            }
+
             .actions {
                 display: flex;
                 align-items: center;

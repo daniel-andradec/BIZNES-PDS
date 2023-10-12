@@ -52,6 +52,7 @@ export default {
     transition: all linear .2s;
     margin: 10px;
     height: min(500px, 100%);
+    padding: 10px;
 
     &.fixedSize {
         width: 300px;

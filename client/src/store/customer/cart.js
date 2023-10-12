@@ -7,7 +7,8 @@ export default {
     },
     mutations: {
         addProductToCart(state, product) {
-            if (state.cart.products.find(p => p.id === product.id)) {
+            // same product already in cart with same selectedOption
+            if (state.cart.products.find(p => p.id === product.id) && state.cart.products.find(p => p.id === product.id).selectedOption === product.selectedOption) {
                 // increment quantity
                 console.log('increment quantity')
                 state.cart.products.find(p => p.id === product.id).quantity++

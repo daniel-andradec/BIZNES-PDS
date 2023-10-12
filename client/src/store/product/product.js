@@ -39,12 +39,12 @@ export default {
             },
             {
                 id: 5,
-                name: 'iPhone 14 Pro Max',
-                description: 'iPhone 14 Pro Max com tela Super Retina XDR de 6,7 polegadas, Chip A16 Bionic, 256GB de armazenamento, iOS 16',
+                name: 'iPhone 15 Pro Max',
+                description: 'iPhone 15 Pro Max. Forjado em titânio e com o incomparável chip A17 Pro, botão de Ação configurável e o sistema de câmera mais poderoso em um iPhone. Tudo isso em um design incrível.',
                 category: ['Smartphones'],
-                price: 14999,
-                img: 'https://cdn.awsli.com.br/2500x2500/761/761012/produto/218353870/editada--5--rcs401z0ta.png',
-                options: ['Preto', 'Branco', 'Roxo']
+                price: 9899.10,
+                img: 'https://www.fastshop.com.br//wcsstore/FastShopCAS/images/catalog/AEMU7A3BEAAZL_PRD/AEMU7A3BEAAZL_PRD_447_1.jpeg',
+                options: ['Preto', 'Branco', 'Azul Escuro']
             },
             {
                 id: 6,
