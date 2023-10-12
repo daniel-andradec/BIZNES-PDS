@@ -17,7 +17,7 @@
                         :type="field.type" 
                         :placeholder="field.placeholder"
                         v-model="formData[field.ref]"
-                        @input="field.input && this[field.input]($event)"
+                        @input="field.input && this[field.input]($event); formatValue($event, field.format)"
                     >
                 </div>
             </div>
@@ -40,7 +40,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import { formatValue } from '@/libs/Util'
 
 export default {
     name: 'CustomerRegisterComponent',
@@ -53,28 +54,34 @@ export default {
                         label: 'Razão Social',
                         type: 'text',
                         placeholder: 'Razão Social',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'tradingName',
                         label: 'Nome Fantasia',
                         type: 'text',
                         placeholder: 'Nome Fantasia',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'phone',
                         label: 'Telefone', 
                         type: 'tel',
                         placeholder: '',
-                        required: true
+                        required: true,
+                        format: 'phone',
+                        minSize: 3
                     },
                     {
                         ref: 'cnpj',
                         label: 'CNPJ', 
                         type: 'text',
                         placeholder: 'CNPJ',
-                        required: true
+                        required: true,
+                        format: 'cnpj',
+                        minSize: 14
                     }
                 ],
                 'Dados de acesso': [
@@ -90,7 +97,8 @@ export default {
                         label: 'Senha', 
                         type: 'password',
                         placeholder: 'Senha',
-                        required: true
+                        required: true,
+                        minSize: 6
                     },
                     {
                         ref: 'passwordConfirmation',
@@ -108,7 +116,8 @@ export default {
                         placeholder: 'CEP',
                         input: 'calcCEP',
                         value: '',
-                        required: true
+                        required: true,
+                        format: 'cep'
                     },
                     {
                         ref: 'addressName',
@@ -116,14 +125,16 @@ export default {
                         type: 'text',
                         placeholder: 'Logradouro',
                         value: '',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'addressNumber',
                         label: 'Número', 
                         type: 'text',
                         placeholder: 'Número',
-                        required: true
+                        required: true,
+                        format: 'number'
                     },
                     {
                         ref: 'complement',
@@ -178,21 +189,106 @@ export default {
     methods: {
         async calcCEP(event) {
             const cep = event.target.value;
-            if (cep.length >= 8) {
+            if (cep.length >= 8 && cep.length <= 9) {
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
-                    console.log(resp.data)
+                    console.log(resp.data);
+                    if (resp.data.erro) {
+                        this.$toast.open({
+                            message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                        event.target.value = '';
+                        return
+                    }
                     this.formData.cep = resp.data.cep;
                     this.formData.addressName = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
-                }).catch(err => {
-                    console.log(err);
+                }).catch(() => {
+                    console.log('Erro ao buscar CEP');
+                    this.$toast.open({
+                        message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                        type: 'error',
+                        duration: 3000,
+                        position: 'top-right'
+                    });
+                    event.target.value = '';
                 });
             }
         },
         submitForm() {
             console.log(this.formData);
-            // Aqui você pode fazer o que quiser com os dados, como enviá-los para uma API
+
+            this.sanitizeData()
+            if (!this.validateFields()) return
+
+            console.log(this.formData)
+            
+            // todo: send to api
+        },
+        formatValue: function(event, format) {
+            if (!format) return
+            const value = event.target.value
+            event.target.value = formatValue(value, format)
+            this.formData[event.target.id] = event.target.value
+        },
+        validateFields() {
+            // validate required fields
+            const fields = this.sections
+            let valid = true
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.required && !this.formData[field.ref]) {
+                        valid = false
+                        this.$toast.open({
+                            message: `O campo ${field.label} é obrigatório.`,
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                    }
+                }
+            }
+
+            // validate minSize fields
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.minSize && this.formData[field.ref].length < field.minSize) {
+                        valid = false
+                        this.$toast.open({
+                            message: `O campo ${field.label} deve ter no mínimo ${field.minSize} caracteres.`,
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                    }
+                }
+            }
+
+            // validate password confirmation
+            if (this.formData.password !== this.formData.passwordConfirmation) {
+                valid = false
+                this.$toast.open({
+                    message: 'As senhas não coincidem.',
+                    type: 'error',
+                    duration: 3000,
+                    position: 'top-right'
+                });
+            }
+
+            return valid
+        },
+        sanitizeData: function () { // sanitize data before sending to backend - remove special characters, format dates, etc
+            const fields = this.sections
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.format) {
+                        this.formData[field.ref] = formatValue(this.formData[field.ref], field.format, true) // true - sanitize
+                    }
+                }
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ const formatValue = (value, format, sanitizeFlag) => {
         return fixInputLength(value, 14)
     }
 
-    else if (format === 'phone') {
+    else if (format === 'cellphone') {
         value = value.replace(/\D/g, '')
         value = value.replace(/(\d{2})(\d)/, '($1) $2')
         value = value.replace(/(\d{5})(\d)/, '$1-$2')
@@ -24,12 +24,28 @@ const formatValue = (value, format, sanitizeFlag) => {
     }
 
     else if (format === 'cep') {
-        return fixInputLength(value, 8)
+        return fixInputLength(value, 9)
+    }
+
+    else if (format === 'cnpj') {
+        value = value.replace(/\D/g, '')
+        value = value.replace(/(\d{2})(\d)/, '$1.$2')
+        value = value.replace(/(\d{3})(\d)/, '$1.$2')
+        value = value.replace(/(\d{3})(\d)/, '$1/$2')
+        value = value.replace(/(\d{4})(\d)/, '$1-$2')
+        return fixInputLength(value, 18)
+    }
+
+    else if (format === 'phone') {
+        value = value.replace(/\D/g, '')
+        value = value.replace(/(\d{2})(\d)/, '($1) $2')
+        value = value.replace(/(\d{4})(\d)/, '$1-$2')
+        return fixInputLength(value, 14)
     }
 }
 
 const sanitize = (value, format) => {
-    if (format === 'cpf' || format === 'phone' || format === 'number' || format === 'cep') {
+    if (format === 'cpf' || format === 'cnpj' || format === 'cellphone' || format === 'phone' || format === 'number' || format === 'cep') {
         value = value.replace(/\D/g, '')
         return value
     }

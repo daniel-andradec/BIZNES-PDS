@@ -70,7 +70,7 @@ export default {
                         type: 'tel',
                         placeholder: 'Celular',
                         required: true,
-                        format: 'phone',
+                        format: 'cellphone',
                         minSize: 3
                     }
                 ],
@@ -176,7 +176,7 @@ export default {
     methods: {
         async calcCEP(event) {
             const cep = event.target.value;
-            if (cep.length >= 8) {
+            if (cep.length >= 8 && cep.length <= 9) {
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
                     if (resp.data.erro) {
                         this.$toast.open({
