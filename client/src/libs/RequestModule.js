@@ -16,7 +16,7 @@ const makeRequest = async (method = 'get', uri, data = {}) => {
     }).then((response) => {
         return response.data
     }).catch((error) => {
-        return error
+        throw error
     })
 
     return result

@@ -17,8 +17,7 @@
                         :type="field.type" 
                         :placeholder="field.placeholder"
                         v-model="formData[field.ref]"
-                        @input="field.input && this[field.input]($event)"
-                    >
+                        @input="field.input && this[field.input]($event); formatValue($event, field.format)" />
                 </div>
             </div>
         </div>
@@ -30,8 +29,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import moment from 'moment'
 import { registerCustomer } from '../../controllers/CustomerController'
+import { formatValue } from '@/libs/Util'
 
 export default {
     name: 'CustomerRegisterComponent',
@@ -44,7 +45,8 @@ export default {
                         label: 'Nome Completo',
                         type: 'text',
                         placeholder: 'Nome Completo',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'birthDate',
@@ -58,14 +60,18 @@ export default {
                         label: 'CPF', 
                         type: 'text',
                         placeholder: 'CPF',
-                        required: true
+                        required: true,
+                        format: 'cpf',
+                        minSize: 11
                     },
                     {
                         ref: 'phone',
                         label: 'Celular', 
                         type: 'tel',
                         placeholder: 'Celular',
-                        required: true
+                        required: true,
+                        format: 'phone',
+                        minSize: 3
                     }
                 ],
                 'Dados de acesso': [
@@ -81,7 +87,8 @@ export default {
                         label: 'Senha', 
                         type: 'password',
                         placeholder: 'Senha',
-                        required: true
+                        required: true,
+                        minSize: 6
                     },
                     {
                         ref: 'passwordConfirmation',
@@ -99,7 +106,8 @@ export default {
                         placeholder: 'CEP',
                         input: 'calcCEP',
                         value: '',
-                        required: true
+                        required: true,
+                        format: 'cep'
                     },
                     {
                         ref: 'street',
@@ -107,14 +115,16 @@ export default {
                         type: 'text',
                         placeholder: 'Logradouro',
                         value: '',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'number',
                         label: 'Número', 
                         type: 'text',
                         placeholder: 'Número',
-                        required: true
+                        required: true,
+                        format: 'number'
                     },
                     {
                         ref: 'complement',
@@ -168,23 +178,43 @@ export default {
             const cep = event.target.value;
             if (cep.length >= 8) {
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
-                    console.log(resp.data)
+                    if (resp.data.erro) {
+                        this.$toast.open({
+                            message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                        event.target.value = '';
+                        return
+                    }
                     this.formData.cep = resp.data.cep;
                     this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
-                }).catch(err => {
-                    console.log(err);
+                }).catch(() => {
+                    this.$toast.open({
+                        message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                        type: 'error',
+                        duration: 3000,
+                        position: 'top-right'
+                    });
+                    event.target.value = '';
                 });
             }
         },
         submitForm: async function () {
+            console.log(this.formData)
             const customer = { ...this.formData }
             delete customer.passwordConfirmation
 
+            if (!this.validateFields()) return
+            this.sanitizeData()
+
+            console.log(this.formData)
+
             await registerCustomer(customer).then((res) => {
-                console.log(res)
-                if (res) {
+                if (!res.error) {
                     this.$toast.open({
                         message: 'Cadastro realizado com sucesso! Faça login para continuar.',
                         type: 'success',
@@ -202,7 +232,91 @@ export default {
                 }
             }).catch(err => {
                 console.log(err)
+                this.$toast.open({
+                    message: 'Erro ao cadastrar usuário. Verifique os dados e tente novamente.',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
             })
+        },
+        formatValue: function (event, format) { // formats value on input to be displayed nicely
+            if (!format) return
+            const value = event.target.value
+            event.target.value = formatValue(value, format)
+            this.formData[event.target.id] = event.target.value
+        },
+        validateFields: function () { // check if fields are valid
+            // validate required fields
+            const fields = this.sections
+            let valid = true
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.required && !this.formData[field.ref]) {
+                        valid = false
+                        this.$toast.open({
+                            message: `O campo ${field.label} é obrigatório.`,
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                    }
+                }
+            }
+
+            // validate minSize fields
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.minSize && this.formData[field.ref].length < field.minSize) {
+                        valid = false
+                        this.$toast.open({
+                            message: `O campo ${field.label} deve ter no mínimo ${field.minSize} caracteres.`,
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                    }
+                }
+            }
+
+            // validate password confirmation
+            if (this.formData.password !== this.formData.passwordConfirmation) {
+                valid = false
+                this.$toast.open({
+                    message: 'As senhas não coincidem.',
+                    type: 'error',
+                    duration: 3000,
+                    position: 'top-right'
+                });
+            }
+
+            // validate if birthDate is not in the future
+            const birthDate = moment(this.formData.birthDate)
+            const today = moment()
+            if (birthDate > today) {
+                valid = false
+                this.$toast.open({
+                    message: 'Data de nascimento inválida.',
+                    type: 'error',
+                    duration: 3000,
+                    position: 'top-right'
+                });
+            }
+
+            return valid
+        },
+        sanitizeData: function () { // sanitize data before sending to backend - remove special characters, format dates, etc
+            const fields = this.sections
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.format) {
+                        this.formData[field.ref] = formatValue(this.formData[field.ref], field.format, true) // true - sanitize
+                    }
+                }
+            }
+
+            // sanitize birthDate to format DD/MM/YYYY
+            this.formData.birthDate = moment(this.formData.birthDate).format('DD/MM/YYYY')
         }
     }
 }
