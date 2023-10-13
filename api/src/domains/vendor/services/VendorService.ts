@@ -13,7 +13,8 @@ import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/
 class VendorServiceClass {
     async create(body: VendorCreationAttributes) { 
         try {
-            validateRegisterVendor(body);  
+            //validateRegisterVendor(body);
+            console.log(body);
             const newVendor  = {
                 CNPJ: body.CNPJ,
                 companyName: body.companyName,

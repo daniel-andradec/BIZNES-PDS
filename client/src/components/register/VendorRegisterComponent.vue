@@ -27,8 +27,8 @@
             <h2>Política de Devolução</h2>
             <div class="section-container">
                 <div class="section-field">
-                    <label for="returnPolicy" class="required">Política de devolução (será informada ao consumidor)</label>
-                    <textarea name="returnPolicy" id="returnPolicy" cols="30" rows="10" v-model="formData['returnPolicy']"></textarea>
+                    <label for="devolutionPolicy" class="required">Política de devolução (será informada ao consumidor)</label>
+                    <textarea name="devolutionPolicy" id="devolutionPolicy" cols="30" rows="10" v-model="formData['devolutionPolicy']"></textarea>
                 </div>
             </div>
         </div>
@@ -42,6 +42,7 @@
 <script>
 import axios from 'axios'
 import { formatValue } from '@/libs/Util'
+import { registerVendor} from '../../controllers/VendorController'
 
 export default {
     name: 'CustomerRegisterComponent',
@@ -58,7 +59,7 @@ export default {
                         minSize: 3
                     },
                     {
-                        ref: 'tradingName',
+                        ref: 'fantasyName',
                         label: 'Nome Fantasia',
                         type: 'text',
                         placeholder: 'Nome Fantasia',
@@ -75,23 +76,23 @@ export default {
                         minSize: 3
                     },
                     {
-                        ref: 'cnpj',
+                        ref: 'CNPJ',
                         label: 'CNPJ', 
                         type: 'text',
                         placeholder: 'CNPJ',
                         required: true,
                         format: 'cnpj',
                         minSize: 14
-                    }
+                    },
                 ],
                 'Dados de acesso': [
-                    {
-                        ref: 'login',
-                        label: 'Login', 
-                        type: 'text',
-                        placeholder: 'Login',
-                        required: true
-                    },
+                {
+                    ref: 'email',
+                    label: 'Email', 
+                    type: 'email', 
+                    placeholder: 'Email', 
+                    required: true
+                },
                     {
                         ref: 'password',
                         label: 'Senha', 
@@ -120,7 +121,7 @@ export default {
                         format: 'cep'
                     },
                     {
-                        ref: 'addressName',
+                        ref: 'street',
                         label: 'Logradouro', 
                         type: 'text',
                         placeholder: 'Logradouro',
@@ -129,7 +130,7 @@ export default {
                         minSize: 3
                     },
                     {
-                        ref: 'addressNumber',
+                        ref: 'number',
                         label: 'Número', 
                         type: 'text',
                         placeholder: 'Número',
@@ -167,21 +168,19 @@ export default {
             },
             formData: {
                 companyName: '',
-                tradingName: '',
-                cnpj: '',
+                fantasyName: '',
                 phone: '',
-                login: '',
                 password: '',
                 passwordConfirmation: '',
                 cep: '',
-                addressName: '',
-                addressNumber: '',
+                street: '',
+                number: '',
                 complement: '',
                 city: '',
                 state: '',
                 neighborhood: '',
-                returnPolicy: ''
-
+                devolutionPolicy: '',
+                name: 'vendor_name'
             },
             imagePreviewUrl: ''
         }
@@ -218,15 +217,42 @@ export default {
                 });
             }
         },
-        submitForm() {
-            console.log(this.formData);
+        submitForm: async function () {
+            console.log(this.formData)
+            const vendor = { ...this.formData }
+            delete vendor.passwordConfirmation
 
-            this.sanitizeData()
             if (!this.validateFields()) return
+            this.sanitizeData()
 
             console.log(this.formData)
-            
-            // todo: send to api
+
+            await registerVendor(vendor).then((res) => {
+                if (!res.error) {
+                    this.$toast.open({
+                        message: 'Cadastro realizado com sucesso! Faça login para continuar.',
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top-right'
+                    });
+                    this.$router.push('/login')
+                } else {
+                    this.$toast.open({
+                        message: 'Erro ao cadastrar usuário. Verifique os dados e tente novamente.',
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top-right'
+                    });
+                }
+            }).catch(err => {
+                console.log(err)
+                this.$toast.open({
+                    message: 'Erro ao cadastrar usuário. Verifique os dados e tente novamente.',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            })
         },
         formatValue: function(event, format) {
             if (!format) return
