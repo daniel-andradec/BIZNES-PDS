@@ -9,8 +9,13 @@
 
         <div class="login-container" @mouseover="showDropdown" @mouseleave="hideDropdown">
             <div class="login">
-                <i class="fa-regular fa-user"></i>
-                Olá, <span>Pedro</span>
+                <div class="logged" v-if="loggedInUser?.id">
+                    <i class="fa-regular fa-user"></i>
+                    Olá, <span>{{ loggedInUser?.name }}</span>
+                </div>
+                <div class="not-logged" v-else>
+                    Olá, faça seu <br><span @click="this.$router.push('/login')">login</span>
+                </div>
             </div>
             <!-- Olá, faça seu <br><span>login</span> -->
 
@@ -19,7 +24,7 @@
                     <i class="fa fa-user-circle"></i>
                     Minha conta
                 </div>
-                <div class="option">
+                <div class="option" @click="logout()">
                     <i class="fa fa-sign-out-alt"></i>
                     Sair
                 </div>
@@ -37,6 +42,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { logout } from '@/controllers/UserController'
+
 export default {
     name: 'CustomerHeader',
     emits: ['input'],
@@ -55,14 +62,20 @@ export default {
             this.$router.push({ name: 'search', query: { searchText: this.searchText } })
         },
         showDropdown() {
-            this.isDropDownVisible = true
+            if (this.loggedInUser?.id)
+                this.isDropDownVisible = true
         },
         hideDropdown() {
             this.isDropDownVisible = false
+        },
+        async logout() {
+            await logout()
+            this.$router.push('/')
+            window.location.reload()
         }
     },
     computed: {
-        ...mapGetters(['getCartTotalQuantity', 'getCartProducts'])
+        ...mapGetters(['getCartTotalQuantity', 'getCartProducts', 'loggedInUser'])
     },
     mounted() {
         // update getCartTotalQuantity when cart is updated
@@ -125,7 +138,6 @@ export default {
         align-self: center;
 
         .login {
-            cursor: pointer;
             margin: 10px 70px;
             color: var(--secondaryColor);
             font-size: 18px;
@@ -136,6 +148,7 @@ export default {
             }
             span {
                 color: var(--primaryColor);
+                cursor: pointer;
             }
         }
 

@@ -9,21 +9,21 @@
                 <h3>Faça seu Login</h3>
                 <div class="input">
                     <i class="fa-regular fa-user icon"></i>
-                    <input type="text" id="email" placeholder="Digite seu login">
+                    <input type="text" id="email" placeholder="Digite seu login" ref="email">
                 </div>
 
                 <div class="input">
                     <i class="fa fa-key icon"></i>
-                    <input type="password" id="password" placeholder="Digite sua senha">
+                    <input :type="showPassword ? 'text' : 'password'" id="password" placeholder="Digite sua senha" ref="password">
 
                     <div>
-                        <i class="fa-regular fa-eye icon" ></i>
+                        <i class="fa-regular fa-eye icon" @click="showPassword = !showPassword"></i>
                     </div>
                 </div>
 
                 <p><span>Esqueceu a senha?</span></p>
 
-                <div class="button">
+                <div class="button" @click="login()">
                     <button>Entrar</button>
                 </div>
 
@@ -48,6 +48,8 @@
 
 <script>
 import ModalComponent from '@/components/modals/ModalComponent.vue'
+import { login, getUser, logout } from '@/controllers/UserController'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'LoginView',
@@ -59,15 +61,82 @@ export default {
             logo: require('@/assets/images/logo.png'),
             imgLogin: require('@/assets/images/online_shopping.png'),
             registerModalOpen: false,
+            showPassword: false
         }
     },
     methods: {
+        ...mapActions(['setUser']),
         registerCostumer () {
             this.$router.push({ name: 'register', params: { userType: 1 } })
         },
         registerSeller () {
             this.$router.push({ name: 'register', params: { userType: 2 } })
+        },
+        async login () {
+            // logout to clear session if user is logged in - review this
+            await logout().catch(() => {
+                console.log('User is not logged in')
+            })
+
+            // log inputs
+            const email = this.$refs.email.value
+            const password = this.$refs.password.value
+
+            if (email === '' || password === '') {
+                this.$toast.open({
+                    message: 'Preencha todos os campos obrigatórios',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                return
+            }
+
+            await login(email, password).then(async (res) => {
+                if (!res.error) {
+                    await getUser().then((res) => {
+                        console.log(res)
+                        const user = {
+                            id: res.idUser,
+                            name: res.name,
+                            email: res.email,
+                            role: res.role
+                        }
+                        this.setUser(user)
+                        localStorage.setItem('user', JSON.stringify(user))
+                        this.$toast.open({
+                            message: 'Bem vind@!',
+                            type: 'success',
+                            duration: 4000,
+                            position: 'top-right'
+                        });
+
+                        if (res.role === 'customer') this.$router.push('/')
+                        else if (res.role === 'vendor') this.$router.push('/vendor-panel')
+                        else if (res.role === 'admin') this.$router.push('/admin-panel')
+                    }).catch(async (err) => {
+                        console.log(err)
+                        this.$toast.open({
+                            message: 'Erro ao fazer login. Verifique suas credenciais',
+                            type: 'error',
+                            duration: 5000,
+                            position: 'top-right'
+                        });
+                    })
+                }
+            }).catch(async (err) => {
+                console.log(err)
+                this.$toast.open({
+                    message: 'Usuário ou senha incorretos.',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            })
         }
+    },
+    computed: {
+        ...mapGetters(['loggedInUser'])
     },
     mounted() {
     }

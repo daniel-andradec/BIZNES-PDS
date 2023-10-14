@@ -1,5 +1,6 @@
 import { nextTick } from "vue";
 import { createRouter, createWebHashHistory } from "vue-router";
+import store from "../store/index.js";
 
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
@@ -27,7 +28,7 @@ const routes = [
     path: "/",
     name: "home",
     meta: {
-      title: "Home",
+      title: "Home"
     },
     component: HomeView,
   },
@@ -35,7 +36,7 @@ const routes = [
     path: "/login",
     name: "login",
     meta: {
-      title: "Login",
+      title: "Login"
     },
     component: LoginView,
   },
@@ -76,6 +77,7 @@ const routes = [
     name: "checkout",
     meta: {
       title: "Checkout",
+      roles: ["customer"],
     },
     component: CheckoutView,
   },
@@ -84,6 +86,7 @@ const routes = [
     name: "order-confirmation",
     meta: {
       title: "Confirmação de Pedido",
+      roles: ["customer"],
     },
     component: OrderConfirmationView,
   },
@@ -92,6 +95,7 @@ const routes = [
     name: "customer-profile",
     meta: {
       title: "Perfil",
+      roles: ["customer"],
     },
     component: CustomerProfileView,
   },
@@ -100,6 +104,7 @@ const routes = [
     name: "panel",
     meta: {
       title: "Painel do Vendedor",
+      roles: ["vendor"],
     },
     component: VendorPanelView,
   },
@@ -108,6 +113,7 @@ const routes = [
     name: "store-registration",
     meta: {
       title: "Cadastro da Loja",
+      roles: ["vendor"],
     },
     component: VendorProfileView,
   },
@@ -116,6 +122,7 @@ const routes = [
     name: "vendor-products",
     meta: {
       title: "Produtos",
+      roles: ["vendor"],
     },
     component: VendorProducstView,
   },
@@ -124,6 +131,7 @@ const routes = [
     name: "vendor-sales",
     meta: {
       title: "Vendas",
+      roles: ["vendor"],
     },
     component: VendorSalesView,
   },
@@ -132,6 +140,7 @@ const routes = [
     name: "admin-panel",
     meta: {
       title: "Painel de Administrador",
+      roles: ["admin"],
     },
     component: AdminPanelView,
   },
@@ -146,6 +155,25 @@ router.afterEach((to) => {
   nextTick(() => {
     document.title = to.meta.title || "Biznes";
   });
+});
+
+router.beforeEach((to, from, next) => {
+  if (!store.state.user.user.id) {
+    const user = localStorage.getItem("user");
+    if (user) {
+      store.dispatch("setUser", JSON.parse(user));
+    }
+  }
+
+  if (to.meta.roles && !to.meta.roles.includes(store.state.user.user?.role)) {
+    alert("Você não tem permissão para acessar esta página!");
+    if (!from.name) {
+      next({ name: "login" });
+    }
+    return
+  }
+
+  next();
 });
 
 export default router;
