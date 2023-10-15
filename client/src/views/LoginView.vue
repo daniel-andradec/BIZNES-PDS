@@ -105,7 +105,7 @@ export default {
                         this.setUser(user)
                         localStorage.setItem('user', JSON.stringify(user))
                         this.$toast.open({
-                            message: 'Bem vind@!',
+                            message: 'Bem vindo(a)!',
                             type: 'success',
                             duration: 4000,
                             position: 'top-right'

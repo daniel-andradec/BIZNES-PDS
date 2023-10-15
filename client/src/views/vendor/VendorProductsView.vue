@@ -66,50 +66,32 @@ export default {
         ...mapActions(['toggleVendorMenu']),
         searchProduct() {
             if (this.searchText === '') {
-                this.products = this.getVendorStock.map((prod) => {
-                    return {
-                        ...this.getProduct(prod.id),
-                        quantity: prod.quantity
-                    }
-                })
+                this.products = this.getVendorStock
                 return
             }
-            this.products = this.getVendorStock.map((prod) => {
-                    return {
-                            ...this.getProduct(prod.id),
-                            quantity: prod.quantity
-                        }
-                    }
-                ).filter((prod) => {
-                    return prod.name.toLowerCase().includes(this.searchText.toLowerCase());
-                }
-            );
+            this.products = this.getVendorStock.filter((prod) => {
+                return prod.name.toLowerCase().includes(this.searchText.toLowerCase());
+            });
             this.noResults = this.products.length === 0;
             console.log(this.products)
         },
         handleCategories(categories) {
             this.categoryModalOpen = false
             if (categories.length === 0) {
-                this.products = this.getVendorStock.map((prod) => {
-                    return {
-                        ...this.getProduct(prod.id),
-                        quantity: prod.quantity
-                    }
-                })
+                this.products = this.getVendorStock
                 return
             }
 
             // category processing - todo - fix this when categories are fixed
             categories = categories.map((cat) => {
-                return cat.name
+                return cat.name || cat
             })
-            this.products = this.getVendorStock.map((prod) => {
-                return {
-                    ...this.getProduct(prod.id),
-                    quantity: prod.quantity
-                }
-            }).filter((prod) => {
-                return prod.category.some((cat) => {
+            this.products = this.getVendorStock.filter((prod) => {
+                const prodCat = prod.category.split(',')
+                // return prod.category.some((cat) => {
+                //     return categories.includes(cat)
+                // })
+                return prodCat.some((cat) => {
                     return categories.includes(cat)
                 })
             });
@@ -133,7 +115,15 @@ export default {
         await getProducts().then(() => {
             console.log(this.getVendorStock)
             this.products = this.getVendorStock;
+            // categoriesList is a array with strings representing the categories of this.products
+            this.products.forEach((prod) => {
+                const categories = prod.category.split(',')
+                categories.forEach((cat) => {
+                    if (!this.categoriesList.includes(cat)) this.categoriesList.push(cat)
+                })
+            })
         })
+        console.log(this.categoriesList)
     }
     
 }

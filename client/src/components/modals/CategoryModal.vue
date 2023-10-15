@@ -6,7 +6,7 @@
             <div class="multi-select-list">
                 <label v-for="(category, ckey) in categories" :key="ckey" class="option-label">
                     <input type="checkbox" :value="category" v-model="chosenCategories">
-                    {{ category.name }}
+                    {{ category.name || category }}
                 </label>
             </div>
 
@@ -39,7 +39,6 @@ export default {
             this.$emit('closeModal');
         },
         addCategories() {
-            console.log(this.chosenCategories);
             this.$emit('addCategories', this.chosenCategories);
         }
     },
@@ -66,7 +65,7 @@ export default {
         align-items: baseline;
         justify-content: center;
         margin-bottom: 15px;
-        padding-left: 20px;
+        padding: 0 20px;
     }
 
     .option-label {

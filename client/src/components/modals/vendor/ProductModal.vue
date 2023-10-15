@@ -33,7 +33,7 @@
 
                 <div>
                     <label for="quantity">Qtde. disponível <span>*</span></label>
-                    <input type="text" placeholder="Quantidade" required ref="quantity" />
+                    <input type="text" placeholder="Quantidade" required ref="quantity" @keypress="formatInput" />
                 </div>
             </div>
 
@@ -143,7 +143,19 @@ export default {
             const quantity = this.$refs.quantity.value
             const options = this.chosenOptions.map((option) => option).join(', ')
             const category = this.$refs.category.value
-            const img = this.imgFile
+            let img = this.imgFile
+
+            if (!img) {
+                // img is the image no-image in src/assets/images
+                img = new File([await (await fetch(require('@/assets/images/no-image.png'))).blob()], 'no-image.png', { type: 'image/png' })
+
+                this.$toast.open({
+                    message: 'Recomendamos que adicione uma imagem ao produto.',
+                    type: 'warning',
+                    position: 'top-right',
+                    duration: 5000
+                })
+            }
 
             
             if (name && description && price && quantity && category) {
@@ -193,7 +205,7 @@ export default {
             const category = this.$refs.category.value
             const img = this.imgFile
 
-            if (name && description && price && quantity && options.length > 0 && category) {
+            if (name && description && price && quantity && category) {
                 // edit product in database
                 const data = {
                     name,
@@ -257,7 +269,7 @@ export default {
                             this.$refs.quantity.value = this.product.quantity
                             this.$refs.category.value = this.product.category
                             this.imagePreviewUrl = this.product.photo
-                            this.chosenOptions = this.product.options.split(', ')
+                            this.chosenOptions = this.product.options !== '' ? this.product.options.split(', ') : []
                         }
                     });
                 }

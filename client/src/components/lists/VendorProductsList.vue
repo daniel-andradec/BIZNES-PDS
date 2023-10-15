@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="list" v-if="Object.values(sortedProducts).length > 0">
-            <div class="list-header">
+        <div class="list-vendor" v-if="Object.values(sortedProducts).length > 0">
+            <div class="list-header-vendor">
                 <div class="header-item" v-for="(field, fkey) in listFields" :key="fkey" :class="{ 'header-item-sort': field.sort }" @click="sortProducts(field)">
                     <h2>{{ field.display }}</h2>
                     <i class="fa-solid fa-sort" v-if="field.sort"></i>
@@ -12,6 +12,7 @@
                     <img :src="product.photo" alt="product">
                 </div>
                 <h2>{{ product.name }}</h2>
+                <h2>{{ product.description }}</h2>
                 <div class="categories">
                     <div class="category" v-for="(category, key) in product.category.split(',')" :key="key">
                         {{ category }}
@@ -19,7 +20,7 @@
                 </div>
                 <h2> {{ formatValue(product.price) }}</h2>
                 <h2>{{ product.quantity }}</h2>
-                <h2> {{ product.options }}</h2>
+                <h2> {{ product.options || '-' }}</h2>
                 <div class="actions">
                     <i class="fa-solid fa-edit" @click="editProduct(product)"></i>
                     <i class="fa-solid fa-trash red" @click="openDeleteProdModal(product)"></i>
@@ -71,6 +72,10 @@ export default {
                     display: 'Nome',
                     name: 'name',
                     sort: true
+                },
+                {
+                    display: 'Descrição',
+                    name: 'description'
                 },
                 {
                     display: 'Categoria'
@@ -177,10 +182,10 @@ export default {
 
 <style lang="less">
 
-.list {
-    .list-header {
+.list-vendor {
+    .list-header-vendor {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(8, 1fr);
         gap: 10px;
         align-items: center;
         padding: 10px;
@@ -209,7 +214,7 @@ export default {
 
     .product {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(8, 1fr);
         gap: 10px;
         align-items: center;
         padding: 10px;
@@ -241,12 +246,13 @@ export default {
             font-size: 12px;
             align-items: center;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 5px;
 
             .category {
                 background: #D4F3DE;
                 border-radius: 5px;
-                padding: 8px;
+                padding: 5px;
             }
         }
 
