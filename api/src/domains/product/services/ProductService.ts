@@ -20,6 +20,7 @@ class ProductServiceClass {
                 quantity: body.quantity,
                 options: body.options,
                 photo: (file as Express.MulterS3.File).location,
+                category: body.category,
                 awsKey: (file as Express.MulterS3.File).key,
                 idVendor: vendor.idVendor,
             };
@@ -53,13 +54,13 @@ class ProductServiceClass {
             throw(error);
         }
     }
-    async update(idProduct: string, body: Attributes<ProductInterface>, user: PayloadParams) {
+    async update(idProduct: string, body: Attributes<ProductInterface>, user: PayloadParams, file: any) {
         try {
-            const product = await this.getById(idProduct);
-            const vendor = await VendorService.getById(user.idUser);
-            if (product.idVendor != vendor!.idVendor && user.role != 'admin') {
-                throw new NotAuthorizedError('Você não tem permissão para editar esse produto!');
+            if(file){
+                body.photo = (file as Express.MulterS3.File).location;
+                body.awsKey = (file as Express.MulterS3.File).key;
             }
+            const product = await this.getById(idProduct);
             await product.update(body);
         } catch (error) {
             throw(error);
