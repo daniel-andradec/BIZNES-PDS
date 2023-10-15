@@ -20,6 +20,7 @@ class ProductServiceClass {
                 quantity: body.quantity,
                 options: body.options,
                 photo: (file as Express.MulterS3.File).location,
+                category: body.category,
                 awsKey: (file as Express.MulterS3.File).key,
                 idVendor: vendor.idVendor,
             };
@@ -29,11 +30,12 @@ class ProductServiceClass {
             throw(error);
         }
     }
-    async getAll(idVendor: string) {
+    async getAll(idUser: string) {
         try {
+            const idVendor = (await VendorService.getById(idUser))!.idVendor;
             const products = await Product.findAll({
                 where: {idVendor},
-                attributes: ['idProduct', 'name', 'description', 'price', 'quantity'],
+                attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
             });
             return products;
         } catch (error) {
@@ -43,7 +45,7 @@ class ProductServiceClass {
     async getById(idProduct: string) {
         try {
             const product = await Product.findByPk(idProduct, {
-                attributes: ['idProduct', 'name', 'description', 'price', 'quantity'],
+                attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'awsKey'],
             });
             if (!product) {
                 throw new QueryError(`Não há um produto com o ID ${idProduct}!`);
@@ -53,13 +55,19 @@ class ProductServiceClass {
             throw(error);
         }
     }
-    async update(idProduct: string, body: Attributes<ProductInterface>, user: PayloadParams) {
+    async update(idProduct: string, body: Attributes<ProductInterface>, user: PayloadParams, file: any) {
         try {
             const product = await this.getById(idProduct);
-            const vendor = await VendorService.getById(user.idUser);
-            if (product.idVendor != vendor!.idVendor && user.role != 'admin') {
-                throw new NotAuthorizedError('Você não tem permissão para editar esse produto!');
+            if(file){
+                body.photo = (file as Express.MulterS3.File).location;
+                body.awsKey = (file as Express.MulterS3.File).key;
             }
+            else{
+                body.photo = product.photo;
+                body.awsKey = product.awsKey;
+            }
+            
+            const vendor = await VendorService.getById(user.idUser);
             await product.update(body);
         } catch (error) {
             throw(error);
@@ -69,9 +77,6 @@ class ProductServiceClass {
         try {
             const product = await this.getById(idProduct);
             const vendor = await VendorService.getById(user.idUser);
-            if (product.idVendor != vendor!.idVendor && user.role != 'admin') {
-                throw new NotAuthorizedError('Você não tem permissão para deletar esse produto!');
-            }
             await deleteObject(product.awsKey);
             await product.destroy();
         } catch (error) {

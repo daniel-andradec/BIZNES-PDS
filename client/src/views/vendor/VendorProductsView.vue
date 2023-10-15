@@ -25,10 +25,10 @@
         </div>
 
         <div class="products-list">
-            <VendorProductsList :products="this.products" :noResults="noResults"/>
+            <VendorProductsList :products="this.products" :noResults="noResults" @refreshProducts="refreshProducts"/>
         </div>
         
-        <ProductModal :modalOpen="addProductModalOpen" @closeModal="addProductModalOpen = false" :editProduct="false" />
+        <ProductModal :modalOpen="addProductModalOpen" @closeModal="addProductModalOpen = false" :editProduct="false" @refreshProducts="refreshProducts"/>
 
         <CategoryModal :modalOpen="categoryModalOpen" :categories="categoriesList" @closeModal="categoryModalOpen = false" @addCategories="handleCategories" />
     </div>
@@ -40,7 +40,7 @@ import VendorMenu from '@/components/menus/VendorMenu.vue'
 import VendorProductsList from '@/components/lists/VendorProductsList.vue'
 import ProductModal from '@/components/modals/vendor/ProductModal.vue'
 import CategoryModal from '@/components/modals/CategoryModal.vue'
-
+import { getProducts } from '@/controllers/VendorController'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -114,6 +114,13 @@ export default {
                 })
             });
             this.noResults = this.products.length === 0
+        },
+        async refreshProducts() {
+            this.addProductModalOpen = false
+            await getProducts().then(() => {
+                this.products = null
+                this.products = this.getVendorStock
+            })
         }
     },
     computed: {
@@ -122,25 +129,11 @@ export default {
     created() {
         
     },
-    mounted() {
-        this.getVendorStock.forEach((prod) => {
-            // push product and quantity
-            const product = this.getProduct(prod.id)
-            this.products.push({
-                ...product,
-                quantity: prod.quantity
-            })
-
-            // push category
-            product.category.forEach((cat) => {
-                const category = this.getCategory(cat)
-                if (!this.categoriesList.includes(category)) {
-                    this.categoriesList.push(category)
-                }
-            })
+    async mounted() {
+        await getProducts().then(() => {
+            console.log(this.getVendorStock)
+            this.products = this.getVendorStock;
         })
-
-        console.log(this.products)
     }
     
 }

@@ -49,27 +49,27 @@ export default {
                 {
                     display: 'Total de vendas',
                     name: 'salesTotal',
-                    value: 112500,
+                    value: 0,
                     icon: 'fa-solid fa-chart-line',
                     format: true
                 },
                 {
                     display: 'Total de pedidos',
                     name: 'totalOrders',
-                    value: 189,
+                    value: 0,
                     icon: 'fa-solid fa-cart-shopping'
                 },
                 {
                     display: 'Produto mais vendido',
                     name: 'bestSellingProduct',
-                    value: 'Apple iPhone 14 Pro Max',
+                    value: '-',
                     icon: 'fa-solid fa-medal',
                     fixLength: true
                 },
                 {
                     display: 'Categoria mais vendida',
                     name: 'bestSellingCategory',
-                    value: 'Smartphones',
+                    value: '-',
                     icon: 'fa-solid fa-ranking-star',
                     fixLength: true
                 }

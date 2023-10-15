@@ -9,17 +9,17 @@
             </div>
             <div class="product" v-for="(product, pkey) in sortedProducts" :key="pkey">
                 <div class="image">
-                    <img :src="product.img" alt="product">
+                    <img :src="product.photo" alt="product">
                 </div>
                 <h2>{{ product.name }}</h2>
                 <div class="categories">
-                    <div class="category" v-for="(category, key) in product.category" :key="key">
+                    <div class="category" v-for="(category, key) in product.category.split(',')" :key="key">
                         {{ category }}
                     </div>
                 </div>
                 <h2> {{ formatValue(product.price) }}</h2>
                 <h2>{{ product.quantity }}</h2>
-                <h2> {{ getOptionsList(product.options) }}</h2>
+                <h2> {{ product.options }}</h2>
                 <div class="actions">
                     <i class="fa-solid fa-edit" @click="editProduct(product)"></i>
                     <i class="fa-solid fa-trash red" @click="openDeleteProdModal(product)"></i>
@@ -33,7 +33,7 @@
             <h2>Ops! Parece que você ainda não tem nenhum produto cadastrado. <br>Utilize o botão acima para adicionar um novo produto.</h2>
         </div>
 
-        <ProductModal :modalOpen="editProductModalOpen" :product="productToEdit" :editProduct="editProductModalOpen" @closeModal="editProductModalOpen = false" />
+        <ProductModal :modalOpen="editProductModalOpen" :product="productToEdit" :editProduct="editProductModalOpen" @closeModal="editProductModalOpen = false" @refreshProducts="refreshProducts"></ProductModal>
 
         <ModalComponent :modalOpen="deleteProductModalOpen" @closeModal="deleteProductModalOpen = false">
             <div class="delete-prod-modal">
@@ -51,6 +51,7 @@
 <script>
 import ProductModal from '../modals/vendor/ProductModal.vue'
 import ModalComponent from '../modals/ModalComponent.vue'
+import { deleteProduct } from '@/controllers/vendor/ProductController'
 
 export default {
     name: 'VendorProductsList',
@@ -59,6 +60,7 @@ export default {
         ModalComponent
     },
     props: ['products', 'noResults'],
+    emits: ['refreshProducts'],
     data() {
         return {
             listFields: [
@@ -123,12 +125,34 @@ export default {
             this.productToEdit = product
             this.editProductModalOpen = true
         },
+        refreshProducts () {
+            this.editProductModalOpen = false
+            this.$emit('refreshProducts')
+        },
         openDeleteProdModal (product) {
             this.productToDelete = product
             this.deleteProductModalOpen = true
         },
-        deleteProduct () {
+        async deleteProduct () {
             // todo - delete product
+            await deleteProduct(this.productToDelete.idProduct).then(() => {
+                this.deleteProductModalOpen = false
+                this.$toast.open({
+                    message: 'Produto excluído com sucesso!',
+                    type: 'success',
+                    duration: 5000,
+                    position: 'top-right'
+                })
+                this.$emit('refreshProducts')
+            }).catch(() => {
+                this.deleteProductModalOpen = false
+                this.$toast.open({
+                    message: 'Ocorreu um erro ao excluir o produto.',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                })
+            })
         }
     },
     computed: {

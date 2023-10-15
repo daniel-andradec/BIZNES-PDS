@@ -14,7 +14,6 @@ class VendorServiceClass {
     async create(body: VendorCreationAttributes) { 
         try {
             //validateRegisterVendor(body);
-            console.log(body);
             const newVendor  = {
                 CNPJ: body.CNPJ,
                 companyName: body.companyName,
@@ -73,7 +72,8 @@ class VendorServiceClass {
 
     async getById(id: string) {
         try {
-            const vendor = await Vendor.findByPk(id);
+            const user = await User.findByPk(id);
+            const vendor = await Vendor.findOne({ where: { idUser: user?.idUser } });
             if (!vendor) {
                 throw new QueryError(`Não há loja com o ID ${id}!`);
             }

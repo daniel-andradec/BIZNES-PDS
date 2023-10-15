@@ -28,7 +28,7 @@
             <div class="middle-fields">
                 <div>
                     <label for="price">Preço <span>*</span></label>
-                    <input type="text" placeholder="Preço" required ref="price" />
+                    <input type="text" placeholder="Preço" required ref="price" @keypress="formatInput" />
                 </div>
 
                 <div>
@@ -39,7 +39,7 @@
 
             <div class="bottom-fields">
                 <div class="options-input">
-                    <label for="options">Opções (tamanhos, cores, medidas)</label>
+                    <label for="options">Opções <span @click="clearOptions">Limpar escolha</span></label>
                     <input type="text" placeholder="Opções" ref="options" />
                     <i class="fa fa-plus" @click="addOption()"></i>
                 </div>
@@ -73,6 +73,7 @@
 import ModalComponent from '../ModalComponent.vue'
 import CategoryModal from '../CategoryModal.vue'
 import { mapGetters } from 'vuex'
+import { createProduct, updateProduct } from '@/controllers/vendor/ProductController'
 
 export default {
     name: 'AddProductModal',
@@ -81,7 +82,7 @@ export default {
         CategoryModal
     },
     props: ['modalOpen', 'editProduct', 'product'],
-    emits: ['closeModal'],
+    emits: ['closeModal', 'refreshProducts'],
     data() {
         return {
             imagePreviewUrl: null,
@@ -132,20 +133,46 @@ export default {
                 this.addProduct()
             }
         },
-        addProduct() {
+        clearOptions() {
+            this.chosenOptions = []
+        },
+        async addProduct() {
             const name = this.$refs.name.value
             const description = this.$refs.description.value
             const price = this.$refs.price.value
             const quantity = this.$refs.quantity.value
-            const options = this.chosenOptions.map((option) => option.name)
+            const options = this.chosenOptions.map((option) => option).join(', ')
             const category = this.$refs.category.value
             const img = this.imgFile
 
             
-            if (name && description && price && quantity && options.length > 0 && category) {
+            if (name && description && price && quantity && category) {
                 // add product to database
                 // todo
-                console.log(name, description, price, quantity, options, category, img)
+                const data = {
+                    name,
+                    description,
+                    price,
+                    quantity,
+                    options,
+                    category
+                }
+                await createProduct(data, img).then(() => {
+                    this.$toast.open({
+                        message: 'Produto adicionado com sucesso',
+                        type: 'success',
+                        position: 'top-right',
+                        duration: 5000
+                    })
+                    this.$emit('refreshProducts')
+                }).catch(() => {
+                    this.$toast.open({
+                        message: 'Erro ao adicionar produto',
+                        type: 'error',
+                        position: 'top-right',
+                        duration: 5000
+                    })
+                })
             }
             else {
                 this.$toast.open({
@@ -156,19 +183,42 @@ export default {
                 })
             }
         },
-        editProductFunc() {
-            const id = this.product.id
+        async editProductFunc() {
+            const id = this.product.idProduct
             const name = this.$refs.name.value
             const description = this.$refs.description.value
             const price = this.$refs.price.value
             const quantity = this.$refs.quantity.value
-            const options = this.chosenOptions.map((option) => option.name)
+            const options = this.chosenOptions.map((option) => option).join(', ')
             const category = this.$refs.category.value
             const img = this.imgFile
 
             if (name && description && price && quantity && options.length > 0 && category) {
                 // edit product in database
-                // todo
+                const data = {
+                    name,
+                    description,
+                    price,
+                    quantity,
+                    options,
+                    category
+                }
+                await updateProduct(id, data, img).then(() => {
+                    this.$toast.open({
+                        message: 'Produto editado com sucesso',
+                        type: 'success',
+                        position: 'top-right',
+                        duration: 5000
+                    })
+                    this.$emit('refreshProducts')
+                }).catch(() => {
+                    this.$toast.open({
+                        message: 'Erro ao editar produto',
+                        type: 'error',
+                        position: 'top-right',
+                        duration: 5000
+                    })
+                })
                 console.log(id, name, description, price, quantity, options, category, img)
             }
             else {
@@ -178,6 +228,15 @@ export default {
                     position: 'top-right',
                     duration: 5000
                 })
+            }
+        },
+        formatInput(event) {
+            const charCode = (event.which) ? event.which : event.keyCode;
+            const value = event.target.value + event.key; // Obtém o valor atual do input mais a tecla pressionada
+
+            // Verifica se o valor é um número float válido
+            if (!/^(\d+\.?\d*|\.\d+)$/.test(value) && charCode > 31) {
+                event.preventDefault(); // Previne a entrada se não for um número float válido
             }
         }
     },
@@ -196,9 +255,9 @@ export default {
                             this.$refs.description.value = this.product.description
                             this.$refs.price.value = this.product.price
                             this.$refs.quantity.value = this.product.quantity
-                            this.$refs.category.value = this.product.category.join(', ')
-                            this.imagePreviewUrl = this.product.img
-                            this.chosenOptions = Object.values(this.product.options)
+                            this.$refs.category.value = this.product.category
+                            this.imagePreviewUrl = this.product.photo
+                            this.chosenOptions = this.product.options.split(', ')
                         }
                     });
                 }
@@ -363,6 +422,12 @@ export default {
                 transform: translateY(-50%);
                 font-size: 12px;
                 color: #828282;
+                cursor: pointer;
+            }
+
+            span {
+                color: var(--primaryColor);
+                margin-left: 5px;
                 cursor: pointer;
             }
         }

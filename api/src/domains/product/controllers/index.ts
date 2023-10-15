@@ -63,9 +63,23 @@ router.get('/:id',
 router.put('/:id',
     verifyJWT,
     checkRole([userRoles.vendor, userRoles.admin]),
+    upload.single('photo'),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await ProductService.update(req.params.id, req.body, req.user!);
+            await ProductService.update(req.params.id, req.body, req.user!, req.file);
+            res.status(statusCodes.NO_CONTENT).end();
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.delete('/:id',
+    verifyJWT,
+    checkRole([userRoles.vendor, userRoles.admin]),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await ProductService.delete(req.params.id, req.user!);
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);
