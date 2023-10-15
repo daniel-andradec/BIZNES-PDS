@@ -179,8 +179,7 @@ export default {
                 city: '',
                 state: '',
                 neighborhood: '',
-                devolutionPolicy: '',
-                name: 'vendor_name'
+                devolutionPolicy: ''
             },
             imagePreviewUrl: ''
         }
@@ -202,7 +201,7 @@ export default {
                         return
                     }
                     this.formData.cep = resp.data.cep;
-                    this.formData.addressName = resp.data.logradouro;
+                    this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
                 }).catch(() => {
@@ -218,14 +217,14 @@ export default {
             }
         },
         submitForm: async function () {
-            console.log(this.formData)
-            const vendor = { ...this.formData }
-            delete vendor.passwordConfirmation
-
             if (!this.validateFields()) return
             this.sanitizeData()
 
-            console.log(this.formData)
+            const vendor = { ...this.formData }
+            delete vendor.passwordConfirmation
+            vendor.name = vendor.fantasyName
+
+            console.log(vendor)
 
             await registerVendor(vendor).then((res) => {
                 if (!res.error) {

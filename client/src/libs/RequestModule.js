@@ -4,7 +4,6 @@ const makeRequest = async (method = 'get', uri, data = {}) => {
     const baseUrl = 'http://localhost:3030/api'
     const url = baseUrl + uri
 
-    console.log('url', url)
     const result = await axios({
         method,
         url,
@@ -13,8 +12,9 @@ const makeRequest = async (method = 'get', uri, data = {}) => {
         headers: {
             'Content-Type': 'application/json'
         },
+        withCredentials: true
     }).then((response) => {
-        return response.data
+        return response
     }).catch((error) => {
         throw error
     })

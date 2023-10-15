@@ -5,7 +5,7 @@
         <div class="login-container" @mouseover="showDropdown" @mouseleave="hideDropdown">
             <div class="login">
                 <i class="fa-solid fa-store"></i>
-                <span>{{ store.name }}</span>
+                <span>{{ loggedInUser?.name }}</span>
             </div>
             <!-- Olá, faça seu <br><span>login</span> -->
 
@@ -14,7 +14,7 @@
                     <i class="fa fa-gear"></i>
                     Cadastro da Loja
                 </div>
-                <div class="option">
+                <div class="option" @click="logout()">
                     <i class="fa fa-sign-out-alt"></i>
                     Sair
                 </div>
@@ -24,6 +24,9 @@
 </template>
 
 <script>
+import { logout } from '@/controllers/UserController'
+import { mapGetters } from 'vuex'
+
 export default {
     name: 'VendorHeader',
     components: {
@@ -32,10 +35,7 @@ export default {
         return {
             logo: require('@/assets/images/logo.png'),
             searchText: '',
-            isDropDownVisible: false,
-            store: {
-                name: 'Fastsell'
-            }
+            isDropDownVisible: false
         }
     },
     methods: {
@@ -44,9 +44,14 @@ export default {
         },
         hideDropdown() {
             this.isDropDownVisible = false
+        },
+        async logout () {
+            await logout()
+            this.$router.push('/login')
         }
     },
     computed: {
+        ...mapGetters(['loggedInUser'])
     }
 }
 </script>

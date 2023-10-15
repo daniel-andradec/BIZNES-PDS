@@ -204,14 +204,13 @@ export default {
             }
         },
         submitForm: async function () {
-            console.log(this.formData)
-            const customer = { ...this.formData }
-            delete customer.passwordConfirmation
-
             if (!this.validateFields()) return
             this.sanitizeData()
 
-            console.log(this.formData)
+            const customer = { ...this.formData }
+            delete customer.passwordConfirmation
+
+            console.log(customer)
 
             await registerCustomer(customer).then((res) => {
                 if (!res.error) {
@@ -316,7 +315,7 @@ export default {
             }
 
             // sanitize birthDate to format DD/MM/YYYY
-            this.formData.birthDate = moment(this.formData.birthDate).format('DD/MM/YYYY')
+            // this.formData.birthDate = moment(this.formData.birthDate).format('DD/MM/YYYY')
         }
     }
 }
