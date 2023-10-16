@@ -1,4 +1,5 @@
 const formatValue = (value, format, sanitizeFlag) => {
+    console.log('formatValue', value, format, sanitizeFlag)
     if (sanitizeFlag) {
         return sanitize(value, format)
     }

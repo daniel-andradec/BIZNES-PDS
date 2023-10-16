@@ -22,8 +22,7 @@
                         :placeholder="field.placeholder"
                         v-model="formData[field.ref]"
                         :disabled="field.disable"
-                        @input="field.input && this[field.input]($event)"
-                    >
+                        @input="field.input && this[field.input]($event); formatValue($event, field.format)" />
                 </div>
             </div>
         </div>
@@ -58,8 +57,10 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import moment from 'moment'
+// import moment from 'moment'
 import ModalComponent from '@/components/modals/ModalComponent.vue'
+import { getCustomerData } from '@/controllers/CustomerController'
+import { formatValue } from '@/libs/Util'
 
 export default {
     name: 'CustomerProfileReg',
@@ -90,14 +91,16 @@ export default {
                         type: 'text',
                         placeholder: 'CPF',
                         required: true,
-                        disable: true
+                        disable: true,
+                        format: 'cpf'
                     },
                     {
                         ref: 'cellphone',
                         label: 'Celular', 
                         type: 'tel',
                         placeholder: 'Celular',
-                        required: true
+                        required: true,
+                        format: 'cellphone'
                     }
                 ],
                 'Dados de acesso': [
@@ -126,7 +129,8 @@ export default {
                         placeholder: 'CEP',
                         input: 'calcCEP',
                         value: '',
-                        required: true
+                        required: true,
+                        format: 'cep'
                     },
                     {
                         ref: 'addressName',
@@ -141,7 +145,8 @@ export default {
                         label: 'Número', 
                         type: 'text',
                         placeholder: 'Número',
-                        required: true
+                        required: true,
+                        format: 'number'
                     },
                     {
                         ref: 'complement',
@@ -240,24 +245,38 @@ export default {
             }
 
             // todo: enviar para a API a senha atual e a nova senha
+        },
+        formatValue: function (event, format) { // formats value on input to be displayed nicely
+            if (!format) return
+            const value = event.target.value
+            event.target.value = formatValue(value, format)
+            this.formData[event.target.id] = event.target.value
+        },
+        formatLoadedData() {
+            this.formData.cpf = formatValue(this.formData.cpf, 'cpf')
+            this.formData.cellphone = formatValue(this.formData.cellphone, 'cellphone')
+            this.formData.cep = formatValue(this.formData.cep, 'cep')
         }
     },
-    mounted() {
+    async mounted() {
+        await getCustomerData()
         console.log (this.getCustomerData);
         if (this.getCustomerData) {
             this.formData.name = this.getCustomerData.name;
-            this.formData.birthDate = moment(this.getCustomerData.birthDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
-            this.formData.cpf = this.getCustomerData.cpf;
+            this.formData.birthDate = this.getCustomerData.birthDate
+            this.formData.cpf = this.getCustomerData.CPF;
             this.formData.cellphone = this.getCustomerData.phone;
             this.formData.email = this.getCustomerData.email;
-            this.formData.cep = this.getCustomerData.address.zipCode;
+            this.formData.cep = this.getCustomerData.address.cep;
             this.formData.addressName = this.getCustomerData.address.street;
             this.formData.addressNumber = this.getCustomerData.address.number;
             this.formData.complement = this.getCustomerData.address.complement;
             this.formData.city = this.getCustomerData.address.city;
             this.formData.state = this.getCustomerData.address.state;
             this.formData.neighborhood = this.getCustomerData.address.neighborhood;
-            this.formData.password = this.getCustomerData.passwordMD5;
+            this.formData.password = '*********';
+
+            this.formatLoadedData();
         }
     }
 }
