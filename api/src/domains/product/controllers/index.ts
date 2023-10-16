@@ -22,8 +22,6 @@ router.post('/',
 );
 
 router.get('/all',
-    verifyJWT,
-    checkRole([userRoles.vendor, userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const products = await ProductService.getAll();
