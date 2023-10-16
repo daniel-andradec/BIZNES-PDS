@@ -17,7 +17,7 @@ router.post('/',
   },
 );
 
-router.post('/logged',
+router.get('/logged',
     verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
