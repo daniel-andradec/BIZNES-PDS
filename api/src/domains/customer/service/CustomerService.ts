@@ -66,7 +66,7 @@ class CustomerServiceClass {
             const customer = await Customer.findOne({where: {idUser}});
             const user = await UserService.getById(idUser);
             const address = await AddressService.getAddress(user);
-            const costumerWithAddress = { customer, address};
+            const costumerWithAddress = { customer, address, user};
             return costumerWithAddress;
         }
         catch(error){

@@ -88,7 +88,7 @@ class VendorServiceClass {
             const vendor = await Vendor.findOne({where: {idUser}});
             const user = await UserService.getById(idUser);
             const address = await AddressService.getAddress(user);
-            const vendorWithAddress = { vendor, address};
+            const vendorWithAddress = { vendor, address, user};
             return vendorWithAddress;
         }
         catch(error){
