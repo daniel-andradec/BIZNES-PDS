@@ -21,12 +21,25 @@ router.post('/',
     }
 );
 
+router.get('/all',
+    verifyJWT,
+    checkRole([userRoles.vendor, userRoles.admin]),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const products = await ProductService.getAll();
+            res.status(statusCodes.SUCCESS).json(products);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 router.get('/',
     verifyJWT,
     checkRole([userRoles.vendor]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const products = await ProductService.getAll(req.user!.idUser);
+            const products = await ProductService.getAllByStore(req.user!.idUser);
             res.status(statusCodes.SUCCESS).json(products);
         } catch (error) {
             next(error);
@@ -39,7 +52,7 @@ router.get('/store/:id',
     checkRole([userRoles.vendor, userRoles.admin, userRoles.customer]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const products = await ProductService.getAll(req.params.id);
+            const products = await ProductService.getAllByStore(req.params.id);
             res.status(statusCodes.SUCCESS).json(products);
         } catch (error) {
             next(error);

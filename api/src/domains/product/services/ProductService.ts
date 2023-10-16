@@ -30,11 +30,21 @@ class ProductServiceClass {
             throw(error);
         }
     }
-    async getAll(idUser: string) {
+    async getAllByStore(idUser: string) {
         try {
             const idVendor = (await VendorService.getById(idUser))!.idVendor;
             const products = await Product.findAll({
                 where: {idVendor},
+                attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+            });
+            return products;
+        } catch (error) {
+            throw(error);
+        }
+    }
+    async getAll() {
+        try {
+            const products = await Product.findAll({
                 attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
             });
             return products;
