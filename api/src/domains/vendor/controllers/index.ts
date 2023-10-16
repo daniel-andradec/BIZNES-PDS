@@ -17,6 +17,18 @@ router.post('/',
   },
 );
 
+router.post('/logged',
+    verifyJWT,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const vendor = await VendorService.getLogged(req.user!.idUser);
+      res.status(statusCodes.SUCCESS).json(vendor);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.get('/',
     verifyJWT,
     checkRole([userRoles.admin]),

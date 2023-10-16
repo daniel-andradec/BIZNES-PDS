@@ -83,6 +83,19 @@ class VendorServiceClass {
         }
     }
 
+    async getLogged(idUser: string) {
+        try{
+            const vendor = await Vendor.findOne({where: {idUser}});
+            const user = await UserService.getById(idUser);
+            const address = await AddressService.getAddress(user);
+            const vendorWithAddress = { vendor, address};
+            return vendorWithAddress;
+        }
+        catch(error){
+            throw(error);
+        }
+    }
+
     async update(id: string, body: VendorCreationAttributes, loggedUser: PayloadParams){
         try {
             validateUpdateVendor(body);
