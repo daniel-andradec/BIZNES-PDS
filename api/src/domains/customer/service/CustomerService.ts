@@ -13,7 +13,8 @@ import { AddressService } from "../../address/services/AddressService";
 class CustomerServiceClass {
     async create(body: CustomerCreationAttributes) {
         try {
-            validateRegisterCustomer(body);
+            //validateRegisterCustomer(body);
+            console.log(body);
             const newUser: CreationAttributes<UserInterface> = {
                 name: body.name,
                 email: body.email,
@@ -56,6 +57,19 @@ class CustomerServiceClass {
             });
             return customers;
         } catch (error) {
+            throw(error);
+        }
+    }
+
+    async getLogged(idUser: string) {
+        try{
+            const customer = await Customer.findOne({where: {idUser}});
+            const user = await UserService.getById(idUser);
+            const address = await AddressService.getAddress(user);
+            const costumerWithAddress = { customer, address};
+            return costumerWithAddress;
+        }
+        catch(error){
             throw(error);
         }
     }
