@@ -73,7 +73,7 @@
 import ModalComponent from '../ModalComponent.vue'
 import CategoryModal from '../CategoryModal.vue'
 import { mapGetters } from 'vuex'
-import { createProduct, updateProduct } from '@/controllers/vendor/ProductController'
+import { createProduct, updateProduct } from '@/controllers/vendor/VendorProductController'
 
 export default {
     name: 'AddProductModal',

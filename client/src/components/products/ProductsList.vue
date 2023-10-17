@@ -26,7 +26,7 @@
 
         <div class="list" v-if="Object.values(products).length > 0">
             <div class="list-item" v-for="(product, key) in products" :key="key" @click="goToProduct(product)">
-                <ProductCard :key="product.id" :product="product" />
+                <ProductCard :key="product.idProduct" :product="product" />
             </div>
         </div>
         <div class="not-found" v-else>
@@ -93,13 +93,14 @@ export default {
             this.isSortDropdownVisible = false
         },
         goToProduct(product) {
-            this.$router.push({ name: 'product', params: { id: product.id } })
+            this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         },
         sortProducts(option) {
             this.$store.dispatch('sortProducts', option)
         }
     },
     mounted() {
+        console.log(this.products)
     }
 }
 </script>

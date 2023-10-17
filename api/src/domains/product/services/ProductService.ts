@@ -5,6 +5,7 @@ import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { VendorService } from '../../vendor/services/VendorService';
 import { deleteObject } from '../../../../utils/functions/aws';
+const { Op } = require("sequelize");
 
 class ProductServiceClass {
     async create(body: CreationAttributes<ProductInterface>, user: PayloadParams, file: any) {
@@ -45,7 +46,8 @@ class ProductServiceClass {
     async getAll() {
         try {
             const products = await Product.findAll({
-                attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                where: {quantity: {[Op.gt]: 0}}, // gt = greater than 0
+                attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo']
             });
             return products;
         } catch (error) {

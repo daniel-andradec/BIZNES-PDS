@@ -101,7 +101,7 @@ export default {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
         },
         goToProduct(product) {
-            this.$router.push({ name: 'product', params: { id: product.id } })
+            this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         }
     },
     mounted() {

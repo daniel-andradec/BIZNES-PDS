@@ -1,6 +1,6 @@
 <template>
     <div class="order-product-card" :class="{ fixedSize: fixSize }">
-        <img :src="product.img" />
+        <img :src="product.photo" />
         <div class="name">{{ quantity + 'x ' + fixLength(product.name) }}</div>
         <div class="option" v-if="product.selectedOption">{{ product.selectedOption }}</div>
         <div class="price"> {{ 'Total: ' + formatValue(getTotalPrice()) }}</div>
