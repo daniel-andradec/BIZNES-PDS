@@ -7,3 +7,5 @@ class TransactionProductServiceClass {
         return await TransactionProduct.create(transactionProduct);
     }
 }
+
+export const TransactionProductService = new TransactionProductServiceClass();
