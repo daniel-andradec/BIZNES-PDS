@@ -61,6 +61,8 @@ import { mapGetters } from 'vuex'
 import ModalComponent from '@/components/modals/ModalComponent.vue'
 import { getCustomerData } from '@/controllers/CustomerController'
 import { formatValue } from '@/libs/Util'
+import { updatePassword } from '@/controllers/UserController'
+import { updateCustomerData } from '@/controllers/CustomerController'
 
 export default {
     name: 'CustomerProfileReg',
@@ -133,7 +135,7 @@ export default {
                         format: 'cep'
                     },
                     {
-                        ref: 'addressName',
+                        ref: 'street',
                         label: 'Logradouro', 
                         type: 'text',
                         placeholder: 'Logradouro',
@@ -141,7 +143,7 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'addressNumber',
+                        ref: 'number',
                         label: 'Número', 
                         type: 'text',
                         placeholder: 'Número',
@@ -185,8 +187,8 @@ export default {
                 email: '',
                 password: '',
                 cep: '',
-                addressName: '',
-                addressNumber: '',
+                street: '',
+                number: '',
                 complement: '',
                 city: '',
                 state: '',
@@ -210,7 +212,7 @@ export default {
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
                     console.log(resp.data)
                     this.formData.cep = resp.data.cep;
-                    this.formData.addressName = resp.data.logradouro;
+                    this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
                 }).catch(err => {
@@ -219,11 +221,30 @@ export default {
             }
         },
         submitForm() {
+            this.sanitizeData()
             console.log(this.formData);
-            // Aqui você pode fazer o que quiser com os dados, como enviá-los para uma API
+            
+            const data = this.formData;
+            delete data.password
+
+            updateCustomerData(data).then(() => {
+                this.$toast.open({
+                    message: 'Dados atualizados com sucesso',
+                    type: 'success',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            }).catch(err => {
+                console.log(err);
+                this.$toast.open({
+                    message: 'Erro ao atualizar dados',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            });
         },
-        updatePassword() {
-            console.log(this.passwordData)
+        async updatePassword() {
             if (!this.passwordData.password || !this.passwordData.newPassword || !this.passwordData.confirmPassword) {
                 this.$toast.open({
                     message: 'Preencha todos os campos obrigatórios',
@@ -244,7 +265,23 @@ export default {
                 return;
             }
 
-            // todo: enviar para a API a senha atual e a nova senha
+            await updatePassword(this.passwordData.password, this.passwordData.newPassword).then(() => {
+                this.$toast.open({
+                    message: 'Senha alterada com sucesso',
+                    type: 'success',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                this.passwordModalOpen = false;
+            }).catch(err => {
+                console.log(err);
+                this.$toast.open({
+                    message: 'Senha incorreta.',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            });
         },
         formatValue: function (event, format) { // formats value on input to be displayed nicely
             if (!format) return
@@ -256,6 +293,16 @@ export default {
             this.formData.cpf = formatValue(this.formData.cpf, 'cpf')
             this.formData.cellphone = formatValue(this.formData.cellphone, 'cellphone')
             this.formData.cep = formatValue(this.formData.cep, 'cep')
+        },
+        sanitizeData: function () { // sanitize data before sending to backend - remove special characters, format dates, etc
+            const fields = this.sections
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.format) {
+                        this.formData[field.ref] = formatValue(this.formData[field.ref], field.format, true) // true - sanitize
+                    }
+                }
+            }
         }
     },
     async mounted() {
@@ -268,8 +315,8 @@ export default {
             this.formData.cellphone = this.getCustomerData.phone;
             this.formData.email = this.getCustomerData.email;
             this.formData.cep = this.getCustomerData.address.cep;
-            this.formData.addressName = this.getCustomerData.address.street;
-            this.formData.addressNumber = this.getCustomerData.address.number;
+            this.formData.street = this.getCustomerData.address.street;
+            this.formData.number = this.getCustomerData.address.number;
             this.formData.complement = this.getCustomerData.address.complement;
             this.formData.city = this.getCustomerData.address.city;
             this.formData.state = this.getCustomerData.address.state;

@@ -77,15 +77,8 @@ class UserServiceClass {
     }
   }
 
-  async update(id: string, body: CreationAttributes<UserInterface>, loggedUser: PayloadParams){
+  async update(id: string, body: CreationAttributes<UserInterface>){
     try {
-      if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
-        throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
-      }
-
-      if (body.role && loggedUser.role != userRoles.admin && loggedUser.role != body.role) {
-        throw new NotAuthorizedError('Você não tem permissão para editar seu cargo!');
-      }
 
       const user = await this.getById(id);
 

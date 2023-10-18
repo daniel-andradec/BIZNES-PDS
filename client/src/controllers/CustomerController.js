@@ -14,4 +14,9 @@ const getCustomerData = async () => {
     return response;
 }
 
-export { registerCustomer, getCustomerData };
+const updateCustomerData = async (customer) => {
+    const response = await makeRequest('PUT', '/customer', customer);
+    return response;
+}
+
+export { registerCustomer, getCustomerData, updateCustomerData };

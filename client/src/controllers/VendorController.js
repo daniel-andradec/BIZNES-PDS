@@ -12,4 +12,17 @@ const getProducts = async () => {
     store.dispatch('setVendorStock', response.data);
 }
 
-export { registerVendor, getProducts };
+const getVendorData = async () => {
+    const response = await makeRequest('GET', '/vendor/logged');
+    if (response.status === 200) {
+        store.dispatch('saveVendorData', response.data);
+    }
+    return response;
+}
+
+const updateVendorData = async (vendor) => {
+    const response = await makeRequest('PUT', '/vendor', vendor);
+    return response;
+}
+
+export { registerVendor, getProducts, getVendorData, updateVendorData };

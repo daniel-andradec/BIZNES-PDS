@@ -92,14 +92,11 @@ class CustomerServiceClass {
         }
     }
 
-    async update(id: string, body: CustomerCreationAttributes, loggedUser: PayloadParams) {
+    async update(body: CustomerCreationAttributes, idUser: string ) {
         try {
             validateUpdateCustomer(body);
-            const vendor = await this.getById(id);
-            const user = await UserService.getById(vendor.idCustomer);
-            if (loggedUser.role != userRoles.admin && loggedUser.idUser != user.idUser) {
-                throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
-            }
+           
+            const user = await UserService.getById(idUser);
 
             const newCustomer = {
                 phone: body.phone,
@@ -114,8 +111,20 @@ class CustomerServiceClass {
                 role: userRoles.vendor,
             };
 
-            await UserService.update(user.idUser, newUser, loggedUser);
-            await vendor.update(body);
+            const newAddress = {
+                street: body.street,
+                number: body.number,
+                complement: body.complement,
+                neighborhood: body.neighborhood,
+                city: body.city,
+                state: body.state,
+                cep: body.cep,
+                idUser: user.idUser,
+            }
+
+            await UserService.update(user.idUser, newUser);
+            await Customer.update(newCustomer, {where: {idUser: idUser}});
+            await AddressService.update(newAddress, user.idUser);
         } catch (error) {
             throw(error);
         }

@@ -15,7 +15,7 @@
                             {{ item.display }}
                         </div>
                     </div>
-                    <div class="logout">
+                    <div class="logout" @click="logout()">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         Sair
                     </div>
@@ -26,7 +26,9 @@
 </template>
 
 <script>
+import { logout } from '@/controllers/UserController'
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
     name: 'VendorMenu',
     components: {
@@ -43,6 +45,10 @@ export default {
         navigate(item) {
             this.$router.push(item.route)
             this.toggleVendorMenu()
+        },
+        async logout () {
+            await logout()
+            this.$router.push('/login')
         }
     },
     computed: {
