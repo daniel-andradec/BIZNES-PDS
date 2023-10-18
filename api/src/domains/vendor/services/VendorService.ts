@@ -13,7 +13,7 @@ import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/
 class VendorServiceClass {
     async create(body: VendorCreationAttributes) { 
         try {
-            //validateRegisterVendor(body);
+            validateRegisterVendor(body);
             const newVendor  = {
                 CNPJ: body.CNPJ,
                 companyName: body.companyName,
@@ -88,7 +88,7 @@ class VendorServiceClass {
             const vendor = await Vendor.findOne({where: {idUser}});
             const user = await UserService.getById(idUser);
             const address = await AddressService.getAddress(user);
-            const vendorWithAddress = { vendor, address, user};
+            const vendorWithAddress = { vendor, address, user };
             return vendorWithAddress;
         }
         catch(error){
