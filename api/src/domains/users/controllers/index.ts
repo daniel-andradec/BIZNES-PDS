@@ -23,16 +23,17 @@ router.post('/logout',
   },
 );
 
-/* router.post('/',
+router.put('/password',
+  verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await UserService.create(req.body);
-      res.status(statusCodes.CREATED).end();
+      await UserService.updatePassword(req.user!.idUser, req.body.newPassword, req.body.oldPassword, req.user!);
+      res.status(statusCodes.SUCCESS).json('Senha alterada com sucesso!').end();
     } catch (error) {
       next(error);
     }
-  },
-); */
+  }
+);
 
 router.get('/',
   verifyJWT,
