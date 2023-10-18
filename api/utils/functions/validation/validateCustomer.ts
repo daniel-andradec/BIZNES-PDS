@@ -30,7 +30,6 @@ export const validateUpdateCustomer = (customer: CustomerCreationAttributes) => 
     const schema = Joi.object({
         name: Joi.string().min(3).max(255),
         email: Joi.string().min(3).max(255).email(),
-        password: Joi.string().min(6).max(255),
         phone: Joi.string().min(3).max(255),
         CPF: Joi.string().min(11).max(11),
         birthDate: Joi.string().min(3).max(255),
