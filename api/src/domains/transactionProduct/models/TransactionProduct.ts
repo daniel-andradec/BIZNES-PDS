@@ -42,10 +42,10 @@ export const TransactionProduct = sequelize.define<TransactionProductInterface>(
 });
 
 TransactionProduct.belongsTo(Transaction, { foreignKey: 'idTransaction' });
-Transaction.hasOne(TransactionProduct, { foreignKey: 'idTransaction' });
+Transaction.hasMany(TransactionProduct, { foreignKey: 'idTransaction', onDelete: 'CASCADE' });
 
 TransactionProduct.belongsTo(Product, { foreignKey: 'idProduct' });
-Product.hasOne(TransactionProduct, { foreignKey: 'idProduct' });
+Product.hasMany(TransactionProduct, { foreignKey: 'idProduct', onDelete: 'CASCADE' });
 
 TransactionProduct.sync({alter: false, force: false})
     .then(() => {

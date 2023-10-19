@@ -5,13 +5,14 @@ import { TransactionProductInterface } from "../../transactionProduct/models/Tra
 import { TransactionRepository } from "../repository/TransactionRepository";
 
 
-class SequelizeTransactionRepository implements TransactionRepository{
-    
+export class SequelizeTransactionRepository implements TransactionRepository{
+
     async create(transaction: TransactionInterface, transactionProducts: TransactionProductInterface[]): Promise<TransactionInterface> {
         try{
             const transactionCreated = await Transaction.create(transaction);
             transactionProducts.forEach(async (transactionProduct) => {
                 transactionProduct.idTransaction = transactionCreated.idTransaction;
+                console.log(transactionProduct);
                 await TransactionProduct.create(transactionProduct);
             });
             return transactionCreated;
@@ -21,7 +22,7 @@ class SequelizeTransactionRepository implements TransactionRepository{
     }
 
     async getAll(): Promise<TransactionInterface[]> {
-        return await Transaction.findAll();
+        return await Transaction.findAll({include: [TransactionProduct]});
     }
 
     async getById(id: string): Promise<TransactionInterface | null> {
