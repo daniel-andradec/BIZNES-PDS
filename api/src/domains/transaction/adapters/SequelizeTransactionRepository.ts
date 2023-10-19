@@ -23,11 +23,27 @@ export class SequelizeTransactionRepository implements TransactionRepository{
     }
 
     async getAll(): Promise<TransactionInterface[]> {
-        return await Transaction.findAll({include: [TransactionProduct]});
+        return await Transaction.findAll({
+            include: [{
+                model: TransactionProduct,
+                include: [{
+                    model: Product,
+                    attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                }]
+            }]
+        });
     }
 
     async getById(id: string): Promise<TransactionInterface | null> {
-        return await Transaction.findByPk(id);
+        return await Transaction.findByPk(id, {
+            include: [{
+                model: TransactionProduct,
+                include: [{
+                    model: Product,
+                    attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                }]
+            }]
+        });
     }
 
     async delete(id: string): Promise<void> {
@@ -37,9 +53,13 @@ export class SequelizeTransactionRepository implements TransactionRepository{
     async getByUserId(id: string): Promise<TransactionInterface[]> {
         return await Transaction.findAll({
             where: {idUser: id},
-            include: {
+            include: [{
                 model: TransactionProduct,
-            }
+                include: [{
+                    model: Product,
+                    attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                }]
+            }]
         });
     }
 
