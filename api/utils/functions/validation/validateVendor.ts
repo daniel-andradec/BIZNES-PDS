@@ -6,6 +6,7 @@ export const validateRegisterVendor = (vendor: VendorCreationAttributes) => {
     const schema = Joi.object<VendorCreationAttributes>({
         name: Joi.string().min(3).max(255).required(),
         email: Joi.string().min(3).max(255).required().email(),
+        password: Joi.string().min(6).max(255).required(),
         CNPJ: Joi.string().min(14).max(14).required(),
         companyName: Joi.string().min(3).max(255).required(),
         fantasyName: Joi.string().min(3).max(255).required(),

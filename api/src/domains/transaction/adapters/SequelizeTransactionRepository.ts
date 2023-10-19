@@ -3,6 +3,7 @@ import { TransactionInterface } from "../models/Transaction";
 import { TransactionProduct } from "../../transactionProduct/models/TransactionProduct";
 import { TransactionProductInterface } from "../../transactionProduct/models/TransactionProduct";
 import { TransactionRepository } from "../repository/TransactionRepository";
+import { Product } from "../../product/models/Product";
 
 
 export class SequelizeTransactionRepository implements TransactionRepository{
@@ -34,7 +35,12 @@ export class SequelizeTransactionRepository implements TransactionRepository{
     }
 
     async getByUserId(id: string): Promise<TransactionInterface[]> {
-        return await Transaction.findAll({where: {idUser: id}});
+        return await Transaction.findAll({
+            where: {idUser: id},
+            include: {
+                model: TransactionProduct,
+            }
+        });
     }
 
 }
