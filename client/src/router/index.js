@@ -49,7 +49,7 @@ const routes = [
     component: RegisterView,
   },
   {
-    path: "/product/:id",
+    path: "/product/:idProduct",
     name: "product",
     meta: {
       title: "Produto",

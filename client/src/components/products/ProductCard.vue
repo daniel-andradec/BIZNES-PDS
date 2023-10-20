@@ -1,9 +1,9 @@
 <template>
     <div class="product-card" :class="{ fixedSize: fixSize }">
-        <img :src="product.img" />
+        <img :src="product.photo" />
         <div class="name">{{ fixLength(product.name) }}</div>
         <div class="categories">
-            <div class="category" v-for="(category, key) in product.category" :key="key">
+            <div class="category" v-for="(category, key) in product.category.split(',')" :key="key">
                 {{ category }}
             </div>
         </div>
@@ -80,9 +80,11 @@ export default {
         display: flex;
         font-size: 12px;
         align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
 
         .category {
-            margin: 0px 10px;
             background: #D4F3DE;
             border-radius: 5px;
             padding: 8px;

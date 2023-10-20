@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         goToProduct(product) {
-            this.$router.push({ name: 'product', params: { id: product.id } })
+            this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         }
     }
 }

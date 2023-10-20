@@ -18,19 +18,19 @@
                 <div class="list">
                     <div class="list-item" v-for="(product, key) in getCartProducts" :key="key">
                         <div class="product-container-cart">
-                            <img :src="product.img" @click="goToProduct(product)" />
+                            <img :src="product.photo" @click="goToProduct(product)" />
 
                             <div class="product-info">
                                 <div class="name" @click="goToProduct(product)">{{ product.name }}</div>
                                 <div class="categories">
-                                    <div class="category" v-for="(category, key) in product.category" :key="key">
+                                    <div class="category" v-for="(category, key) in product.category.split(',')" :key="key">
                                         {{ category }}
                                     </div>
                                 </div>
                                 <div v-if="product.selectedOption" class="selected-option">
                                     Opção selecionada: <b>{{ product.selectedOption }}</b>
                                 </div>
-                                <div>Vendido por <b>FastShop</b></div>
+                                <div>Vendido por <b>{{ product.seller }}</b></div>
                                 <div class="price"> Total: <span>{{ formatValue(product.price) }}</span></div>
                             </div>
 
@@ -157,7 +157,7 @@ export default {
             return this.getCartProducts.reduce((acc, product) => acc + (product.price * product.quantity), 0)
         },
         goToProduct(product) {
-            this.$router.push({ name: 'product', params: { id: product.id } })
+            this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         },
         goToCheckout() {
             // cart transaction - no product selected

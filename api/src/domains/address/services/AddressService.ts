@@ -3,7 +3,7 @@ import { Attributes, CreationAttributes } from 'sequelize/types';
 import { PayloadParams } from "../../users/types/PayloadParams";
 
 class AddressServiceClass {
-    async create(body: CreationAttributes<AddressInterface>, user: PayloadParams) {
+    async create(body: CreationAttributes<AddressInterface>) {
         try {
             const newAddress: CreationAttributes<AddressInterface> = {
                 street: body.street,
@@ -14,6 +14,7 @@ class AddressServiceClass {
                 state: body.state,
                 cep: body.cep,
                 idUser: body.idUser,
+                idTransaction: body.idTransaction,
             };
             const address = await Address.create(newAddress);
             return address;

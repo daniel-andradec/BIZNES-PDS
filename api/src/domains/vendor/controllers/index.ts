@@ -10,7 +10,7 @@ router.post('/',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const vendor = await VendorService.create(req.body);
-      res.status(statusCodes.CREATED).json(vendor).end();
+      res.status(statusCodes.CREATED).json().end();
     } catch (error) {
       next(error);
     }
