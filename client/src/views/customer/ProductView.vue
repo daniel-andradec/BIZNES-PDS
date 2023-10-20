@@ -25,7 +25,7 @@
                 </div>
     
                 <p>
-                    Vendido por <b>{{ product.seller }}</b> e entregue por Biznes
+                    Vendido por <span>{{ product.seller }}</span> e entregue por Biznes
                 </p>
     
                 <p>
@@ -228,7 +228,11 @@ export default {
             }
     
             p {
-                font-size: 22px;                
+                font-size: 22px;        
+                
+                span {
+                    font-weight: 500;
+                }
             }
 
             .justify {

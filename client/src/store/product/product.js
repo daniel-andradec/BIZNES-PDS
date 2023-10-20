@@ -261,6 +261,13 @@ export default {
         },
         setProducts(state, products) {
             state.products = products
+
+            state.products.forEach(product => {
+                product.seller = product.Vendor.fantasyName
+                delete product.Vendor
+            })
+
+            localStorage.setItem('products', JSON.stringify(state.products))
         },
         fetchProducts(state) {
             const products = localStorage.getItem('products')
@@ -286,7 +293,6 @@ export default {
         // getProduct: state => id => state.products.find(product => product.id == id)
         getProduct: state => id => {
             let product = state.products.find(product => product.idProduct == id)
-            product.seller = 'Seller Name' // todo - get seller name from database
             return product
         },
         getCategoryProducts: state => (categories, id) => {
