@@ -12,7 +12,7 @@
                     <img :src="product.photo" alt="product">
                 </div>
                 <h2>{{ product.name }}</h2>
-                <h2>{{ product.description }}</h2>
+                <h2>{{ fixLength(product.description) }} <i class="fa-regular fa-eye fa-xs" @click="toggleDescription(product)"></i></h2>
                 <div class="categories">
                     <div class="category" v-for="(category, key) in product.category.split(',')" :key="key">
                         {{ category }}
@@ -46,13 +46,20 @@
                 </div>
             </div>
         </ModalComponent>
+
+        <ModalComponent :modalOpen="descriptionModalOpen" @closeModal="descriptionModalOpen = false">
+            <div class="description-modal">
+                <i class="fa-solid fa-circle-info"></i>
+                <h2>{{ currentDescription }}</h2>
+            </div>
+        </ModalComponent>
     </div>
 </template>
 
 <script>
 import ProductModal from '../modals/vendor/ProductModal.vue'
 import ModalComponent from '../modals/ModalComponent.vue'
-import { deleteProduct } from '@/controllers/vendor/ProductController'
+import { deleteProduct } from '@/controllers/vendor/VendorProductController'
 
 export default {
     name: 'VendorProductsList',
@@ -102,7 +109,9 @@ export default {
             editProductModalOpen: false,
             productToEdit: {},
             deleteProductModalOpen: false,
-            productToDelete: {}
+            productToDelete: {},
+            descriptionModalOpen: false,
+            currentDescription: ''
         }
     },
     methods: {
@@ -158,6 +167,13 @@ export default {
                     position: 'top-right'
                 })
             })
+        },
+        fixLength: function (text) {
+            return text.length > 75 ? text.substr(0, 75) + '...' : text
+        },
+        toggleDescription (product) {
+            this.currentDescription = product.description
+            this.descriptionModalOpen = true
         }
     },
     computed: {
@@ -256,6 +272,10 @@ export default {
             }
         }
 
+        i {
+            color: #232323;
+            cursor: pointer;
+        }
 
         .actions {
             display: flex;
@@ -295,7 +315,7 @@ export default {
     }
 }
 
-.delete-prod-modal {
+.delete-prod-modal, .description-modal {
     display: flex;
     flex-direction: column;
     align-items: center;

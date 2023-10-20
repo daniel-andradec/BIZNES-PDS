@@ -7,14 +7,14 @@
         </div>
         <div class="select-categories">
             <i class="fas fa-bars" @click="toggleMenu"></i>
-            <div class="category" v-for="(category, key) in product.category" :key="key">
+            <div class="category" v-for="(category, key) in product.category?.split(',')" :key="key">
                 <p>{{ category }}</p>
             </div>
         </div>
 
         <div class="product-container">
             <div class="product-image">
-                <img :src="product.img" />
+                <img :src="product.photo" />
             </div>
             <div class="info">
                 <h1>{{ product.name }}</h1>
@@ -25,7 +25,7 @@
                 </div>
     
                 <p>
-                    Vendido por <b>{{ product.seller }}</b> e entregue por Biznes
+                    Vendido por <span>{{ product.seller }}</span> e entregue por Biznes
                 </p>
     
                 <p>
@@ -36,7 +36,7 @@
                     <label for="color-options">Opção:</label>
                     <select id="color-options" v-model="selectedOption">
                         <option value="" disabled selected>Selecione uma opção</option>
-                        <option v-for="(option, index) in product.options" :key="index" :value="option">
+                        <option v-for="(option, index) in product.options?.split(',')" :key="index" :value="option">
                             {{ option }}
                         </option>
                     </select>
@@ -110,7 +110,7 @@ export default {
             return deliveryDate.toLocaleDateString('pt-br', { weekday: 'long', day: 'numeric', month: 'long' })
         },
         goToProduct(prod) {
-            this.$router.push({ name: 'product', params: { id: prod.id } })
+            this.$router.push({ name: 'product', params: { idProduct: prod.idProduct } })
         },
         addToCart() {
             if (!this.selectedOption && this.product.options?.length > 0) return this.$toast.open({
@@ -133,7 +133,7 @@ export default {
         ...mapGetters(['getBestSellers', 'getCategoryProducts'])
     },
     mounted() {
-        const productID = this.$route.params.id
+        const productID = this.$route.params.idProduct
         this.product = this.$store.getters.getProduct(productID)
         this.categoryProducts = this.$store.getters.getCategoryProducts(this.product?.category, this.product?.id)
         window.scrollTo(0, 0)
@@ -228,7 +228,11 @@ export default {
             }
     
             p {
-                font-size: 22px;                
+                font-size: 22px;        
+                
+                span {
+                    font-weight: 500;
+                }
             }
 
             .justify {

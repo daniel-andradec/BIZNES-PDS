@@ -8,7 +8,7 @@
                 <div>
                     <div class="order-product" v-for="product in products" :key="product.id">
                         <div class="product-image">
-                            <img :src="product.img" alt="product image">
+                            <img :src="product.photo" alt="product image">
                         </div>
                         <div class="product-details">
                             <h3>{{ product.name }}</h3>

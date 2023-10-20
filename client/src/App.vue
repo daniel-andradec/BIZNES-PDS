@@ -3,10 +3,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
   components: {
+  },
+  computed: {
+    ...mapGetters(['getProducts'])
+  },
+  mounted() {
+    console.log('App mounted');
+    if (!this.getProducts.length) {
+      this.$store.dispatch('fetchProducts');
+    }
   }
 }
 </script>

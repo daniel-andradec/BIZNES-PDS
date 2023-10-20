@@ -14,6 +14,7 @@
 import ProductsList from '@/components/products/ProductsList.vue';
 import CustomerHeader from '@/components/headers/CustomerHeader.vue';
 import { mapGetters } from 'vuex';
+import { getProducts } from '@/controllers/ProductController';
 
 export default {
     name: 'HomeView',
@@ -29,6 +30,12 @@ export default {
         ...mapGetters(['getProducts'])
     },
     methods: {
+    },
+    async mounted() {
+        await getProducts().then((response) => {
+            console.log(response);
+        });
+        console.log(this.getProducts);
     }
 }
 </script>
