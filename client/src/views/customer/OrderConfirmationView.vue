@@ -9,14 +9,17 @@
             <div class="list-header">
                 <div class="select-categories">
                     <i class="fas fa-bars" @click="toggleCategoryMenu"></i>
+                    <h1>Pedido realizado!</h1>
                 </div>
-                <h1>Pedido realizado!</h1>
             </div>
             
             <div class="info">
                 <p>Olá, {{ consumerName }}! 
                     Obrigado por comprar conosco. Seu pedido será enviado em breve. Para ver os detalhes do pedido
-                    ou política de devolução, acesse <span>Minha Conta > Pedidos.</span>
+                    ou política de devolução, acesse 
+                    <span @click="this.$router.push('/customer-profile')">
+                        Minha Conta > Pedidos.
+                    </span>
                 </p>
             </div>
     
@@ -47,7 +50,10 @@
             
             <div class="info">
                 <p>Olá, {{ consumerName }}! 
-                    Para ver seus pedidos ou política de devolução, acesse <span>Minha Conta > Pedidos.</span>
+                    Para ver seus pedidos ou política de devolução, acesse 
+                    <span @click="this.$router.push('/customer-profile')">
+                        Minha Conta > Pedidos.
+                    </span>
                 </p>
             </div>
         </div>
@@ -64,9 +70,9 @@
 
             <div class="list" v-else>
                 <!-- Produtos mais vendidos -->
-                    <div class="list-item" v-for="(product, key) in this.$store.getters.getBestSellers" :key="key" @click="goToProduct(product)">
-                        <ProductCard :key="product.id" :product="product" :fixSize="true" />
-                    </div>
+                <div class="list-item" v-for="(product, key) in this.$store.getters.getBestSellers" :key="key" @click="goToProduct(product)">
+                    <ProductCard :key="product.id" :product="product" :fixSize="true" />
+                </div>
             </div>
         </div>
     </div>
@@ -105,7 +111,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.getOrderData?.products.length)
     },
     
 }
@@ -127,17 +132,16 @@ export default {
             justify-content: flex-start;
             align-items: center;
             margin: 48px 50px 20px 50px;
-            color: var(--secondaryColor);
             i {
+                color: var(--secondaryColor);
                 font-size: 25px;
             }
-        }
-
-        h1 {
-            font-weight: 500;
-            font-size: 30px;
-            text-align: left;
-            margin-left: 50px;
+            h1 {
+                font-weight: 500;
+                font-size: 30px;
+                text-align: left;
+                margin-left: 20px;
+            }
         }
     }
 
@@ -150,6 +154,7 @@ export default {
 
             span {
                 font-weight: 500;
+                cursor: pointer;
             }
         }
     }

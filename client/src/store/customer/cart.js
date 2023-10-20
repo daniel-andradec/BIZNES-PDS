@@ -8,10 +8,9 @@ export default {
     mutations: {
         addProductToCart(state, product) {
             // same product already in cart with same selectedOption
-            if (state.cart.products.find(p => p.id === product.id) && state.cart.products.find(p => p.id === product.id).selectedOption === product.selectedOption) {
+            if (state.cart.products.find(p => p.idProduct === product.idProduct) && state.cart.products.find(p => p.idProduct === product.idProduct).selectedOption === product.selectedOption) {
                 // increment quantity
-                console.log('increment quantity')
-                state.cart.products.find(p => p.id === product.id).quantity++
+                state.cart.products.find(p => p.idProduct === product.idProduct).quantity++
             } else {
                 product.quantity = 1
                 state.cart.products.push(product)
@@ -20,21 +19,24 @@ export default {
             // save cart in localStorage
             localStorage.setItem('cart', JSON.stringify(state.cart))
         },
-        removeProductFromCart(state, id) {
-            state.cart.products = state.cart.products.filter(p => p.id !== id)
+        removeProductFromCart(state, product) {
+            const { idProduct, selectedOption } = product
+            const prod = state.cart.products.find(p => p.idProduct === idProduct && p.selectedOption === selectedOption)
+            state.cart.products.splice(state.cart.products.indexOf(prod), 1)
 
             // save cart in localStorage
             localStorage.setItem('cart', JSON.stringify(state.cart))
         },
-        incrementProductQuantity(state, id) {
-            state.cart.products.find(p => p.id === id).quantity++
+        incrementProductQuantity(state, product) {
+            const { idProduct, selectedOption } = product
+            state.cart.products.find(p => p.idProduct === idProduct && p.selectedOption === selectedOption).quantity++
 
             // save cart in localStorage
             localStorage.setItem('cart', JSON.stringify(state.cart))
         },
-        decrementProductQuantity(state, id) {
-            const product = state.cart.products.find(p => p.id === id)
-            product.quantity--
+        decrementProductQuantity(state, product) {
+            const { idProduct, selectedOption } = product
+            state.cart.products.find(p => p.idProduct === idProduct && p.selectedOption === selectedOption).quantity--
 
             // save cart in localStorage
             localStorage.setItem('cart', JSON.stringify(state.cart))
@@ -57,14 +59,14 @@ export default {
         addProductToCart({ commit }, product) {
             commit('addProductToCart', product)
         },
-        removeProductFromCart({ commit }, id) {
-            commit('removeProductFromCart', id)
+        removeProductFromCart({ commit }, product) {
+            commit('removeProductFromCart', product)
         },
-        incrementProductQuantity({ commit }, id) {
-            commit('incrementProductQuantity', id)
+        incrementProductQuantity({ commit }, product) {
+            commit('incrementProductQuantity', product)
         },
-        decrementProductQuantity({ commit }, id) {
-            commit('decrementProductQuantity', id)
+        decrementProductQuantity({ commit }, product) {
+            commit('decrementProductQuantity', product)
         },
         clearCart({ commit }) {
             commit('clearCart')

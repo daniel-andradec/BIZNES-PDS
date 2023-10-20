@@ -24,4 +24,13 @@ const getCustomerAddress = async () => {
     return response;
 }
 
-export { registerCustomer, getCustomerData, updateCustomerData, getCustomerAddress };
+const getCustomerTransactions = async (idUser) => {
+    // id as param
+    const response = await makeRequest('GET', `/transaction/user/${idUser}`);
+    if (response.status === 200) {
+        store.dispatch('saveCustomerTransactions', response.data);
+    }
+    return response;
+}
+
+export { registerCustomer, getCustomerData, updateCustomerData, getCustomerAddress, getCustomerTransactions };

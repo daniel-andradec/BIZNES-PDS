@@ -3,7 +3,7 @@
         <img @click="this.$router.push('/vendor-panel')" alt="Vue logo" :src="logo">
 
         <div class="login-container" @mouseover="showDropdown" @mouseleave="hideDropdown">
-            <div class="login">
+            <div class="login" @click="this.$router.push('/store-registration')">
                 <i class="fa-solid fa-store"></i>
                 <span>{{ loggedInUser?.name }}</span>
             </div>

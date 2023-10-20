@@ -54,23 +54,21 @@ export default {
     padding: 10px;
     min-width: 250px;
 
-    &.fixedSize {
-        width: 300px;
-        height: 400px;
-
-        img {
-            width: 100%;
-            height: 200px;
-            object-fit: contain;
-        }
-    }
-
     img {
         width: 100%;
         height: 200px;
         border-radius: 5px;
         object-fit: contain;
         margin-top: 10px;
+    }
+
+    &.fixedSize {
+        width: 250px;
+        height: 350px;
+
+        img {
+            height: 150px;
+        }
     }
 
     .name {

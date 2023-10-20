@@ -111,9 +111,15 @@ export default {
                             position: 'top-right'
                         });
 
-                        if (res.role === 'customer') this.$router.push('/')
-                        else if (res.role === 'vendor') this.$router.push('/vendor-panel')
-                        else if (res.role === 'admin') this.$router.push('/admin-panel')
+                        // checks if is a redirect
+                        if (this.$route.params.redirect && res.role === 'customer') {
+                            this.$router.push(this.$route.params.redirect)
+                        }
+                        else {
+                            if (res.role === 'customer') this.$router.push('/')
+                            else if (res.role === 'vendor') this.$router.push('/vendor-panel')
+                            else if (res.role === 'admin') this.$router.push('/admin-panel')
+                        }
                     }).catch(async (err) => {
                         console.log(err)
                         this.$toast.open({
@@ -139,6 +145,9 @@ export default {
         ...mapGetters(['loggedInUser'])
     },
     mounted() {
+        // get red param
+        const red = this.$route.params.red
+        console.log(red)
     }
 }
 </script>

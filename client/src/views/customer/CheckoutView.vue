@@ -4,7 +4,7 @@
             <CheckoutHeader />
         </div>
         
-        <div class="checkout" v-if="Object.values(getCartProducts).length > 0">
+        <div class="checkout" v-if="Object.values(checkoutProducts).length > 0">
             <div class="checkout-details">
                 <h1>Endereço de Entrega</h1>
                 <div class="delivery-address">
@@ -84,21 +84,45 @@
             </div>
         </div>
 
+        <div class="no-items" v-else>
+            <div class="list-header">
+                <div class="select-categories">
+                    <i class="fas fa-bars" @click="toggleCategoryMenu"></i>
+                </div>
+                <h1>Ops! Parece que não há itens no carrinho.</h1>
+            </div>
+            
+            <div class="info">
+                <p>
+                    Para adicionar produtos ao carrinho, acesse nossa
+                    <span @click="this.$router.push('/')">
+                        página principal,
+                    </span>
+                    ou navegue pelas categorias no menu lateral.
+                </p>
+            </div>
+        </div>
+
         <ChangeAddressModal :modalOpen="changeAddressModalOpen" @closeModal="changeAddressModalOpen = false" @updateAddress="updateAddress"  />
+        <CategoryMenu />
     </div>
 </template>
 
 <script>
 import CheckoutHeader from '@/components/headers/CheckoutHeader.vue';
+import CategoryMenu from '@/components/menus/CategoryMenu.vue';
 import ChangeAddressModal from '@/components/modals/customer/ChangeAddressModal.vue';
 import { mapGetters, mapActions } from 'vuex'
 import { getCustomerAddress } from '@/controllers/CustomerController';
+import moment from 'moment';
+import { createTransaction } from '@/controllers/TransactionController';
 
 export default {
     name: "CheckoutView",
     components: {
         CheckoutHeader,
-        ChangeAddressModal
+        ChangeAddressModal,
+        CategoryMenu
     },
     data() {
         return {
@@ -123,38 +147,46 @@ export default {
             ],
             installments: 1,
             changeAddressModalOpen: false,
-            address: {}
+            address: {},
+            checkoutProducts: []
         }
     },
     computed: {
-        ...mapGetters(['getCartProducts', 'clearCart', 'loggedInUser']),
+        ...mapGetters(['getCartProducts', 'loggedInUser']),
     },
     methods: {
-        ...mapActions(['setOrderData']),
+        ...mapActions(['setOrderData', 'clearCart', 'toggleCategoryMenu']),
         formatValue(value) {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
         },
         calculateTotalQuantity() {
-            return this.getCartProducts.reduce((acc, product) => acc + product.quantity, 0)
+            return this.checkoutProducts.reduce((acc, product) => acc + product.quantity, 0)
         },
         calculateTotalPrice() {
-            return this.getCartProducts.reduce((acc, product) => acc + (product.price * product.quantity), 0)
+            return this.checkoutProducts.reduce((acc, product) => acc + (product.price * product.quantity), 0)
         },
         deliveryDate() {
-            const today = new Date()
-            const deliveryDate = new Date(today.setDate(today.getDate() + 5))
+            const deliveryDate = moment().add(5, 'days').toDate()
             return deliveryDate.toLocaleDateString('pt-br')
         },
         formatCardValue (value, format) {
             if (!value) return ''
             value = value.toString()
             if (format === 'MM/AA') {
-                return value.replace(/(\d{2})(\d{2})/, '$1/$2').substring(0, 5)
+                value = value.replace(/\D/g, '')
+                value = value.replace(/(\d{2})(\d{2})/, '$1/$2')
+
+                if (value.length > 5) {
+                    value = value.slice(0, 5)
+                }
+
+                return value
             }
             if (format === 'XXX') {
                 return value.replace(/(\d{3})(\d{1})/, '$1 $2').substring(0, 3)
             }
             if (format === 'cardNumber') {
+                value = value.replace(/\D/g, '')
                 const newVal = value.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, '$1 $2 $3 $4')
                 return newVal.substring(0, 19)
             }
@@ -166,7 +198,7 @@ export default {
             if (this.selectedPayment === 'boleto') return 'Boleto'
             return ''
         },
-        checkout() {
+        async checkout() {
             // check if there is a selected payment method
             if (!this.selectedPayment) {
                 this.$toast.open({
@@ -180,23 +212,104 @@ export default {
             }
             
             // card inputs
+            // check if all card inputs are filled
+            if (this.selectedPayment === 'card') {
+                const emptyInputs = this.cardInputs.filter(input => !input.value)
+                if (emptyInputs.length > 0) {
+                    this.$toast.open({
+                        message: 'Preencha todos os campos do cartão',
+                        type: 'warning',
+                        duration: 5000,
+                        position: 'top-right'
+                    })
+                    return
+                }
+            }
             console.log(this.cardInputs.map(input => input.value))
 
             // save order
-            // todo
+            await this.saveOrder()
+        },
+        async saveOrder () {
+            const transactionInfo = {
+                idUser: this.loggedInUser.id,
+                date: moment().format('YYYY-MM-DD'),
+                deliveryDate: moment().add(5, 'days').format('YYYY-MM-DD'),
+                paymentMethod: this.selectedPaymentString(),
+                recipientName: this.address.recipient,
+                shippingCost: 0,
+                total: this.calculateTotalPrice(),
+            }
 
-            // set order data
+            // delivery address
+            const deliveryAddress = {
+                street: this.address.street,
+                number: this.address.number,
+                complement: this.address.complement,
+                city: this.address.city,
+                state: this.address.state,
+                cep: this.address.cep,
+                neighborhood: this.address.neighborhood
+            }
+
+            // transaction products
+            const transactionProducts = this.checkoutProducts.map(product => {
+                return {
+                    idProduct: product.idProduct,
+                    quantity: product.quantity,
+                    selectedOption: product.selectedOption
+                }
+            })
+
+            const payload = {
+                transaction: transactionInfo,
+                address: deliveryAddress,
+                transactionProducts
+            }
+
+            await createTransaction(payload).then((res) => {
+                if (res.status === 201) {
+                    this.concludeOrder()
+                } else {
+                    this.$toast.open({
+                        message: 'Erro ao realizar pedido. Tente novamente mais tarde',
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top-right'
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                this.$toast.open({
+                    message: 'Erro ao realizar pedido. Tente novamente mais tarde',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                })
+            })
+        },
+        concludeOrder () {
+            this.$toast.open({
+                message: 'Pedido realizado com sucesso!',
+                type: 'success',
+                duration: 5000,
+                position: 'top-right'
+            })
+
             const data = {
-                products: this.getCartProducts,
+                products: this.checkoutProducts,
                 totalPrice: this.calculateTotalPrice(),
                 deliveryDate: this.deliveryDate(),
                 paymentMethod: this.selectedPaymentString(),
             }
             this.setOrderData(data)
 
-
             // clear cart - if order saving is successful
-            // this.clearCart() // not going to clear cart for now because we are building other features
+            this.clearCart()
+
+            // clear direct transaction product
+            localStorage.removeItem('directTransacProduct')
 
             // redirect to order success page
             this.$router.push('/order-confirmation')
@@ -212,6 +325,18 @@ export default {
             this.address = res.data
             this.address.recipient = this.loggedInUser.name
         })
+
+        // check if there is a direct order
+        const product = localStorage.getItem('directTransacProduct')
+        if (product) {
+            const productObj = JSON.parse(product)
+            this.checkoutProducts.push(productObj)
+        }
+        else {
+            this.checkoutProducts = this.getCartProducts
+        }
+
+        console.log(this.checkoutProducts)
     }
 }
 </script>
@@ -436,6 +561,46 @@ export default {
                     margin-top: 20px;
                     font-weight: 600;
                     font-family: Gellix;
+                }
+            }
+        }
+    }
+
+    .no-items {
+        .list-header {
+            padding-top: 30px;
+            margin-bottom: 20px;
+
+            .select-categories {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                align-items: center;
+                margin: 48px 50px 20px 50px;
+                color: var(--secondaryColor);
+                i {
+                    font-size: 25px;
+                }
+            }
+
+            h1 {
+                font-weight: 500;
+                font-size: 30px;
+                text-align: left;
+                margin-left: 50px;
+            }
+        }
+
+        .info {
+            margin: 0 50px;
+            p {
+                font-size: 25px;
+                line-height: 30px;
+                text-align: left;
+
+                span {
+                    font-weight: 500;
+                    cursor: pointer;
                 }
             }
         }

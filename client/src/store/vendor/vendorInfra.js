@@ -4,6 +4,11 @@ export default {
             isVisible: false,
             items: [
                 {
+                    display: 'Painel',
+                    icon: 'fa-solid fa-laptop',
+                    route: '/vendor-panel'
+                },
+                {
                     display: 'Cadastro',
                     icon: 'fa-solid fa-store',
                     route: '/store-registration'

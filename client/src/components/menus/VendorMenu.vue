@@ -104,7 +104,7 @@ export default {
                 display: flex;
                 flex-direction: row;
                 justify-content: flex-start;
-                align-items: center;
+                align-items: baseline;
                 padding: 20px 15px;
                 border-bottom: 1px solid #DEDEDE;
                 cursor: pointer;

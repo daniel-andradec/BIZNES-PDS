@@ -33,7 +33,7 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/login",
+    path: "/login/:redirect?",
     name: "login",
     meta: {
       title: "Login"
