@@ -18,7 +18,7 @@
             </div>
             <div class="info">
                 <h1>{{ product.name }}</h1>
-                <p>{{ product.description }}</p>
+                <p class="justify">{{ product.description }}</p>
                 <div class="price">
                     <h2>{{ formatValue(product.price) }}</h2>
                     <p>em até 10x de {{ formatValue(product.price / 10) }}</p>
@@ -212,7 +212,7 @@ export default {
 
 
         .info {
-            width: 30%;
+            width: 40%;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -221,14 +221,18 @@ export default {
 
             h1 {
                 font-family: Gellix;
-                font-size: 35px;
+                font-size: 32px;
                 margin-top: 0;
                 margin-bottom: 15px;
                 font-weight: 600;
             }
     
             p {
-                font-size: 25px;                
+                font-size: 22px;                
+            }
+
+            .justify {
+                text-align: justify;
             }
     
             .price {
@@ -237,7 +241,7 @@ export default {
                     color: var(--primaryColor);
                 }
                 p {
-                    font-size: 20px;
+                    font-size: 18px;
                 }
             }
     

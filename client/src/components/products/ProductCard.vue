@@ -41,7 +41,6 @@ export default {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-content: center;
     justify-content: space-evenly;
     align-items: center;
     min-height: 90px;
@@ -53,6 +52,7 @@ export default {
     margin: 10px;
     height: min(500px, 100%);
     padding: 10px;
+    min-width: 250px;
 
     &.fixedSize {
         width: 300px;

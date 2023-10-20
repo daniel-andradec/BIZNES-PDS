@@ -17,7 +17,7 @@
             <div class="cart-products">
                 <div class="list">
                     <div class="list-item" v-for="(product, key) in getCartProducts" :key="key">
-                        <div class="product-container">
+                        <div class="product-container-cart">
                             <img :src="product.photo" @click="goToProduct(product)" />
 
                             <div class="product-info">
@@ -160,6 +160,17 @@ export default {
             this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         },
         goToCheckout() {
+            if (!this.loggedInUser.id) {
+                this.$toast.open({
+                    message: 'Você precisa estar logado para finalizar a compra!',
+                    type: 'warning',
+                    position: 'top-right',
+                    duration: 3000
+                })
+
+                this.$router.push('/login')
+                return
+            }
             this.$router.push('/checkout')
         },
         goToHome() {
@@ -167,7 +178,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getCartProducts', 'getBestSellers'])
+        ...mapGetters(['getCartProducts', 'getBestSellers', 'loggedInUser'])
     },
     mounted () {
         console.log(this.getCartProducts)
@@ -226,7 +237,7 @@ export default {
                 }
 
 
-                .product-container {
+                .product-container-cart {
                     position: relative;
                     display: grid;
                     grid-template-columns: 1fr 1.3fr 1fr;
@@ -241,6 +252,7 @@ export default {
                     img {
                         height: 200px;
                         width: 100%;
+                        max-width: 200px;
                         border-radius: 5px;
                         object-fit: contain;
                         margin: 10px 40px;
@@ -497,7 +509,7 @@ export default {
 
 
     // media - width less than 1200px puts the summary below the products list
-    @media (max-width: 800px) {
+    @media (max-width: 1000px) {
         .cart {
             flex-direction: column;
             gap: 0px;
@@ -510,6 +522,7 @@ export default {
             }
 
             .summary {
+                align-self: center;
                 width: 100%;
                 margin-right: 0px;
                 margin-top: 30px;

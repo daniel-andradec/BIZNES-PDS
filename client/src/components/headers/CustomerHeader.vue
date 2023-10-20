@@ -69,8 +69,8 @@ export default {
             this.isDropDownVisible = false
         },
         async logout() {
-            await logout()
             this.$router.push('/')
+            await logout()
             window.location.reload()
         }
     },

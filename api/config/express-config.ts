@@ -36,5 +36,8 @@ app.use('/api/product', productRouter);
 import { router as addressRouter } from '../src/domains/address/controllers/index';
 app.use('/api/address', addressRouter);
 
+import { router as transactionRouter } from '../src/domains/transaction/controllers/index';
+app.use('/api/transaction', transactionRouter);
+
 import { errorHandler } from '../src/middlewares/error-handler';
 app.use(errorHandler);

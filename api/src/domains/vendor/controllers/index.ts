@@ -56,11 +56,11 @@ router.get('/:id',
 );
 
 
-router.put('/:id',
+router.put('/',
   verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const vendor = await VendorService.update(req.params.id!, req.body, req.user!);
+      const vendor = await VendorService.update(req.user!.idUser, req.body);
       console.log(vendor);
       res.status(statusCodes.SUCCESS).json(vendor).end();
     } catch (error) {

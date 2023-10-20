@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { User, UserInterface } from '../models/User';
 import { Attributes, CreationAttributes } from 'sequelize/types';
 import { userRoles } from '../constants/userRoles';
@@ -21,7 +21,7 @@ class UserServiceClass {
       }
 
       const user = await User.findOne({where: {email: body.email}});
-      
+
       if (user) {
         throw new QueryError('E-mail já cadastrado!');
       }
@@ -47,13 +47,13 @@ class UserServiceClass {
       const users = await User.findAll({
 
         attributes: ['idUser', 'name', 'email', 'role'],
-  
+
       });
-  
+
       if (!users) {
         throw new QueryError('Não há nenhum usuário cadastrado');
       }
-      
+
       return users;
     } catch (error) {
       throw(error);
@@ -64,7 +64,7 @@ class UserServiceClass {
     try {
       const user = await User.findByPk(id, {attributes:
         {
-          exclude: ['password', 'createdAt', 'updatedAt'],
+          exclude: ['createdAt', 'updatedAt'],
         }});
 
       if (!user) {
@@ -77,22 +77,15 @@ class UserServiceClass {
     }
   }
 
-  async update(id: string, body: CreationAttributes<UserInterface>, loggedUser: PayloadParams){
+  async update(id: string, body: CreationAttributes<UserInterface>){
     try {
-      if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
-        throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
-      }
-  
-      if (body.role && loggedUser.role != userRoles.admin && loggedUser.role != body.role) {
-        throw new NotAuthorizedError('Você não tem permissão para editar seu cargo!');
-      }
-  
+
       const user = await this.getById(id);
-      
+
       if (body.password) {
         body.password = await this.encryptPassword(body.password);
       }
-  
+
       await user.update(body);
 
     } catch (error) {
@@ -106,6 +99,32 @@ class UserServiceClass {
       await user.destroy();
     } catch (error) {
       throw(error);
+    }
+  }
+
+  async checkPassword(oldPassword: string, user: UserInterface) {
+    try {
+        return await compare(oldPassword, user.password);
+    } catch (error) {
+        console.error("Erro enquanto checava senha: ", error);
+        return false;
+    }
+}
+
+async updatePassword(id: string, newPassword: string, oldPassword: string, loggedUser: PayloadParams) {
+    try {
+        const user = await this.getById(id);
+        if (loggedUser.role != userRoles.admin && loggedUser.idUser != user.idUser) {
+            throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
+        }
+        if (await this.checkPassword(oldPassword, user)) {
+            user.password = await this.encryptPassword(newPassword);
+            await user.save();
+        } else {
+            throw new PermissionError('Senha incorreta!');
+        }
+    } catch (error) {
+        throw(error);
     }
   }
 }

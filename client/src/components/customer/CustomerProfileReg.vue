@@ -22,8 +22,7 @@
                         :placeholder="field.placeholder"
                         v-model="formData[field.ref]"
                         :disabled="field.disable"
-                        @input="field.input && this[field.input]($event)"
-                    >
+                        @input="field.input && this[field.input]($event); formatValue($event, field.format)" />
                 </div>
             </div>
         </div>
@@ -58,8 +57,12 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import moment from 'moment'
+// import moment from 'moment'
 import ModalComponent from '@/components/modals/ModalComponent.vue'
+import { getCustomerData } from '@/controllers/CustomerController'
+import { formatValue } from '@/libs/Util'
+import { updatePassword } from '@/controllers/UserController'
+import { updateCustomerData } from '@/controllers/CustomerController'
 
 export default {
     name: 'CustomerProfileReg',
@@ -90,14 +93,16 @@ export default {
                         type: 'text',
                         placeholder: 'CPF',
                         required: true,
-                        disable: true
+                        disable: true,
+                        format: 'cpf'
                     },
                     {
                         ref: 'cellphone',
                         label: 'Celular', 
                         type: 'tel',
                         placeholder: 'Celular',
-                        required: true
+                        required: true,
+                        format: 'cellphone'
                     }
                 ],
                 'Dados de acesso': [
@@ -126,10 +131,11 @@ export default {
                         placeholder: 'CEP',
                         input: 'calcCEP',
                         value: '',
-                        required: true
+                        required: true,
+                        format: 'cep'
                     },
                     {
-                        ref: 'addressName',
+                        ref: 'street',
                         label: 'Logradouro', 
                         type: 'text',
                         placeholder: 'Logradouro',
@@ -137,11 +143,12 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'addressNumber',
+                        ref: 'number',
                         label: 'Número', 
                         type: 'text',
                         placeholder: 'Número',
-                        required: true
+                        required: true,
+                        format: 'number'
                     },
                     {
                         ref: 'complement',
@@ -180,8 +187,8 @@ export default {
                 email: '',
                 password: '',
                 cep: '',
-                addressName: '',
-                addressNumber: '',
+                street: '',
+                number: '',
                 complement: '',
                 city: '',
                 state: '',
@@ -201,24 +208,61 @@ export default {
     methods: {
         async calcCEP(event) {
             const cep = event.target.value;
-            if (cep.length >= 8) {
+            if (cep.length >= 8 && cep.length <= 9) {
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
-                    console.log(resp.data)
+                    console.log(resp.data);
+                    if (resp.data.erro) {
+                        this.$toast.open({
+                            message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                        event.target.value = '';
+                        return
+                    }
                     this.formData.cep = resp.data.cep;
-                    this.formData.addressName = resp.data.logradouro;
+                    this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
-                }).catch(err => {
-                    console.log(err);
+                    this.formData.neighborhood = resp.data.bairro;
+                }).catch(() => {
+                    console.log('Erro ao buscar CEP');
+                    this.$toast.open({
+                        message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                        type: 'error',
+                        duration: 3000,
+                        position: 'top-right'
+                    });
+                    event.target.value = '';
                 });
             }
         },
         submitForm() {
+            this.sanitizeData()
             console.log(this.formData);
-            // Aqui você pode fazer o que quiser com os dados, como enviá-los para uma API
+            
+            const data = this.formData;
+            delete data.password
+
+            updateCustomerData(data).then(() => {
+                this.$toast.open({
+                    message: 'Dados atualizados com sucesso',
+                    type: 'success',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            }).catch(err => {
+                console.log(err);
+                this.$toast.open({
+                    message: 'Erro ao atualizar dados',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            });
         },
-        updatePassword() {
-            console.log(this.passwordData)
+        async updatePassword() {
             if (!this.passwordData.password || !this.passwordData.newPassword || !this.passwordData.confirmPassword) {
                 this.$toast.open({
                     message: 'Preencha todos os campos obrigatórios',
@@ -239,25 +283,65 @@ export default {
                 return;
             }
 
-            // todo: enviar para a API a senha atual e a nova senha
+            await updatePassword(this.passwordData.password, this.passwordData.newPassword).then(() => {
+                this.$toast.open({
+                    message: 'Senha alterada com sucesso',
+                    type: 'success',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                this.passwordModalOpen = false;
+            }).catch(err => {
+                console.log(err);
+                this.$toast.open({
+                    message: 'Senha incorreta.',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            });
+        },
+        formatValue: function (event, format) { // formats value on input to be displayed nicely
+            if (!format) return
+            const value = event.target.value
+            event.target.value = formatValue(value, format)
+            this.formData[event.target.id] = event.target.value
+        },
+        formatLoadedData() {
+            this.formData.cpf = formatValue(this.formData.cpf, 'cpf')
+            this.formData.cellphone = formatValue(this.formData.cellphone, 'cellphone')
+            this.formData.cep = formatValue(this.formData.cep, 'cep')
+        },
+        sanitizeData: function () { // sanitize data before sending to backend - remove special characters, format dates, etc
+            const fields = this.sections
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.format) {
+                        this.formData[field.ref] = formatValue(this.formData[field.ref], field.format, true) // true - sanitize
+                    }
+                }
+            }
         }
     },
-    mounted() {
+    async mounted() {
+        await getCustomerData()
         console.log (this.getCustomerData);
         if (this.getCustomerData) {
             this.formData.name = this.getCustomerData.name;
-            this.formData.birthDate = moment(this.getCustomerData.birthDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
-            this.formData.cpf = this.getCustomerData.cpf;
+            this.formData.birthDate = this.getCustomerData.birthDate
+            this.formData.cpf = this.getCustomerData.CPF;
             this.formData.cellphone = this.getCustomerData.phone;
             this.formData.email = this.getCustomerData.email;
-            this.formData.cep = this.getCustomerData.address.zipCode;
-            this.formData.addressName = this.getCustomerData.address.street;
-            this.formData.addressNumber = this.getCustomerData.address.number;
+            this.formData.cep = this.getCustomerData.address.cep;
+            this.formData.street = this.getCustomerData.address.street;
+            this.formData.number = this.getCustomerData.address.number;
             this.formData.complement = this.getCustomerData.address.complement;
             this.formData.city = this.getCustomerData.address.city;
             this.formData.state = this.getCustomerData.address.state;
             this.formData.neighborhood = this.getCustomerData.address.neighborhood;
-            this.formData.password = this.getCustomerData.passwordMD5;
+            this.formData.password = '*********';
+
+            this.formatLoadedData();
         }
     }
 }
