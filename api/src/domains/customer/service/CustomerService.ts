@@ -108,7 +108,7 @@ class CustomerServiceClass {
                 name: body.name,
                 email: body.email,
                 password: body.password,
-                role: userRoles.vendor,
+                role: userRoles.customer,
             };
 
             const newAddress = {

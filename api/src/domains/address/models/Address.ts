@@ -34,7 +34,7 @@ export const Address = sequelize.define<AddressInterface>('Addresses', {
     },
     complement: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     neighborhood: {
         type: DataTypes.STRING,
