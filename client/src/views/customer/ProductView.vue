@@ -119,8 +119,12 @@ export default {
                 position: 'top-right',
                 duration: 3000
             })
-            this.product.selectedOption = this.selectedOption
-            this.addProductToCart(this.product)
+            const newProd = {
+                ...this.product,
+                selectedOption: this.selectedOption,
+                quantity: 1
+            } 
+            this.addProductToCart(newProd)
             this.$toast.open({
                 message: 'Produto adicionado ao carrinho!',
                 type: 'success',

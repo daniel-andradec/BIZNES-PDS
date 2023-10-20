@@ -8,14 +8,13 @@ export default {
     mutations: {
         addProductToCart(state, product) {
             // same product already in cart with same selectedOption
-            if (state.cart.products.find(p => p.idProduct === product.idProduct) && state.cart.products.find(p => p.idProduct === product.idProduct).selectedOption === product.selectedOption) {
+            if (state.cart.products.find(p => (p.idProduct === product.idProduct && p.selectedOption === product.selectedOption))) {
                 // increment quantity
-                state.cart.products.find(p => p.idProduct === product.idProduct).quantity++
+                state.cart.products.find(p => p.idProduct === product.idproduct && p.selectedOption === product.selectedOption).quantity++
             } else {
                 product.quantity = 1
                 state.cart.products.push(product)
             }
-
             // save cart in localStorage
             localStorage.setItem('cart', JSON.stringify(state.cart))
         },

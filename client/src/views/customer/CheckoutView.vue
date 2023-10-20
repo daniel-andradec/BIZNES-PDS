@@ -305,8 +305,9 @@ export default {
             }
             this.setOrderData(data)
 
-            // clear cart - if order saving is successful
-            this.clearCart()
+            // clear cart - if order saving is successful and there is no direct transaction
+            if (!localStorage.getItem('directTransacProduct'))
+                this.clearCart()
 
             // clear direct transaction product
             localStorage.removeItem('directTransacProduct')
