@@ -1,12 +1,13 @@
 import { TransactionRepository } from "../repository/TransactionRepository";
 import { TransactionInterface } from "../models/Transaction";
 import { TransactionProduct, TransactionProductInterface } from "../../transactionProduct/models/TransactionProduct";
+import { AddressInterface } from "../../address/models/Address";
 
 export class TransactionService{
     constructor(private transactionRepository: TransactionRepository) {}
 
-    async create(transaction: TransactionInterface, transactionProducts: TransactionProductInterface[]): Promise<TransactionInterface> {
-        return await this.transactionRepository.create(transaction, transactionProducts);
+    async create(transaction: TransactionInterface, transactionProducts: TransactionProductInterface[], address: AddressInterface): Promise<TransactionInterface> {
+        return await this.transactionRepository.create(transaction, transactionProducts, address);
     }
 
     async getAll(): Promise<TransactionInterface[]> {

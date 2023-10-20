@@ -15,7 +15,7 @@ router.post('/',
     checkRole([userRoles.customer]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await transactionService.create(req.body.transaction, req.body.transactionProducts);
+            await transactionService.create(req.body.transaction, req.body.transactionProducts, req.body.address);
             res.status(statusCodes.CREATED).end();
         } catch (error) {
             next(error);
@@ -25,7 +25,7 @@ router.post('/',
 
 router.get('/',
     verifyJWT,
-    checkRole([userRoles.admin]),
+    //checkRole([userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const transactions = await transactionService.getAll();

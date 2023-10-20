@@ -38,7 +38,7 @@ class CustomerServiceClass {
                 cep: body.cep,
                 idUser: user.idUser,
             }
-            await AddressService.create(address, user);
+            await AddressService.create(address);
             const customer = await Customer.create(newCustomer);
             return customer;
         } catch (error) {
