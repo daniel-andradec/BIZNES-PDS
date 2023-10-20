@@ -56,11 +56,11 @@ router.get('/:id',
     }
 );
 
-router.put('/:id',
+router.put('/',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await CustomerService.update(req.params.id!, req.body, req.user!);;
+            await CustomerService.update(req.body, req.user!.idUser);;
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);

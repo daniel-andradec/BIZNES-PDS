@@ -45,10 +45,10 @@ const formatValue = (value, format, sanitizeFlag) => {
 }
 
 const sanitize = (value, format) => {
-    if (format === 'cpf' || format === 'cnpj' || format === 'cellphone' || format === 'phone' || format === 'number' || format === 'cep') {
+    if (format === 'cpf' || format === 'cnpj' || format === 'cellphone' || format === 'phone' || format === 'cep') {
         value = value.replace(/\D/g, '')
-        return value
     }
+    return value
 }
 
 const fixInputLength = (inputValue, length) => {

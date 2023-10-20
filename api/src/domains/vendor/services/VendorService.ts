@@ -96,15 +96,11 @@ class VendorServiceClass {
         }
     }
 
-    async update(id: string, body: VendorCreationAttributes, loggedUser: PayloadParams){
+    async update(id: string, body: VendorCreationAttributes){
         try {
             validateUpdateVendor(body);
             const vendor = await this.getById(id);;
             const user = await UserService.getById(vendor.idUser);
-
-            if (loggedUser.role != userRoles.admin && loggedUser.idUser != user.idUser) {
-                throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
-            }
 
             const newVendor = {
                 CNPJ: body.CNPJ,
@@ -132,9 +128,9 @@ class VendorServiceClass {
                 idUser: user.idUser,
             };
 
-            await UserService.update(user.idUser, newUser, loggedUser);
-            await vendor.update(body);
-            await AddressService.update(newAddress, user);
+            await UserService.update(user.idUser, newUser);
+            await Vendor.update(newVendor, { where: { idUser: id } });
+            await AddressService.update(newAddress, user.idUser);
 
             return vendor;
 

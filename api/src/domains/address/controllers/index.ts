@@ -22,7 +22,7 @@ router.put('/',
   verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await AddressService.update(req.body, req.user!);
+      await AddressService.update(req.body, req.user!.idUser);
       res.status(statusCodes.NO_CONTENT).end();
     } catch (error) {
       next(error);

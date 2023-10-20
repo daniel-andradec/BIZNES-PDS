@@ -43,7 +43,7 @@ export default {
         return {
             addressData: [
                 {
-                    ref: 'recipientName',
+                    ref: 'recipient',
                     label: 'Nome do destinatário',
                     type: 'text',
                     placeholder: 'Nome do destinatário',
@@ -60,7 +60,7 @@ export default {
                     required: true
                 },
                 {
-                    ref: 'addressName',
+                    ref: 'street',
                     label: 'Logradouro', 
                     type: 'text',
                     placeholder: 'Logradouro',
@@ -68,7 +68,7 @@ export default {
                     required: true
                 },
                 {
-                    ref: 'addressNumber',
+                    ref: 'number',
                     label: 'Número', 
                     type: 'text',
                     placeholder: 'Número',

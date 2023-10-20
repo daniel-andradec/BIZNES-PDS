@@ -27,9 +27,14 @@
                             <p v-if="field.changeButton" class="change-password" @click="passwordModalOpen = true">Alterar
                             </p>
                         </div>
-                        <input :id="field.ref" :type="field.type" :placeholder="field.placeholder"
-                            v-model="formData[field.ref]" :disabled="field.disable"
-                            @input="field.input && this[field.input]($event)">
+                        <input 
+                            :id="field.ref" 
+                            :type="field.type" 
+                            :placeholder="field.placeholder"
+                            v-model="formData[field.ref]" 
+                            :disabled="field.disable"
+                            @input="field.input && this[field.input]($event); formatValue($event, field.format)"
+                            >
                     </div>
                 </div>
             </div>
@@ -41,7 +46,7 @@
                         <label for="returnPolicy" class="required">Política de devolução (será informada ao
                             consumidor)</label>
                         <textarea name="returnPolicy" id="returnPolicy" cols="30" rows="10"
-                            v-model="formData['returnPolicy']"></textarea>
+                            v-model="formData['devolutionPolicy']"></textarea>
                     </div>
                 </div>
             </div>
@@ -51,19 +56,45 @@
             </div>
         </div>
 
+        <ModalComponent :modalOpen="passwordModalOpen" @closeModal="passwordModalOpen = false">
+            <div class="update-password-modal">
+                <h2>Alterar senha</h2>
+                <div class="change-password-container">
+                    <div class="password-fields">
+                        <label for="password">Senha Atual</label>
+                        <input  id="password" type="password" placeholder="Nova senha" v-model="passwordData.password">
+                        
+                        <label for="newPassword">Nova Senha</label>
+                        <input  id="newPassword" type="password" placeholder="Nova senha" v-model="passwordData.newPassword">
+
+                        <label for="confirmPassword">Confirmar Senha</label>
+                        <input  id="confirmPassword" type="password" placeholder="Confirmar senha" v-model="passwordData.confirmPassword">
+                    </div>
+                </div>
+                <div class="submit-button-pss">
+                    <button @click="updatePassword()">Alterar</button>
+                </div>
+            </div>
+        </ModalComponent>
     </div>
 </template>
 
 <script>
 import VendorHeader from '@/components/headers/VendorHeader.vue';
 import VendorMenu from '@/components/menus/VendorMenu.vue';
+import ModalComponent from '@/components/modals/ModalComponent.vue';
 import { mapActions, mapGetters } from 'vuex';
+import { getVendorData, updateVendorData } from '@/controllers/VendorController';
+import { updatePassword } from '@/controllers/UserController';
+import { formatValue } from '@/libs/Util'
+import axios from 'axios';
 
 export default {
     name: 'VendorProfileView',
     components: {
         VendorHeader,
-        VendorMenu
+        VendorMenu,
+        ModalComponent
     },
     data() {
         return {
@@ -77,7 +108,7 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'tradingName',
+                        ref: 'fantasyName',
                         label: 'Nome Fantasia',
                         type: 'text',
                         placeholder: 'Nome Fantasia',
@@ -88,7 +119,8 @@ export default {
                         label: 'Telefone',
                         type: 'tel',
                         placeholder: '',
-                        required: true
+                        required: true,
+                        format: 'phone'
                     },
                     {
                         ref: 'cnpj',
@@ -96,7 +128,8 @@ export default {
                         type: 'text',
                         placeholder: 'CNPJ',
                         required: true,
-                        disable: true
+                        disable: true,
+                        format: 'cnpj'
                     }
                 ],
                 'Dados de acesso': [
@@ -125,10 +158,11 @@ export default {
                         placeholder: 'CEP',
                         input: 'calcCEP',
                         value: '',
-                        required: true
+                        required: true,
+                        format: 'cep'
                     },
                     {
-                        ref: 'addressName',
+                        ref: 'street',
                         label: 'Logradouro',
                         type: 'text',
                         placeholder: 'Logradouro',
@@ -136,11 +170,12 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'addressNumber',
+                        ref: 'number',
                         label: 'Número',
                         type: 'text',
                         placeholder: 'Número',
-                        required: true
+                        required: true,
+                        format: 'number'
                     },
                     {
                         ref: 'complement',
@@ -173,48 +208,166 @@ export default {
             },
             formData: {
                 companyName: '',
-                tradingName: '',
+                fantasyName: '',
                 cnpj: '',
                 phone: '',
                 login: '',
                 password: '',
-                passwordConfirmation: '',
                 cep: '',
-                addressName: '',
-                addressNumber: '',
+                street: '',
+                number: '',
                 complement: '',
                 city: '',
                 state: '',
                 neighborhood: '',
-                returnPolicy: ''
+                devolutionPolicy: ''
 
-            }
+            },
+            passwordData: {
+                password: '',
+                newPassword: '',
+                confirmPassword: ''
+            },
+            passwordModalOpen: false
         }
     },
     methods: {
-        ...mapActions(['toggleVendorMenu'])
+        ...mapActions(['toggleVendorMenu']),
+        async calcCEP(event) {
+            const cep = event.target.value;
+            if (cep.length >= 8 && cep.length <= 9) {
+                await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
+                    console.log(resp.data);
+                    if (resp.data.erro) {
+                        this.$toast.open({
+                            message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                        event.target.value = '';
+                        return
+                    }
+                    this.formData.cep = resp.data.cep;
+                    this.formData.street = resp.data.logradouro;
+                    this.formData.city = resp.data.localidade;
+                    this.formData.state = resp.data.uf;
+                    this.formData.neighborhood = resp.data.bairro;
+                }).catch(() => {
+                    console.log('Erro ao buscar CEP');
+                    this.$toast.open({
+                        message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                        type: 'error',
+                        duration: 3000,
+                        position: 'top-right'
+                    });
+                    event.target.value = '';
+                });
+            }
+
+            console.log(this.formData);
+        },
+        submitForm() {
+            //this.sanitizeData()
+            console.log(this.formData);
+            
+            const data = this.formData;
+            delete data.password
+
+            updateVendorData(data).then(() => {
+                this.$toast.open({
+                    message: 'Dados atualizados com sucesso',
+                    type: 'success',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+
+                this.formData.password = '********';
+            }).catch(err => {
+                console.log(err);
+                this.$toast.open({
+                    message: 'Erro ao atualizar dados',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            });
+        },
+        async updatePassword() {
+            if (!this.passwordData.password || !this.passwordData.newPassword || !this.passwordData.confirmPassword) {
+                this.$toast.open({
+                    message: 'Preencha todos os campos obrigatórios',
+                    type: 'warning',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                return;
+            }
+
+            if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
+                this.$toast.open({
+                    message: 'As senhas não coincidem',
+                    type: 'warning',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                return;
+            }
+
+            await updatePassword(this.passwordData.password, this.passwordData.newPassword).then(() => {
+                this.$toast.open({
+                    message: 'Senha alterada com sucesso',
+                    type: 'success',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                this.passwordModalOpen = false;
+            }).catch(err => {
+                console.log(err);
+                this.$toast.open({
+                    message: 'Senha incorreta.',
+                    type: 'error',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+            });
+        },
+        formatValue: function (event, format) { // formats value on input to be displayed nicely
+            if (!format) return
+            const value = event.target.value
+            event.target.value = formatValue(value, format)
+            this.formData[event.target.id] = event.target.value
+        },
+        formatLoadedData() {
+            this.formData.cnpj = formatValue(this.formData.cnpj, 'cnpj')
+            this.formData.phone = formatValue(this.formData.phone, 'phone')
+            this.formData.cep = formatValue(this.formData.cep, 'cep')
+        },
     },
     computed: {
         ...mapGetters(['getVendorData'])
     },
-    mounted() {
+    async mounted() {
+        await getVendorData()
+        console.log('getVendorData')
         console.log(this.getVendorData)
         if (this.getVendorData) {
-            this.formData.companyName = this.getVendorData.socialName
-            this.formData.tradingName = this.getVendorData.fantasyName
+            this.formData.companyName = this.getVendorData.companyName
+            this.formData.fantasyName = this.getVendorData.fantasyName
             this.formData.phone = this.getVendorData.phone
-            this.formData.cnpj = this.getVendorData.cnpj
-            this.formData.login = this.getVendorData.login
-            this.formData.password = this.getVendorData.passwordMD5
-            this.formData.passwordConfirmation = this.getVendorData.passwordMD5
-            this.formData.returnPolicy = this.getVendorData.returnPolicy
-            this.formData.cep = this.getVendorData.address.zipCode
-            this.formData.addressName = this.getVendorData.address.street
-            this.formData.addressNumber = this.getVendorData.address.number
+            this.formData.cnpj = this.getVendorData.CNPJ
+            this.formData.login = this.getVendorData.email
+            this.formData.password = '********'
+            this.formData.devolutionPolicy = this.getVendorData.devolutionPolicy
+            this.formData.cep = this.getVendorData.address.cep
+            this.formData.street = this.getVendorData.address.street
+            this.formData.number = this.getVendorData.address.number
             this.formData.complement = this.getVendorData.address.complement
             this.formData.city = this.getVendorData.address.city
             this.formData.state = this.getVendorData.address.state
             this.formData.neighborhood = this.getVendorData.address.neighborhood
+
+            this.formatLoadedData();
         }
     }
 }
@@ -349,6 +502,54 @@ export default {
 
             button {
                 width: 425px;
+                height: 50px;
+                border-radius: 5px;
+                border: none;
+                background-color: var(--primaryColor);
+                color: #FFFFFF;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                margin: 30px 0px;
+            }
+        }
+    }
+
+    .update-password-modal {
+        .password-fields {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            label {
+                margin-bottom: 5px;
+                font-weight: 500;
+                text-align: left;
+                &:after {
+                    content: '*';
+                    color: var(--primaryColor);
+                    margin-left: 5px;
+                }
+            }
+    
+            input {
+                padding: 10px 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                margin: 10px 0px 20px 0px;
+                width: 300px;
+    
+                &:focus {
+                    outline: none;
+                    border-color: var(--primaryColor);
+                }
+            }
+        }
+
+        .submit-button-pss {
+            button {
+                width: 200px;
                 height: 50px;
                 border-radius: 5px;
                 border: none;

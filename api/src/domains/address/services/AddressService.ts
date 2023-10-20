@@ -35,11 +35,11 @@ class AddressServiceClass {
         }
     }
 
-    async update(body: CreationAttributes<AddressInterface>, user: PayloadParams) {
+    async update(body: CreationAttributes<AddressInterface>, idUser: string) {
         try {
             const updatedAddress = await Address.update(body, {
                 where: {
-                    idUser: user.idUser,
+                    idUser: idUser,
                 }
             });
             return updatedAddress;
