@@ -5,6 +5,7 @@ import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { VendorService } from '../../vendor/services/VendorService';
 import { deleteObject } from '../../../../utils/functions/aws';
+import { Vendor } from '../../vendor/models/Vendor';
 
 class ProductServiceClass {
     async create(body: CreationAttributes<ProductInterface>, user: PayloadParams, file: any) {
@@ -46,6 +47,10 @@ class ProductServiceClass {
         try {
             const products = await Product.findAll({
                 attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                include: [{
+                    model: Vendor,
+                    attributes: ['companyName'],
+                }]
             });
             return products;
         } catch (error) {
