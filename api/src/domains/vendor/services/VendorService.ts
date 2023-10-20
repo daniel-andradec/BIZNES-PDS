@@ -47,7 +47,7 @@ class VendorServiceClass {
             const vendor = await Vendor.create(newVendor);
 
             newAddress.idUser = user.idUser;
-            const address = await AddressService.create(newAddress, user);
+            const address = await AddressService.create(newAddress);
 
             return vendor;
         } catch (error) {

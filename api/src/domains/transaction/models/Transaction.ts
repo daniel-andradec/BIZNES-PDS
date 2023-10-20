@@ -1,11 +1,13 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { sequelize } from '../../../../database/index';
 import { User } from '../../users/models/User';
+import { Address } from '../../address/models/Address';
 
 
 export interface TransactionInterface extends Model<InferAttributes<TransactionInterface>, InferCreationAttributes<TransactionInterface>> {
     idTransaction: CreationOptional<string>;
     idUser: string;
+    recipientName: string;
     date: Date;
     deliveryDate: Date;
     paymentMethod: string;
@@ -24,6 +26,10 @@ export const Transaction = sequelize.define<TransactionInterface>('Transactions'
     },
     idUser: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    recipientName: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
     date: {
@@ -58,6 +64,7 @@ export const Transaction = sequelize.define<TransactionInterface>('Transactions'
 
 Transaction.hasOne(User, { foreignKey: 'idUser' });
 User.belongsTo(Transaction, { foreignKey: 'idUser' });
+
 
 Transaction.sync({alter: false, force: false})
     .then(() => {
