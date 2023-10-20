@@ -5,7 +5,7 @@
         <div class="login">
             <img :src="imgLogin">
 
-            <div class="form">
+            <div class="form" @keyup.enter="login()">
                 <h3>Faça seu Login</h3>
                 <div class="input">
                     <i class="fa-regular fa-user icon"></i>
@@ -161,12 +161,12 @@ export default {
         flex-direction: row;
         align-items: center;
         width: 100%;
-        justify-content: space-evenly;
+        justify-content: center;
+        gap: 80px;
 
         img {
-            width: 900px;
-            height: 700px;
-            margin-left: -30px;
+            width: 800px;
+            height: 600px;
         }
 
 
@@ -178,6 +178,7 @@ export default {
             height: 500px;
             width: 400px;
             margin-bottom: 180px;
+            margin-right: 0px;
 
             h3 {
                 font-size: 35px;

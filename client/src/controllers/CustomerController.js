@@ -19,4 +19,9 @@ const updateCustomerData = async (customer) => {
     return response;
 }
 
-export { registerCustomer, getCustomerData, updateCustomerData };
+const getCustomerAddress = async () => {
+    const response = await makeRequest('GET', '/address');
+    return response;
+}
+
+export { registerCustomer, getCustomerData, updateCustomerData, getCustomerAddress };

@@ -8,11 +8,14 @@
             <div class="checkout-details">
                 <h1>Endereço de Entrega</h1>
                 <div class="delivery-address">
-                    <div class="address-info">
-                        <p>Pedro Henrique Santos</p>
-                        <p>Rua Sergipe, 1014- 7º e 8º andar</p>
-                        <p>Belo Horizonte, MG</p>
-                        <p>30130-171</p>
+                    <div class="address-info" v-if="Object.keys(address).length > 0">
+                        <p>{{ address.recipient }}</p>
+                        <p>{{ address.street }}, {{ address.number }} - {{ address.complement }}</p>
+                        <p>{{ address.city }}, {{ address.state }}</p>
+                        <p>{{ address.cep }}</p>
+                    </div>
+                    <div v-else>
+                        <p>Nenhum endereço cadastrado</p>
                     </div>
                     <button @click="changeAddressModalOpen = true">Alterar</button>
                 </div>
@@ -89,6 +92,7 @@
 import CheckoutHeader from '@/components/headers/CheckoutHeader.vue';
 import ChangeAddressModal from '@/components/modals/customer/ChangeAddressModal.vue';
 import { mapGetters, mapActions } from 'vuex'
+import { getCustomerAddress } from '@/controllers/CustomerController';
 
 export default {
     name: "CheckoutView",
@@ -118,11 +122,12 @@ export default {
                 { value: 10, label: '10x' },
             ],
             installments: 1,
-            changeAddressModalOpen: false
+            changeAddressModalOpen: false,
+            address: {}
         }
     },
     computed: {
-        ...mapGetters(['getCartProducts', 'clearCart']),
+        ...mapGetters(['getCartProducts', 'clearCart', 'loggedInUser']),
     },
     methods: {
         ...mapActions(['setOrderData']),
@@ -198,9 +203,16 @@ export default {
         },
         updateAddress (address) {
             this.changeAddressModalOpen = false
-            console.log(address)
+            this.address = address
         }
     },
+    async mounted () {
+        await getCustomerAddress().then(res => {
+            if (!res?.data) return
+            this.address = res.data
+            this.address.recipient = this.loggedInUser.name
+        })
+    }
 }
 </script>
 

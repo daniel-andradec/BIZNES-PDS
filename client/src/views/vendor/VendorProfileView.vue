@@ -27,9 +27,14 @@
                             <p v-if="field.changeButton" class="change-password" @click="passwordModalOpen = true">Alterar
                             </p>
                         </div>
-                        <input :id="field.ref" :type="field.type" :placeholder="field.placeholder"
-                            v-model="formData[field.ref]" :disabled="field.disable"
-                            @input="field.input && this[field.input]($event)">
+                        <input 
+                            :id="field.ref" 
+                            :type="field.type" 
+                            :placeholder="field.placeholder"
+                            v-model="formData[field.ref]" 
+                            :disabled="field.disable"
+                            @input="field.input && this[field.input]($event); formatValue($event, field.format)"
+                            >
                     </div>
                 </div>
             </div>
@@ -81,6 +86,8 @@ import ModalComponent from '@/components/modals/ModalComponent.vue';
 import { mapActions, mapGetters } from 'vuex';
 import { getVendorData, updateVendorData } from '@/controllers/VendorController';
 import { updatePassword } from '@/controllers/UserController';
+import { formatValue } from '@/libs/Util'
+import axios from 'axios';
 
 export default {
     name: 'VendorProfileView',
@@ -101,7 +108,7 @@ export default {
                         required: true
                     },
                     {
-                        ref: 'tradingName',
+                        ref: 'fantasyName',
                         label: 'Nome Fantasia',
                         type: 'text',
                         placeholder: 'Nome Fantasia',
@@ -112,7 +119,8 @@ export default {
                         label: 'Telefone',
                         type: 'tel',
                         placeholder: '',
-                        required: true
+                        required: true,
+                        format: 'phone'
                     },
                     {
                         ref: 'cnpj',
@@ -120,7 +128,8 @@ export default {
                         type: 'text',
                         placeholder: 'CNPJ',
                         required: true,
-                        disable: true
+                        disable: true,
+                        format: 'cnpj'
                     }
                 ],
                 'Dados de acesso': [
@@ -149,10 +158,11 @@ export default {
                         placeholder: 'CEP',
                         input: 'calcCEP',
                         value: '',
-                        required: true
+                        required: true,
+                        format: 'cep'
                     },
                     {
-                        ref: 'address',
+                        ref: 'street',
                         label: 'Logradouro',
                         type: 'text',
                         placeholder: 'Logradouro',
@@ -164,7 +174,8 @@ export default {
                         label: 'Número',
                         type: 'text',
                         placeholder: 'Número',
-                        required: true
+                        required: true,
+                        format: 'number'
                     },
                     {
                         ref: 'complement',
@@ -197,13 +208,13 @@ export default {
             },
             formData: {
                 companyName: '',
-                tradingName: '',
+                fantasyName: '',
                 cnpj: '',
                 phone: '',
                 login: '',
                 password: '',
                 cep: '',
-                address: '',
+                street: '',
                 number: '',
                 complement: '',
                 city: '',
@@ -222,6 +233,40 @@ export default {
     },
     methods: {
         ...mapActions(['toggleVendorMenu']),
+        async calcCEP(event) {
+            const cep = event.target.value;
+            if (cep.length >= 8 && cep.length <= 9) {
+                await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
+                    console.log(resp.data);
+                    if (resp.data.erro) {
+                        this.$toast.open({
+                            message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                        event.target.value = '';
+                        return
+                    }
+                    this.formData.cep = resp.data.cep;
+                    this.formData.street = resp.data.logradouro;
+                    this.formData.city = resp.data.localidade;
+                    this.formData.state = resp.data.uf;
+                    this.formData.neighborhood = resp.data.bairro;
+                }).catch(() => {
+                    console.log('Erro ao buscar CEP');
+                    this.$toast.open({
+                        message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                        type: 'error',
+                        duration: 3000,
+                        position: 'top-right'
+                    });
+                    event.target.value = '';
+                });
+            }
+
+            console.log(this.formData);
+        },
         submitForm() {
             //this.sanitizeData()
             console.log(this.formData);
@@ -236,6 +281,8 @@ export default {
                     duration: 5000,
                     position: 'top-right'
                 });
+
+                this.formData.password = '********';
             }).catch(err => {
                 console.log(err);
                 this.$toast.open({
@@ -285,6 +332,17 @@ export default {
                 });
             });
         },
+        formatValue: function (event, format) { // formats value on input to be displayed nicely
+            if (!format) return
+            const value = event.target.value
+            event.target.value = formatValue(value, format)
+            this.formData[event.target.id] = event.target.value
+        },
+        formatLoadedData() {
+            this.formData.cnpj = formatValue(this.formData.cnpj, 'cnpj')
+            this.formData.phone = formatValue(this.formData.phone, 'phone')
+            this.formData.cep = formatValue(this.formData.cep, 'cep')
+        },
     },
     computed: {
         ...mapGetters(['getVendorData'])
@@ -295,19 +353,21 @@ export default {
         console.log(this.getVendorData)
         if (this.getVendorData) {
             this.formData.companyName = this.getVendorData.companyName
-            this.formData.tradingName = this.getVendorData.fantasyName
+            this.formData.fantasyName = this.getVendorData.fantasyName
             this.formData.phone = this.getVendorData.phone
             this.formData.cnpj = this.getVendorData.CNPJ
             this.formData.login = this.getVendorData.email
             this.formData.password = '********'
             this.formData.devolutionPolicy = this.getVendorData.devolutionPolicy
             this.formData.cep = this.getVendorData.address.cep
-            this.formData.address = this.getVendorData.address.street
+            this.formData.street = this.getVendorData.address.street
             this.formData.number = this.getVendorData.address.number
             this.formData.complement = this.getVendorData.address.complement
             this.formData.city = this.getVendorData.address.city
             this.formData.state = this.getVendorData.address.state
             this.formData.neighborhood = this.getVendorData.address.neighborhood
+
+            this.formatLoadedData();
         }
     }
 }

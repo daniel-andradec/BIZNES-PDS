@@ -21,6 +21,9 @@ export default {
     getters: {
         getCustomerData(state) {
             return state.customer;
+        },
+        getCustomerAddress (state) {
+            return state.customer.address;
         }
     }
 }

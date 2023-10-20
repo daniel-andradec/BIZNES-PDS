@@ -114,7 +114,7 @@ export default {
         display: flex;
         justify-content: space-between;
         width: 100%;
-        min-width: 1100px;
+        min-width: 1500px;
 
         .select-categories {
             display: flex;
