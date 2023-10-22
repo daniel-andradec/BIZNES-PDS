@@ -65,4 +65,17 @@ router.get('/user/:id',
     }
 );
 
+router.get('/vendor/:id',
+    verifyJWT,
+    checkRole([userRoles.vendor, userRoles.admin]),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const transactions = await transactionService.getByVendorId(req.params.id);
+            res.status(statusCodes.SUCCESS).json(transactions);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+);
 

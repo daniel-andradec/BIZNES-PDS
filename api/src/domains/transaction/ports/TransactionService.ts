@@ -26,4 +26,7 @@ export class TransactionService{
         return await this.transactionRepository.getByUserId(id);
     }
 
+    async getByVendorId(id: string): Promise<TransactionInterface[]> {
+        return await this.transactionRepository.getByVendorId(id);
+    }
 }
