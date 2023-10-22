@@ -152,7 +152,7 @@ export default {
         const productID = this.$route.params.idProduct
         this.product = this.$store.getters.getProduct(productID)
         console.log(this.product)
-        // this.categoryProducts = this.$store.getters.getCategoryProducts(this.product?.category.split(','), this.product?.idProduct)
+        this.categoryProducts = this.$store.getters.getCategoryProducts(this.product?.category.split(','), this.product?.idProduct)
         window.scrollTo(0, 0)
     },
     created() {

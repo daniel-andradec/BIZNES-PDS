@@ -9,12 +9,12 @@
             </div>
 
             <div class="sale" v-for="(sale, skey) in sortedSales" :key="skey">
-                <h2>{{ sale.id }}</h2>
-                <h2>{{ sale.customer }}</h2>
-                <h2>{{ sale.date }}</h2>
+                <h2>{{ sale.idTransaction }}</h2>
+                <h2>{{ sale.recipientName }}</h2>
+                <h2>{{ formatDate(sale.date) }}</h2>
                 <h2>{{ formatValue(sale.total) }}</h2>
-                <h2>{{ sale.city }}</h2>
-                <h2>{{ sale.deliveryDate }}</h2>
+                <h2>{{ sale.Address.city }}</h2>
+                <h2>{{ formatDate(sale.deliveryDate) }}</h2>
                 <i class="fa-regular fa-eye" @click="saleDetails(sale)"></i>
             </div>
         </div>
@@ -80,6 +80,9 @@ export default {
     methods: {
         formatValue(value) {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+        },
+        formatDate(date) {
+            return moment(date).format("DD/MM/YYYY")
         },
         sortSales(field) {
             if (field.sort) {

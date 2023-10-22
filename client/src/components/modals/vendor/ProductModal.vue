@@ -275,6 +275,18 @@ export default {
                 }
             },
             deep: true
+        },
+        modalOpen: {
+            handler: function (newVal) {
+                if (!newVal) {
+                    this.$nextTick(() => { 
+                        this.fileChanged = false
+                        this.imagePreviewUrl = null
+                        this.chosenOptions = []
+                    });
+                }
+            },
+            deep: true
         }
     }
     

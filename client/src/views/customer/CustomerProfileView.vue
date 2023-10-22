@@ -30,8 +30,10 @@
         <div class="customer-orders" v-if="currentTab === 'profile'">
             <div v-if="Object.values(getCustomerOrders).length > 0">
                 <div class="list">
-                    <div class="list-item" v-for="(order, key) in getCustomerOrders" :key="key">
-                        <CustomerOrder :key="order.idTransaction" :order="order" />
+                    <div class="list-item" v-for="(dateGroup, key) in groupedOrders" :key="key">
+                        <h2 class="date">{{ key }}</h2>
+                        <!-- <CustomerOrder :key="order.idTransaction" :order="order" /> -->
+                        <CustomerOrder v-for="order in dateGroup" :key="order.idTransaction" :order="order" />
                     </div>
                 </div>
             </div>
@@ -57,6 +59,7 @@ import CustomerProfileReg from '@/components/customer/CustomerProfileReg.vue'
 
 import { mapGetters, mapActions } from 'vuex'
 import { getCustomerTransactions } from '@/controllers/CustomerController'
+import moment from 'moment'
 
 export default {
     name: 'CustomerProfileView',
@@ -70,7 +73,8 @@ export default {
     data() {
         return {
             consumerName: 'Pedro',
-            currentTab: 'profile'
+            currentTab: 'profile',
+            groupedOrders: []
         }
     },
     computed: {
@@ -87,6 +91,12 @@ export default {
         await getCustomerTransactions(idUser).then((res) => {
             if (res.data) {
                 console.log(this.getCustomerOrders)
+                // group orders by date (order.date) using moment
+                this.groupedOrders = this.getCustomerOrders.reduce((r, a) => {
+                    r[moment(a.date).format('DD/MM/YYYY')] = [...r[moment(a.date).format('DD/MM/YYYY')] || [], a]
+                    return r
+                }, {})
+                console.log(this.groupedOrders)
             }
         })
     },
@@ -178,8 +188,12 @@ export default {
         .list {
             padding: 0px 100px;
 
-            .list-item {
-                margin-bottom: 30px;
+            .list-item {                
+                .date {
+                    text-align: left;
+                    font-size: 20px;
+                    font-weight: 600;
+                }
             }
         }
 

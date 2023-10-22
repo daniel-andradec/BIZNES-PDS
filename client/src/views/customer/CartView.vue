@@ -229,6 +229,8 @@ export default {
         display: flex;
         justify-content: center;
         gap: 30px;
+        padding: 20px;
+        padding-top: 0;
 
         .cart-products {
             padding-top: 0;
@@ -246,7 +248,8 @@ export default {
                     display: grid;
                     grid-template-columns: 1fr 1.3fr 1fr;
                     width: 100%;
-                    min-width: 500px;
+                    min-width: 620px;
+                    max-width: 925px;
                     text-align: center;
                     border-radius: 5px;
                     border: 1px solid rgba(0, 0, 0, 0.18);
@@ -513,7 +516,7 @@ export default {
 
 
     // media - width less than 1200px puts the summary below the products list
-    @media (max-width: 1000px) {
+    @media (max-width: 1130px) {
         .cart {
             flex-direction: column;
             gap: 0px;

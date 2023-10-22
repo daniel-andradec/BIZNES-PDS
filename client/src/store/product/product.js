@@ -300,7 +300,6 @@ export default {
         getCategoryProducts: state => (categories, id) => {
             console.log(categories);
             // get other products from the same category but not the one with the given id - max 4 products
-            // return state.products.filter(product => product.category.split(',').some(category => categories?.includes(category)) && product.id != id)
             return state.products.filter(product => product.category.split(',').some(category => categories?.includes(category)) && product.idProduct != id).slice(0, 4)
         },
         getSearchProducts: state => (search) => {

@@ -233,8 +233,8 @@ export default {
         async saveOrder () {
             const transactionInfo = {
                 idUser: this.loggedInUser.id,
-                date: moment().format('YYYY-MM-DD'),
-                deliveryDate: moment().add(5, 'days').format('YYYY-MM-DD'),
+                date: moment(),
+                deliveryDate: moment().add(5, 'days'),
                 paymentMethod: this.selectedPaymentString(),
                 recipientName: this.address.recipient,
                 shippingCost: 0,

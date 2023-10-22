@@ -1,7 +1,6 @@
 <template>
     <div class="customer-order-container">
         <div class="date">
-            <h2>{{ fixDate(order.date) }}</h2>
         </div>
         <div class="order-card">
             <div class="order-products">
@@ -43,7 +42,9 @@
                     </div>
                     <div class="detail">
                         <h3>Endereço de entrega</h3>
-                        <p>{{ address2text(order.Address) }}</p>
+                        <p>
+                            {{ order.recipientName }} <br>
+                            {{ address2text(order.Address) }}</p>
                     </div>
                 </div>
 
@@ -98,7 +99,7 @@ export default {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
         },
         getOrderStatus() {
-            const deliveryDate = moment(this.order.deliveryDate, 'DD/MM/YYYY')
+            const deliveryDate = moment(this.order.deliveryDate)
             const today = moment()
             const diff = deliveryDate.diff(today, 'days')
             if (diff < 0) {
@@ -134,7 +135,6 @@ export default {
             }
         })
         this.devolutionPolicies = policies
-        console.log(this.devolutionPolicies)
     },
     
 }
@@ -145,24 +145,15 @@ export default {
     display: flex;
     flex-direction: column;
 
-    .date {
-        text-align: left;
-
-        h2 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-    }
-
     .order-card {
         height: auto;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-top: 10px;
+        margin: 15px 0;
         padding: 25px;
         border-radius: 5px;
-        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
 
         .order-products {
             width: 50%;

@@ -28,8 +28,11 @@
             </div>
         </div>
 
-        <div class="sales-list">
+        <div class="sales-list" v-if="this.sales?.length > 0">
             <VendorSalesList :sales="this.paginatedSales" />
+        </div>
+        <div v-else class="not-found">
+            <h1>Nenhuma venda encontrada.</h1>
         </div>
 
     </div>
@@ -41,6 +44,7 @@ import VendorSalesList from '@/components/lists/VendorSalesList.vue'
 import VendorMenu from '@/components/menus/VendorMenu.vue'
 
 import { mapGetters, mapActions } from 'vuex'
+import { getVendorSales } from '@/controllers/VendorController'
 
 export default {
     name: 'VendorSalesView',
@@ -54,7 +58,7 @@ export default {
             searchText: '',
             page: 1,
             sales: [],
-            itemsPerPage: 10,
+            itemsPerPage: 20,
             totalSales: 0,
         }
     },
@@ -87,16 +91,30 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getVendorSales']),
+        ...mapGetters(['getVendorSales', 'loggedInUser']),
         paginatedSales() {
             const start = (this.page - 1) * this.itemsPerPage
             const end = start + this.itemsPerPage
             return this.sales.slice(start, end)
         }
     },
-    created() {
-        this.sales = this.getVendorSales
-        this.totalSales = this.sales.length
+    async mounted() {
+        await getVendorSales(this.loggedInUser.id).then((res) => {
+            console.log(res)
+            if (res.data && res.data.length > 0) {
+                this.sales = this.getVendorSales
+                this.totalSales = this.sales.length
+                console.log(this.sales)
+            }
+        }).catch((err) => {
+            console.log(err)
+            this.$toast.open({
+                message: 'Erro ao carregar vendas. Tente novamente mais tarde.',
+                position: 'top-right',
+                duration: 5000,
+                type: 'error'
+            })
+        })
     }
 }
 </script>
@@ -192,6 +210,20 @@ export default {
                     cursor: pointer;
                 }
             }
+        }
+    }
+    
+    .not-found {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+
+        h1 {
+            font-size: 25px;
+            font-weight: 500;
+            text-align: center;
         }
     }
 }

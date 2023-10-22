@@ -8,9 +8,10 @@ export default {
     mutations: {
         addProductToCart(state, product) {
             // same product already in cart with same selectedOption
-            if (state.cart.products.find(p => (p.idProduct === product.idProduct && p.selectedOption === product.selectedOption))) {
+            const sameProd = state.cart.products.find(p => (p.idProduct === product.idProduct && p.selectedOption === product.selectedOption))
+            if (sameProd) {
                 // increment quantity
-                state.cart.products.find(p => p.idProduct === product.idproduct && p.selectedOption === product.selectedOption).quantity++
+                sameProd.quantity++
             } else {
                 product.quantity = 1
                 state.cart.products.push(product)
