@@ -53,7 +53,7 @@ router.get('/:id',
 
 router.get('/user/:id',
     verifyJWT,
-    checkRole([userRoles.customer]),
+    checkRole([userRoles.customer, userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const transactions = await transactionService.getByUserId(req.params.id);
