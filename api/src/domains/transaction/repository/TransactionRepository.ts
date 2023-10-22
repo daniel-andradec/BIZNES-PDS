@@ -8,4 +8,5 @@ export interface TransactionRepository {
     getById(id: string): Promise<TransactionInterface | null>;
     delete(id: string): Promise<void>;
     getByUserId(id: string): Promise<TransactionInterface[]>;
+    getByVendorId(id: string): Promise<TransactionInterface[]>;
 }
