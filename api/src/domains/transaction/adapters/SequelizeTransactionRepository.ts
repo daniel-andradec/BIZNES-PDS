@@ -35,7 +35,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
                 include: [{
                     model: Product,
-                    attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
                 }]
             }, {
                 model: Address,
@@ -52,7 +52,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
                 include: [{
                     model: Product,
-                    attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
                 }]
             }, {
                 model: Address,
@@ -74,7 +74,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
                 include: [{
                     model: Product,
-                    attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
                 }]
             }, {
                 model: Address,
@@ -83,4 +83,21 @@ export class SequelizeTransactionRepository implements TransactionRepository{
         });
     }
 
+    async getByVendorId(id: string): Promise<TransactionInterface[]> {
+        return await Transaction.findAll({
+            attributes: {exclude: ['createdAt', 'updatedAt']},
+            where:{ '$TransactionProducts.Product.idVendor$': id},
+            include: [{
+                model: TransactionProduct,
+                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
+                include: [{
+                    model: Product,
+                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                }]
+            }, {
+                model: Address,
+                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
+            }]
+        });
+    }
 }
