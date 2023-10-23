@@ -65,6 +65,10 @@ export class SequelizeVendorRepository implements vendorRepository{
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],
+                    include: [{
+                        model: Address,
+                        attributes: ['city', 'state']
+                    }]
                 }],
             });
             return vendors;

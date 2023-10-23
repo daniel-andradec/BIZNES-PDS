@@ -9,13 +9,13 @@
             </div>
 
             <div class="vendors" v-for="(vendor, ckey) in sortedVendors" :key="ckey">
-                <h2>{{ vendor.id }}</h2>
+                <h2>{{ vendor.idVendor }}</h2>
                 <h2>{{ vendor.companyName }}</h2>
                 <h2>{{ vendor.fantasyName }}</h2>
-                <h2>{{ vendor.cnpj }}</h2>
-                <h2>{{ vendor.city }}/{{ vendor.state }}</h2>
+                <h2>{{ vendor.CNPJ }}</h2>
+                <h2>{{ vendor.User.Address.city }}/{{ vendor.User.Address.state }}</h2>
                 <h2>{{ vendor.phone }}</h2>
-                <h2>{{ vendor.email }}</h2>                
+                <h2>{{ vendor.User.email }}</h2>                
                 <i class="fa-solid fa-trash red" @click="openDeleteVendorModal(vendor)"></i>
             </div>
         </div>
@@ -41,6 +41,8 @@
 import ModalComponent from '../modals/ModalComponent.vue'
 
 import { mapGetters } from 'vuex'
+
+import { getVendors } from '@/controllers/AdminController'
 export default {
     name: 'ManageVendor',
     props: ['searchText'],
@@ -114,9 +116,14 @@ export default {
             this.deleteVendorModalOpen = true
         },
     },
-    mounted() {
-        console.log(this.getVendors)
-        this.sortedVendors = this.getVendors
+    async mounted() {
+        //this.sortedVendors = this.getVendors
+        await getVendors().then(res => {
+            if (res.data.length > 0){
+                console.log(res.data)
+                this.sortedVendors = res.data
+            }
+        })
     },
     watch: {
         searchText: {
