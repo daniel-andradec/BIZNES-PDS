@@ -9,6 +9,7 @@ import { PayloadParams } from "../../users/types/PayloadParams";
 import { validateRegisterCustomer, validateUpdateCustomer } from "../../../../utils/functions/validation/validateCustomer";
 import { deleteObject } from "../../../../utils/functions/aws";
 import { AddressService } from "../../address/services/AddressService";
+import { Address } from "../../address/models/Address";
 
 class CustomerServiceClass {
     async create(body: CustomerCreationAttributes) {
@@ -53,6 +54,10 @@ class CustomerServiceClass {
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],
+                    include: [{
+                        model: Address,
+                        attributes: ['city', 'state']
+                    }]
                 }],
             });
             return customers;

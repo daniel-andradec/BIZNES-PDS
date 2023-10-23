@@ -9,12 +9,12 @@
             </div>
 
             <div class="customers" v-for="(customer, ckey) in sortedCustomers" :key="ckey">
-                <h2>{{ customer.id }}</h2>
-                <h2>{{ customer.name }}</h2>
-                <h2>{{ customer.birthDate }}</h2>
-                <h2>{{ customer.cpf }}</h2>
-                <h2>{{ customer.city }}/{{ customer.state }}</h2>
-                <h2>{{ customer.email }}</h2>
+                <h2>{{ customer.idCustomer }}</h2>
+                <h2>{{ customer.User.name }}</h2>
+                <h2>{{ formatDate(customer.birthDate) }}</h2>
+                <h2>{{ customer.CPF }}</h2>
+                <h2>{{ customer.User.Address.city }}/{{ customer.User.Address.state }}</h2>
+                <h2>{{ customer.User.email }}</h2>
                 <i class="fa-solid fa-trash red" @click="openDeleteCustomerModal(customer)"></i>
             </div>
         </div>
@@ -42,6 +42,8 @@ import ModalComponent from '../modals/ModalComponent.vue'
 
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+
+import { getCustomers } from '@/controllers/AdminController'
 
 export default {
     name: 'ManageCustomer',
@@ -94,6 +96,9 @@ export default {
         ...mapGetters(['getCustomers'])
     },
     methods: {
+        formatDate (date) {
+            return moment(date).format('DD/MM/YYYY')
+        },
         sortCustomers(field) {
             if (field.sort) {
                 this.isSorted = !this.isSorted;
@@ -128,9 +133,15 @@ export default {
             // todo - delete customer
         }
     },
-    mounted() {
-        console.log(this.getCustomers)
-        this.sortedCustomers = this.getCustomers
+    async mounted() {
+        //this.sortedCustomers = this.getCustomers
+        await getCustomers().then(res => {
+            if (res.data.length > 0){
+                console.log(res.data)
+                this.sortedCustomers = res.data
+            } 
+        })
+
     },
     watch: {
         searchText: {

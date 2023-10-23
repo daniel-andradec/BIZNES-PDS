@@ -62,6 +62,10 @@ class VendorServiceClass {
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],
+                    include: [{
+                        model: Address,
+                        attributes: ['city', 'state']
+                    }]
                 }],
             });
             return vendors;
