@@ -7,6 +7,7 @@ export default {
     mutations: { //mudam o state
         setVendorStock(state, payload) {
             state.vendorStock = payload
+            localStorage.setItem('vendorStock', JSON.stringify(payload))
         },
         saveVendorData(state, payload) {
             state.vendor = payload.vendor
@@ -18,6 +19,7 @@ export default {
         },
         saveVendorSales(state, payload) {
             state.vendorSales = payload
+            localStorage.setItem('vendorSales', JSON.stringify(payload))
         }
     },
     actions: { // chamam as mutations de fora da store - por exemplo de um componente/controller
@@ -36,10 +38,24 @@ export default {
             return state.vendor
         },
         getVendorStock(state) {
+            if (state.vendorStock?.length === 0) {
+                const vendorStock = JSON.parse(localStorage.getItem('vendorStock'))
+                if (vendorStock) {
+                    state.vendorStock = vendorStock
+                }
+            }
             return state.vendorStock
         },
         getVendorSales(state) {
+            // se o state estiver vazio, tenta buscar do localStorage
+            if (state.vendorSales?.length === 0) {
+                const vendorSales = JSON.parse(localStorage.getItem('vendorSales'))
+                if (vendorSales) {
+                    state.vendorSales = vendorSales
+                }
+            }
             return state.vendorSales
-        }
+        },
+        getProductInStock: state => id => state.vendorStock.find(product => product.idProduct == id)
     }
 }

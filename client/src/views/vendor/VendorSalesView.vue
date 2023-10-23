@@ -91,7 +91,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getVendorSales', 'loggedInUser']),
+        ...mapGetters(['getVendorSales']),
         paginatedSales() {
             const start = (this.page - 1) * this.itemsPerPage
             const end = start + this.itemsPerPage
@@ -99,22 +99,27 @@ export default {
         }
     },
     async mounted() {
-        await getVendorSales(this.loggedInUser.id).then((res) => {
-            console.log(res)
-            if (res.data && res.data.length > 0) {
-                this.sales = this.getVendorSales
-                this.totalSales = this.sales.length
-                console.log(this.sales)
-            }
-        }).catch((err) => {
-            console.log(err)
-            this.$toast.open({
-                message: 'Erro ao carregar vendas. Tente novamente mais tarde.',
-                position: 'top-right',
-                duration: 5000,
-                type: 'error'
+        if (!this.getVendorSales) {
+            await getVendorSales().then((res) => {
+                console.log(res)
+                if (res.data && res.data.length > 0) {
+                    this.sales = this.getVendorSales
+                    this.totalSales = this.sales.length
+                    console.log(this.sales)
+                }
+            }).catch((err) => {
+                console.log(err)
+                this.$toast.open({
+                    message: 'Erro ao carregar vendas. Tente novamente mais tarde.',
+                    position: 'top-right',
+                    duration: 5000,
+                    type: 'error'
+                })
             })
-        })
+        }
+
+        this.sales = this.getVendorSales
+        this.totalSales = this.sales.length
     }
 }
 </script>

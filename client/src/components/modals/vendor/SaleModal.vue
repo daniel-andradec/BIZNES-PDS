@@ -15,7 +15,7 @@
                     <div class="right">
                         <h2>Endereço de entrega</h2>
                         <span>
-                            {{ sale.recipient }} <br>
+                            {{ sale.recipientName }} <br>
                             {{ sale.Address?.street }}, {{ sale.Address?.number }} - {{ sale.Address?.complement }} -
                             {{ sale.Address?.neighborhood }}, 
                             {{ sale.Address?.city }} - {{ sale.Address?.state }} <br>
@@ -95,12 +95,12 @@ export default {
         },
     },
     computed: {
-        ...mapGetters(['getProduct'])
+        ...mapGetters(['getProductInStock'])
     },
     mounted() {
         this.productsList = this.sale.products?.map((prod) => {
             return {
-                ...this.getProduct(prod.id),
+                ...this.getProductInStock(prod.id),
                 quantity: prod.quantity,
                 option: prod.option
             }
@@ -111,7 +111,7 @@ export default {
             if (this.modalOpen) {
                 this.productsList = this.sale.TransactionProducts.map((prod) => {
                     return {
-                        ...this.getProduct(prod.idProduct),
+                        ...this.getProductInStock(prod.idProduct),
                         quantity: prod.quantity,
                         option: prod.selectedOption
                     }

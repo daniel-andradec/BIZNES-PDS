@@ -112,18 +112,15 @@ export default {
         
     },
     async mounted() {
-        await getProducts().then(() => {
-            console.log(this.getVendorStock)
-            this.products = this.getVendorStock;
-            // categoriesList is a array with strings representing the categories of this.products
-            this.products.forEach((prod) => {
-                const categories = prod.category.split(',')
-                categories.forEach((cat) => {
-                    if (!this.categoriesList.includes(cat)) this.categoriesList.push(cat)
-                })
+        console.log(this.getVendorStock)
+        this.products = this.getVendorStock;
+        // categoriesList is a array with strings representing the categories of this.products
+        this.products.forEach((prod) => {
+            const categories = prod.category.split(',')
+            categories.forEach((cat) => {
+                if (!this.categoriesList.includes(cat)) this.categoriesList.push(cat)
             })
         })
-        console.log(this.categoriesList)
     }
     
 }
