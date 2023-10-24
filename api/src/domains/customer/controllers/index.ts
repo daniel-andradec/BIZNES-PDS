@@ -3,16 +3,19 @@ import { loginMiddleware,
     verifyJWT,
     notLoggedIn } from '../../../middlewares/auth-middlewares';
 import { statusCodes } from '../../../../utils/constants/statusCodes';
-import { CustomerService } from '../service/CustomerService';
+import { CustomerService } from '../ports/CustomerService';
+import { SequelizeCustomerRepository } from '../adapters/SequelizeCustomerRepository';
 import { upload } from '../../../../utils/functions/aws';
 
 export const router = Router();
+const customerRepository = new SequelizeCustomerRepository();
+const customerService = new CustomerService(customerRepository);
 
 router.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log(req.body);
-        const costumer = await CustomerService.create(req.body);
+        const costumer = await customerService.create(req.body);
         res.status(statusCodes.CREATED).send(costumer);
         } catch (error) {
         next(error);
@@ -24,7 +27,7 @@ router.get('/',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const customers = await CustomerService.getAll();
+            const customers = await customerService.getAll();
             res.status(statusCodes.SUCCESS).json(customers);
         } catch (error) {
             next(error);
@@ -36,7 +39,7 @@ router.get('/logged',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const customer = await CustomerService.getLogged(req.user!.idUser);
+            const customer = await customerService.getLogged(req.user!.idUser);
             res.status(statusCodes.SUCCESS).json(customer);
         } catch (error) {
             next(error);
@@ -48,7 +51,7 @@ router.get('/:id',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await CustomerService.getById(req.params.id!);
+            const user = await customerService.getById(req.params.id!);
             res.status(statusCodes.SUCCESS).json(user);
         } catch (error) {
             next(error);
@@ -60,7 +63,7 @@ router.put('/',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await CustomerService.update(req.body, req.user!.idUser);;
+            await customerService.update(req.body, req.user!.idUser);;
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);
@@ -72,7 +75,7 @@ router.delete('/:id',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await CustomerService.delete(req.params.id!, req.user!);
+            await customerService.delete(req.params.id!, req.user!);
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);
