@@ -2,10 +2,6 @@ import {Address, AddressInterface} from "../models/Address";
 import {CreationAttributes} from "sequelize";
 import {AddressRepository} from "../repository/AddressRepository";
 import {PayloadParams} from "../../users/types/PayloadParams";
-import {QueryError} from "../../../../errors/QueryError";
-import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
-import { PermissionError } from '../../../../errors/PermissionError';
-
 
 export class SequelizeAddressRepository implements AddressRepository{
     async create(body: CreationAttributes<AddressInterface>) {
