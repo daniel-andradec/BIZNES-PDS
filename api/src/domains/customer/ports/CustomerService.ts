@@ -4,8 +4,9 @@ import { AddressInterface } from "../../address/models/Address";
 import { UserInterface } from "../../users/models/User";
 import { CreationAttributes } from "sequelize";
 import { PayloadParams } from "../../users/types/PayloadParams";
+import { SequelizeCustomerRepository } from "../adapters/SequelizeCustomerRepository";
 
-export class CustomerService{
+class CustomerServiceClass{
     constructor(private customerRepository: CustomerRepository) {}
     async create(body: CreationAttributes<CustomerInterface>) : Promise<CustomerInterface>{
         return await this.customerRepository.create(body);
@@ -26,3 +27,6 @@ export class CustomerService{
         return await this.customerRepository.delete(id, loggedUser);
     }
 }
+
+const customerRepository = new SequelizeCustomerRepository();
+export const CustomerService = new CustomerServiceClass(customerRepository);
