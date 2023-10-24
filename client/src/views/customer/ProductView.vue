@@ -65,10 +65,7 @@
 
             <div class="list" v-else>
                 <!-- Produtos mais vendidos -->
-                <div class="list-item" v-for="(product, key) in getBestSellers" :key="key" @click="goToProduct(product)">
-                    <ProductCard :key="product.id" :product="product" :fixSize="true" />
-                </div>
-                <span @click="this.$router.push('/')">Voltar à <br> página inicial</span>
+                <BestSellersList />
             </div>
         </div>
     </div>
@@ -78,6 +75,7 @@
 import CustomerHeader from '@/components/headers/CustomerHeader.vue'
 import CategoryMenu from '@/components/menus/CategoryMenu.vue'
 import ProductCard from '@/components/products/ProductCard.vue'
+import BestSellersList from '@/components/lists/BestSellersList.vue'
 
 import { mapActions, mapGetters } from 'vuex'
 
@@ -86,7 +84,8 @@ export default {
     components: {
         CustomerHeader,
         CategoryMenu,
-        ProductCard
+        ProductCard,
+        BestSellersList
     },
     data() {
         return {

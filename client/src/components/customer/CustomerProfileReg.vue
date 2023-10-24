@@ -252,6 +252,8 @@ export default {
                     duration: 5000,
                     position: 'top-right'
                 });
+
+                this.formatLoadedData();
             }).catch(err => {
                 console.log(err);
                 this.$toast.open({

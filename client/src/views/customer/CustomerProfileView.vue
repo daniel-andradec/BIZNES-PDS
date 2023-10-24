@@ -39,7 +39,7 @@
             </div>
             <div v-else class="no-orders">
                 <h2>Você ainda não realizou pedidos no Biznes. Aqui você encontra tudo, dê uma olhadinha nas categorias :)</h2>
-                <BestSellersList />
+                <BestSellersList :showHeader="true" />
             </div>
         </div>
 

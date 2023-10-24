@@ -84,7 +84,7 @@
         </div>
 
         <div>
-            <BestSellersList />
+            <BestSellersList :showHeader="true" />
         </div>
         
 

@@ -1,7 +1,7 @@
 <template>
     <div class="best-sellers-list">
         <div class="list-header">
-            <h2>Mais vendidos no Biznes</h2>
+            <h2 v-if="showHeader">Mais vendidos no Biznes</h2>
         </div>
         <div class="list" v-if="Object.values(getBestSellers).length > 0">
             <div class="list-item" v-for="(product, key) in getBestSellers" :key="key" @click="goToProduct(product)">
@@ -10,16 +10,20 @@
                 
             <span @click="this.$router.push('/')">Outros produtos</span>
         </div>
-        
+        <div v-else>
+            <h2>Não há produtos cadastrados</h2>
+        </div>
     </div>
 </template>
 
 <script>
 import ProductCard from '@/components/products/ProductCard.vue'
+import { saveBestSellers } from '@/controllers/ProductController'
 import { mapGetters } from 'vuex'
 
 export default {
     name: 'BestSellersList',
+    props: ['showHeader'],
     components: {
         ProductCard
     },
@@ -34,6 +38,10 @@ export default {
         goToProduct(product) {
             this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         }
+    },
+    async mounted() {
+        await saveBestSellers()
+        console.log(this.getBestSellers)
     }
 }
 </script>

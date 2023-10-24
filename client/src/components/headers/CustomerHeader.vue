@@ -11,7 +11,7 @@
             <div class="login">
                 <div class="logged" v-if="loggedInUser?.id">
                     <i class="fa-regular fa-user"></i>
-                    Olá, <span>{{ loggedInUser?.name }}</span>
+                    Olá, <span>{{ getFirstName(loggedInUser?.name) }}</span>
                 </div>
                 <div class="not-logged" v-else>
                     Olá, faça seu <br><span @click="this.$router.push('/login')">login</span>
@@ -72,6 +72,9 @@ export default {
             this.$router.push('/')
             await logout()
             window.location.reload()
+        },
+        getFirstName(name) {
+            return name.split(' ')[0]
         }
     },
     computed: {

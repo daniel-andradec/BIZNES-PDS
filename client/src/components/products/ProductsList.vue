@@ -39,6 +39,7 @@
 <script>
 import ProductCard from '@/components/products/ProductCard.vue'
 import CategoryMenu from '@/components/menus/CategoryMenu.vue'
+import { saveBestSellers } from '@/controllers/ProductController'
 import { mapActions } from 'vuex'
 export default {
     name: 'ProductsList',
@@ -95,7 +96,10 @@ export default {
         goToProduct(product) {
             this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         },
-        sortProducts(option) {
+        async sortProducts(option) {
+            if (option === 'bestSellers') {
+               await saveBestSellers()
+            }
             this.$store.dispatch('sortProducts', option)
         }
     },

@@ -1,6 +1,7 @@
 export default {
     state: {
-        products: []
+        products: [],
+        bestSellers: []
     },
     mutations: {
         sortProducts(state, option) {
@@ -17,9 +18,22 @@ export default {
                 case 'category':
                     state.products.sort((a, b) => a.category[0].localeCompare(b.category[0]))
                     break
-                case 'bestSellers':
-                    state.products.sort((a, b) => a.id - b.id) // todo - sort by best sellers
+                case 'bestSellers': {
+                    if (Object.keys(state.bestSellers).length <= 0) break
+
+                    const salesRanking = {}
+                    state.bestSellers.forEach((product, index) => {
+                        salesRanking[product.idProduct] = index
+                    })
+
+                    state.products.sort((a, b) => {
+                        const rankA = salesRanking[a.idProduct] !== undefined ? salesRanking[a.idProduct] : Number.MAX_SAFE_INTEGER;
+                        const rankB = salesRanking[b.idProduct] !== undefined ? salesRanking[b.idProduct] : Number.MAX_SAFE_INTEGER;
+                        
+                        return rankA - rankB;
+                    })
                     break
+                }
                 default:
                     break
             }
@@ -41,6 +55,9 @@ export default {
             if (products) {
                 state.products = JSON.parse(products)
             }
+        },
+        saveBestSellers(state, bestSellers) {
+            state.bestSellers = bestSellers
         }
     },
     actions: {
@@ -52,6 +69,9 @@ export default {
         },
         fetchProducts({ commit }) {
             commit('fetchProducts')
+        },
+        saveBestSellers({ commit }, bestSellers) {
+            commit('saveBestSellers', bestSellers)
         }
     },
     getters: {
@@ -73,8 +93,12 @@ export default {
             return state.products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()) || product.description.toLowerCase().includes(search.toLowerCase()) || product.category.split(',').some(category => category.toLowerCase().includes(search.toLowerCase())))
         },
         // best sellers products - by now, just return the products from index 3 to 7
-        getBestSellers: state => {
-            return state.products.slice(3, 7)
+        getBestSellers: state => {            
+            console.log(state.bestSellers, state.products.slice(0, 4))
+            if (Object.keys(state.bestSellers).length > 0) {
+                return state.bestSellers
+            }
+            return state.products.slice(0, 4)
         }
     }
 }

@@ -134,10 +134,10 @@ export default {
                 ],
                 'Dados de acesso': [
                     {
-                        ref: 'login',
-                        label: 'Login',
+                        ref: 'email',
+                        label: 'E-mail',
                         type: 'text',
-                        placeholder: 'Login',
+                        placeholder: 'E-mail',
                         required: true
                     },
                     {
@@ -211,7 +211,7 @@ export default {
                 fantasyName: '',
                 cnpj: '',
                 phone: '',
-                login: '',
+                email: '',
                 password: '',
                 cep: '',
                 street: '',
@@ -356,7 +356,7 @@ export default {
             this.formData.fantasyName = this.getVendorData.fantasyName
             this.formData.phone = this.getVendorData.phone
             this.formData.cnpj = this.getVendorData.CNPJ
-            this.formData.login = this.getVendorData.email
+            this.formData.email = this.getVendorData.email
             this.formData.password = '********'
             this.formData.devolutionPolicy = this.getVendorData.devolutionPolicy
             this.formData.cep = this.getVendorData.address.cep

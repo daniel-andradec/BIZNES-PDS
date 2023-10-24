@@ -192,6 +192,7 @@ export default {
                     this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
+                    this.formData.neighborhood = resp.data.bairro;
                 }).catch(() => {
                     this.$toast.open({
                         message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
