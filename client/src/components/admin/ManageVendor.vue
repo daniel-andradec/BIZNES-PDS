@@ -41,8 +41,9 @@
 import ModalComponent from '../modals/ModalComponent.vue'
 
 import { mapGetters } from 'vuex'
-
 import { getVendors } from '@/controllers/AdminController'
+import { formatValue } from '@/libs/Util'
+
 export default {
     name: 'ManageVendor',
     props: ['searchText'],
@@ -54,7 +55,7 @@ export default {
             listFields: [
                 {
                     display: 'ID',
-                    name: 'id',
+                    name: 'idVendor',
                     sort: true
                 },
                 {
@@ -103,6 +104,7 @@ export default {
                 this.isSorted = !this.isSorted
 
                 this.sortedVendors.sort((a, b) => {
+                    console.log(a)
                     if (this.isSorted) {
                         return a[field.name] < b[field.name] ? -1 : a[field.name] > b[field.name] ? 1 : 0;
                     } else {
@@ -115,13 +117,19 @@ export default {
             this.vendorToDelete = vendor
             this.deleteVendorModalOpen = true
         },
+        formatLoadedData() {
+            this.sortedVendors.forEach(vendor => {
+                vendor.phone = formatValue(vendor.phone, 'phone')
+                vendor.CNPJ = formatValue(vendor.CNPJ, 'cnpj')
+            })
+        },
     },
     async mounted() {
         //this.sortedVendors = this.getVendors
         await getVendors().then(res => {
             if (res.data.length > 0){
-                console.log(res.data)
                 this.sortedVendors = res.data
+                this.formatLoadedData()
             }
         })
     },
@@ -133,7 +141,7 @@ export default {
                 } else {
                     this.sortedVendors = this.getVendors.filter(vendors => {
                         //match id, company name, fantasy name or email
-                        return vendors.id.toString().includes(val) || vendors.companyName.toLowerCase().includes(val.toLowerCase()) || vendors.fantasyName.toLowerCase().includes(val.toLowerCase()) || vendors.email.toLowerCase().includes(val.toLowerCase())
+                        return vendors.idVendor.toString().includes(val) || vendors.companyName.toLowerCase().includes(val.toLowerCase()) || vendors.fantasyName.toLowerCase().includes(val.toLowerCase()) || vendors.User.email.toLowerCase().includes(val.toLowerCase())
                     })
                 }
             },
