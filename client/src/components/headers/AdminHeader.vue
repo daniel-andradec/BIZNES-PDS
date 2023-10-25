@@ -1,3 +1,4 @@
+
 <template>
     <div class="admin-header">
         <img @click="this.$router.push('/admin-panel')" alt="Vue logo" :src="logo">
@@ -5,7 +6,7 @@
         <div class="login-container">
             <div class="login">
                 <i class="fa fa-gear"></i>
-                <span> Biznes ADM </span>
+                <span> {{ loggedInUser.name }} </span>
                 <span> (admin) </span>
             </div>
             <div class="logout">
@@ -16,6 +17,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { logout } from '@/controllers/UserController'
+
 export default {
     name: 'AdminHeader',
     components: {
@@ -31,8 +35,13 @@ export default {
         }
     },
     methods: {
+        async logout() {
+            await logout()
+            this.$router.push('/login')
+        }
     },
     computed: {
+        ...mapGetters(['loggedInUser'])
     }
 }
 </script>
@@ -60,7 +69,6 @@ export default {
         margin-right: 40px;
 
         .login {
-            cursor: pointer;
             color: var(--secondaryColor);
             font-size: 25px;
             font-weight: 500;

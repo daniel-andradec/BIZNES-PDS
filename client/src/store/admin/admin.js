@@ -315,8 +315,22 @@ export default {
             },
         ]        
     },
-    mutations: {},
-    actions: {},
+    mutations: {
+        saveCustomers (state, payload) {
+            state.customers = payload
+        },
+        saveVendors (state, payload) {
+            state.vendors = payload
+        }
+    },
+    actions: {
+        saveCustomers ({ commit }, payload) {
+            commit('saveCustomers', payload)
+        },
+        saveVendors ({ commit }, payload) {
+            commit('saveVendors', payload)
+        }
+    },
     getters: {
         getCustomers: state => state.customers,
         getVendors: state => state.vendors

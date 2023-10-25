@@ -10,7 +10,7 @@ import { validateRegisterCustomer, validateUpdateCustomer } from "../../../../ut
 import { deleteObject } from "../../../../utils/functions/aws";
 import { AddressService } from "../../address/ports/AddressService";
 import { CustomerRepository } from "../repository/CustomerRepository";
-import { AddressInterface } from "../../address/models/Address";
+import { Address, AddressInterface } from "../../address/models/Address";
 
 export class SequelizeCustomerRepository implements CustomerRepository{
     async create(body: CustomerCreationAttributes): Promise<CustomerInterface> {
@@ -55,6 +55,10 @@ export class SequelizeCustomerRepository implements CustomerRepository{
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],
+                    include: [{
+                        model: Address,
+                        attributes: ['city', 'state']
+                    }]
                 }],
             });
             return customers;
@@ -86,7 +90,7 @@ export class SequelizeCustomerRepository implements CustomerRepository{
                 }],
             });
             if (!customer) {
-                throw new QueryError(`Não há loja com o ID ${id}!`);
+                throw new QueryError(`Não há usuário com o ID ${id}!`);
             }
             return customer;
         } catch (error) {

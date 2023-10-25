@@ -1,19 +1,16 @@
-import {Vendor, VendorCreationAttributes, VendorInterface} from "../models/Vendor";
-import {vendorRepository} from "../repository/VendorRepository";
-import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/functions/validation/validateVendor";
-import { CreationAttributes } from "sequelize";
-import { UserInterface } from "../../users/models/User";
-import { userRoles } from "../../users/constants/userRoles";
+import { Vendor, VendorInterface, VendorCreationAttributes } from "../models/Vendor";
+import { UserService } from "../../users/services/UserService";
+import { AddressService } from "../../address/services/AddressService";
+import { User, UserInterface } from "../../users/models/User";
 import { Address, AddressInterface } from "../../address/models/Address";
-import { SequelizeAddressRepository } from "../../address/adapters/SequelizeAddressRepository";
-import { UserService } from "../../users/ports/UserService";
-import { SequelizeUserRepository } from "../../users/adapters/SequelizeUserRepository";
-import { User } from "../../users/models/User";
-import { QueryError } from "../../../../errors/QueryError";
-import { AddressService } from "../../address/ports/AddressService";
+import { Attributes, CreationAttributes } from 'sequelize/types';
+import { userRoles } from "../../users/constants/userRoles";
+import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
+import { QueryError } from '../../../../errors/QueryError';
+import { PayloadParams } from "../../users/types/PayloadParams";
+import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/functions/validation/validateVendor";
 
-
-export class SequelizeVendorRepository implements vendorRepository{
+class VendorServiceClass {
     async create(body: VendorCreationAttributes) { 
         try {
             validateRegisterVendor(body);
@@ -80,9 +77,7 @@ export class SequelizeVendorRepository implements vendorRepository{
     async getById(id: string) {
         try {
             const user = await User.findByPk(id);
-            const vendor = await Vendor.findByPk(id, {
-                attributes: ['idVendor', 'idUser', 'CNPJ', 'companyName', 'fantasyName', 'phone', 'devolutionPolicy']
-            });
+            const vendor = await Vendor.findOne({ where: { idUser: user?.idUser } });
             if (!vendor) {
                 throw new QueryError(`Não há loja com o ID ${id}!`);
             }
@@ -96,7 +91,7 @@ export class SequelizeVendorRepository implements vendorRepository{
         try{
             const vendor = await Vendor.findOne({where: {idUser}});
             const user = await UserService.getById(idUser);
-            const address = await AddressService.getAddress(idUser);
+            const address = await AddressService.getAddress(user);
             const vendorWithAddress = { vendor, address, user };
             return vendorWithAddress;
         }
@@ -110,10 +105,6 @@ export class SequelizeVendorRepository implements vendorRepository{
             validateUpdateVendor(body);
             const vendor = await this.getById(id);;
             const user = await UserService.getById(vendor.idUser);
-
-            if(!user){
-                throw new QueryError(`Não há usuário com o ID ${id}!`);
-            }
 
             const newVendor = {
                 CNPJ: body.CNPJ,
@@ -152,12 +143,18 @@ export class SequelizeVendorRepository implements vendorRepository{
         }
     }
 
-    async delete(id: string) {  
+    async delete(id: string, loggedUser: PayloadParams) {  
         try {
             const vendor = await this.getById(id);
-            await UserService.delete(vendor.idUser);
+            if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
+                throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
+            }
+
+            await UserService.delete(vendor.idUser, loggedUser.idUser);
         } catch (error) {
             throw(error);
         }
-    }
+    } 
 }
+
+export const VendorService = new VendorServiceClass();
