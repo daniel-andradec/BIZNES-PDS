@@ -90,7 +90,7 @@ export class SequelizeCustomerRepository implements CustomerRepository{
                 }],
             });
             if (!customer) {
-                throw new QueryError(`Não há loja com o ID ${id}!`);
+                throw new QueryError(`Não há usuário com o ID ${id}!`);
             }
             return customer;
         } catch (error) {

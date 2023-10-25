@@ -4,7 +4,7 @@ import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/
 import { CreationAttributes } from "sequelize";
 import { UserInterface } from "../../users/models/User";
 import { userRoles } from "../../users/constants/userRoles";
-import { AddressInterface } from "../../address/models/Address";
+import { Address, AddressInterface } from "../../address/models/Address";
 import { SequelizeAddressRepository } from "../../address/adapters/SequelizeAddressRepository";
 import { UserService } from "../../users/ports/UserService";
 import { SequelizeUserRepository } from "../../users/adapters/SequelizeUserRepository";

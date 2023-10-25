@@ -43,6 +43,7 @@ import ModalComponent from '../modals/ModalComponent.vue'
 import { mapGetters } from 'vuex'
 import { getVendors } from '@/controllers/AdminController'
 import { formatValue } from '@/libs/Util'
+import { deleteVendor } from '@/controllers/AdminController'
 
 export default {
     name: 'ManageVendor',
@@ -123,6 +124,32 @@ export default {
                 vendor.CNPJ = formatValue(vendor.CNPJ, 'cnpj')
             })
         },
+        async deleteVendor () {
+            await deleteVendor(this.vendorToDelete.idVendor).then(async res => {
+                if (res.status === 204) {
+                    await getVendors().then(res => {
+                        if (res.data.length > 0){
+                            this.sortedVendors = res.data
+                            this.formatLoadedData()
+                        }
+                    })
+                    this.deleteVendorModalOpen = false
+                    this.$toast.open({
+                        message: 'Loja excluída com sucesso.',
+                        type: 'success',
+                        position: 'top-right'
+                    })
+                }
+            })
+            .catch(() => {
+                this.deleteVendorModalOpen = false
+                this.$toast.open({
+                    message: 'Não foi possível excluir a loja.',
+                    type: 'error',
+                    position: 'top-right'
+                })
+            })
+        }
     },
     async mounted() {
         //this.sortedVendors = this.getVendors

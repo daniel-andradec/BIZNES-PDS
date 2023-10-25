@@ -141,11 +141,20 @@ export default {
             })
         },
         async deleteCustomer () {
-            console.log(this.customerToDelete)
-            await deleteCustomer(this.customerToDelete.idCustomer).then(res => {
-                if (res.data) {
-                    this.sortedCustomers = this.sortedCustomers.filter(customer => customer.idCustomer !== this.customerToDelete.idCustomer)
+            await deleteCustomer(this.customerToDelete.idCustomer).then(async res => {
+                if (res.status === 204) {
+                    await getCustomers().then(res => {
+                        if (res.data.length > 0){
+                            this.sortedCustomers = res.data
+                            this.formatLoadedData()
+                        } 
+                    })
                     this.deleteCustomerModalOpen = false
+                    this.$toast.open({
+                        message: 'Cliente excluído com sucesso.',
+                        type: 'success',
+                        position: 'top-right'
+                    })
                 }
             })
             .catch(() => {
