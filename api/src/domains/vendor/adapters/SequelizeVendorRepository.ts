@@ -81,7 +81,9 @@ export class SequelizeVendorRepository implements vendorRepository{
     async getById(id: string) {
         try {
             const user = await User.findByPk(id);
-            const vendor = await Vendor.findOne({ where: { idUser: user?.idUser } });
+            const vendor = await Vendor.findByPk(id, {
+                attributes: ['idVendor', 'idUser', 'CNPJ', 'companyName', 'fantasyName', 'phone', 'devolutionPolicy']
+            });
             if (!vendor) {
                 throw new QueryError(`Não há loja com o ID ${id}!`);
             }
@@ -155,6 +157,7 @@ export class SequelizeVendorRepository implements vendorRepository{
         try {
             const vendor = await this.getById(id);
             await userService.delete(vendor.idUser);
+            await vendor.destroy();
         } catch (error) {
             throw(error);
         }

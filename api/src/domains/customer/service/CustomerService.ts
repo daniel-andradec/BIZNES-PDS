@@ -137,8 +137,8 @@ class CustomerServiceClass {
             if(loggedUser.role != userRoles.admin && loggedUser.idUser != id){
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
             }
-
             await UserService.delete(customer.idUser, loggedUser.idUser);
+            await customer.destroy();
         } catch (error) {
             throw(error);
         }

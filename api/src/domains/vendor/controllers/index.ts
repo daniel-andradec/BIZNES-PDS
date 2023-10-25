@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { VendorService } from '../services/VendorService';
+import { VendorService } from '../ports/VendorService';
 import { verifyJWT, checkRole } from '../../../middlewares/auth-middlewares';
 import { userRoles } from '../../users/constants/userRoles';
 import { statusCodes } from '../../../../utils/constants/statusCodes';
@@ -47,7 +47,7 @@ router.get('/:id',
   checkRole([userRoles.admin]),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await VendorService.getById(req.params.idUser!);
+      const user = await VendorService.getById(req.params.id!);
       res.status(statusCodes.SUCCESS).json(user);
     } catch (error) {
       next(error);
@@ -73,7 +73,7 @@ router.delete('/:id',
     verifyJWT,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await VendorService.delete(req.params.idUser!, req.user!);
+            await VendorService.delete(req.params.id!);
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);

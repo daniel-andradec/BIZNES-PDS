@@ -2,8 +2,8 @@ import { vendorRepository } from "../repository/VendorRepository";
 import { VendorInterface, VendorCreationAttributes } from "../models/Vendor";
 import { UserInterface } from "../../users/models/User";
 import { AddressInterface } from "../../address/models/Address";
-
-export class VendorService{
+import { SequelizeVendorRepository } from "../adapters/SequelizeVendorRepository";
+class VendorServiceClass{
     constructor(private vendorRepository: vendorRepository) {}
 
     async create(vendor: VendorCreationAttributes): Promise<VendorInterface> {
@@ -34,3 +34,6 @@ export class VendorService{
         return await this.vendorRepository.delete(id);
     }
 }
+
+const vendorRepository = new SequelizeVendorRepository();
+export const VendorService = new VendorServiceClass(vendorRepository);
