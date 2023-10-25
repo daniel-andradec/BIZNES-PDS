@@ -2,8 +2,9 @@ import { TransactionProduct } from "../models/TransactionProduct";
 import { TransactionProductInterface } from "../models/TransactionProduct";
 import { ProductService } from "../../product/services/ProductService";
 import { QueryError } from "../../../../errors/QueryError";
+import {TransactionProductRepository} from "../repository/TransactionProductRepository";
 
-class TransactionProductServiceClass {
+export class SequelizeTransactionProductRepository implements TransactionProductRepository {
     async create(transactionProduct: TransactionProductInterface): Promise<TransactionProductInterface> {
         try{
             const product = await ProductService.getById(transactionProduct.idProduct);
@@ -18,5 +19,3 @@ class TransactionProductServiceClass {
         }
     }
 }
-
-export const TransactionProductService = new TransactionProductServiceClass();

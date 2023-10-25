@@ -7,15 +7,12 @@ import { userRoles } from '../../users/constants/userRoles';
 
 export const router = Router();
 
-const transactionRepository = new SequelizeTransactionRepository();
-const transactionService = new TransactionService(transactionRepository);
-
 router.post('/',
     verifyJWT,
     checkRole([userRoles.customer]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await transactionService.create(req.body.transaction, req.body.transactionProducts, req.body.address);
+            await TransactionService.create(req.body.transaction, req.body.transactionProducts, req.body.address);
             res.status(statusCodes.CREATED).end();
         } catch (error) {
             next(error);
@@ -28,7 +25,7 @@ router.get('/',
     //checkRole([userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const transactions = await transactionService.getAll();
+            const transactions = await TransactionService.getAll();
             res.status(statusCodes.SUCCESS).json(transactions);
         }
         catch (error) {
@@ -42,7 +39,7 @@ router.get('/:id',
     //checkRole([userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const transaction = await transactionService.getById(req.params.id);
+            const transaction = await TransactionService.getById(req.params.id);
             res.status(statusCodes.SUCCESS).json(transaction);
         }
         catch (error) {
@@ -56,7 +53,7 @@ router.get('/user/:id',
     checkRole([userRoles.customer, userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const transactions = await transactionService.getByUserId(req.params.id);
+            const transactions = await TransactionService.getByUserId(req.params.id);
             res.status(statusCodes.SUCCESS).json(transactions);
         }
         catch (error) {
@@ -70,7 +67,7 @@ router.get('/vendor/:id',
     checkRole([userRoles.vendor, userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const transactions = await transactionService.getByVendorId(req.params.id);
+            const transactions = await TransactionService.getByVendorId(req.params.id);
             res.status(statusCodes.SUCCESS).json(transactions);
         }
         catch (error) {

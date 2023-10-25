@@ -5,7 +5,7 @@ import { PayloadParams } from "../../users/types/PayloadParams";
 
 export interface AddressRepository {
     create(address: CreationAttributes<AddressInterface>): Promise<AddressInterface>;
-    getAddress(user: PayloadParams | null): Promise<AddressInterface | null>;
+    getAddress(id: string): Promise<AddressInterface | null>;
     update(address: CreationAttributes<AddressInterface>, idUser: string): Promise<AddressInterface>;
 }
 

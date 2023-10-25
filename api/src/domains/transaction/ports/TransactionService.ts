@@ -2,8 +2,8 @@ import { TransactionRepository } from "../repository/TransactionRepository";
 import { TransactionInterface } from "../models/Transaction";
 import { TransactionProduct, TransactionProductInterface } from "../../transactionProduct/models/TransactionProduct";
 import { AddressInterface } from "../../address/models/Address";
-
-export class TransactionService{
+import { SequelizeTransactionRepository } from "../adapters/SequelizeTransactionRepository";
+class TransactionServiceClass {
     constructor(private transactionRepository: TransactionRepository) {}
 
     async create(transaction: TransactionInterface, transactionProducts: TransactionProductInterface[], address: AddressInterface): Promise<TransactionInterface> {
@@ -30,3 +30,6 @@ export class TransactionService{
         return await this.transactionRepository.getByVendorId(id);
     }
 }
+
+const transactionRepository = new SequelizeTransactionRepository();
+export const TransactionService = new TransactionServiceClass(transactionRepository);
