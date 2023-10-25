@@ -2,9 +2,10 @@ import { Transaction } from "../models/Transaction";
 import { TransactionInterface } from "../models/Transaction";
 import { TransactionProduct } from "../../transactionProduct/models/TransactionProduct";
 import { TransactionProductInterface } from "../../transactionProduct/models/TransactionProduct";
+import { TransactionProductService } from "../../transactionProduct/ports/TransactionProductService";
 import { TransactionRepository } from "../repository/TransactionRepository";
 import { Product } from "../../product/models/Product";
-import { AddressService } from "../../address/services/AddressService";
+import { AddressService } from "../../address/ports/AddressService";
 import { AddressInterface } from "../../address/models/Address";
 import { Address } from "../../address/models/Address";
 
@@ -17,7 +18,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
             transactionProducts.forEach(async (transactionProduct) => {
                 transactionProduct.idTransaction = transactionCreated.idTransaction;
                 console.log(transactionProduct);
-                await TransactionProduct.create(transactionProduct);
+                await TransactionProductService.create(transactionProduct);
             });
             address.idTransaction = transactionCreated.idTransaction;
             await AddressService.create(address);

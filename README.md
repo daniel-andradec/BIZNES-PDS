@@ -191,4 +191,68 @@ O objetivo deste projeto é desenvolver um sistema de e-commerce como uma ferram
     
     [BE] Testes automatizados [Avelar]
 
+# Arquitetura Hexagonal no Sistema
+
+## Introdução
+
+Optamos por utilizar a Arquitetura Hexagonal, também conhecida como "Portas e Adaptadores", em nosso sistema. Esta arquitetura é fundamental para garantir que nosso código de negócio permaneça isolado e desacoplado de detalhes técnicos, como frameworks, bibliotecas e sistemas externos. Assim, conseguimos uma maior flexibilidade e capacidade de manutenção, além de facilitar os testes unitários.
+
+## Por que adotar a Arquitetura Hexagonal?
+
+1. **Desacoplamento**: O núcleo do domínio não tem dependências diretas sobre detalhes de implementação, como acesso a bancos de dados ou serviços externos.
+  
+2. **Flexibilidade**: Facilita a substituição de componentes da infraestrutura sem afetar o domínio.
+
+3. **Testabilidade**: Como o domínio é desacoplado da infraestrutura, testes unitários tornam-se mais simples e focados.
+
+## Portas e Adaptadores: O que são e seus objetivos
+
+- **Portas (Ports)**: São interfaces que definem os contratos de operações que o domínio precisa para executar sua lógica de negócio. Elas representam as "entradas" e "saídas" da aplicação.
+
+- **Adaptadores (Adapters)**: São implementações concretas das portas. Eles "adaptam" um framework, biblioteca ou sistema externo para que o domínio possa interagir com eles sem conhecê-los diretamente.
+
+### Exemplo:
+
+Imagine que nosso domínio precise buscar um endereço pelo ID do usuário:
+
+1. **Porta**: Criamos uma classe `AddressService` no domínio com um método `getAddress`.
+
+```typescript
+export class AddressService{
+    constructor(private addressRepository: AddressRepository) {}
+
+    async create(address: CreationAttributes<AddressInterface>): Promise<AddressInterface> {
+        return await this.addressRepository.create(address);
+    }
+
+    async getAddress(user: PayloadParams | null): Promise<AddressInterface | null> {
+        return await this.addressRepository.getAddress(user);
+    }
+
+    async update(address: CreationAttributes<AddressInterface>, idUser: string): Promise<AddressInterface> {
+        return await this.addressRepository.update(address, idUser);
+    }
+}
+
+```
+
+2. **Adaptador**: Implementamos essa interface na camada de infraestrutura usando, por exemplo, Sequelize.
+
+```typescript
+// Exemplo de metódo do adadptador
+async getAddress(user: PayloadParams) {
+        try {
+            const address = await Address.findOne({
+                where: {
+                    idUser: user.idUser,
+                }
+            });
+            return address;
+        } catch (error) {
+            throw(error);
+        }
+    }
+```
+
+
 

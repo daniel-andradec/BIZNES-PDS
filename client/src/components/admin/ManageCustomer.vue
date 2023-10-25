@@ -9,12 +9,12 @@
             </div>
 
             <div class="customers" v-for="(customer, ckey) in sortedCustomers" :key="ckey">
-                <h2>{{ customer.id }}</h2>
-                <h2>{{ customer.name }}</h2>
+                <h2>{{ customer.idCustomer }}</h2>
+                <h2>{{ customer.User.name }}</h2>
                 <h2>{{ customer.birthDate }}</h2>
-                <h2>{{ customer.cpf }}</h2>
-                <h2>{{ customer.city }}/{{ customer.state }}</h2>
-                <h2>{{ customer.email }}</h2>
+                <h2>{{ customer.CPF }}</h2>
+                <h2>{{ customer.User.Address.city }}/{{ customer.User.Address.state }}</h2>
+                <h2>{{ customer.User.email }}</h2>
                 <i class="fa-solid fa-trash red" @click="openDeleteCustomerModal(customer)"></i>
             </div>
         </div>
@@ -42,6 +42,8 @@ import ModalComponent from '../modals/ModalComponent.vue'
 
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import { getCustomers, deleteCustomer } from '@/controllers/AdminController'
+import { formatValue } from '@/libs/Util'
 
 export default {
     name: 'ManageCustomer',
@@ -54,7 +56,7 @@ export default {
             listFields: [
                 {
                     display: 'ID',
-                    name: 'id',
+                    name: 'idCustomer',
                     sort: true
                 },
                 {
@@ -100,13 +102,21 @@ export default {
 
                  if (field.name === 'birthDate') {
                     this.sortedCustomers.sort((a, b) => {
-                        const dateA = moment(a[field.name], "DD/MM/YYYY");
-                        const dateB = moment(b[field.name], "DD/MM/YYYY");
+                        const dateA = moment(a[field.name]);
+                        const dateB = moment(b[field.name]);
 
                         if (this.isSorted) {
                             return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
                         } else {
                             return dateA.isAfter(dateB) ? -1 : dateA.isBefore(dateB) ? 1 : 0;
+                        }
+                    });
+                 } else if (field.name === 'name') {
+                    this.sortedCustomers.sort((a, b) => {
+                        if (this.isSorted) {
+                            return a.User[field.name] < b.User[field.name] ? -1 : a.User[field.name] > b.User[field.name] ? 1 : 0;
+                        } else {
+                            return a.User[field.name] > b.User[field.name] ? -1 : a.User[field.name] < b.User[field.name] ? 1 : 0;
                         }
                     });
                 } else {
@@ -124,13 +134,48 @@ export default {
             this.customerToDelete = customer
             this.deleteCustomerModalOpen = true
         },
-        deleteCustomer () {
-            // todo - delete customer
+        formatLoadedData () {
+            this.sortedCustomers.forEach(customer => {
+                customer.CPF = formatValue(customer.CPF, 'cpf')
+                customer.birthDate = moment(customer.birthDate).format('DD/MM/YYYY')
+            })
+        },
+        async deleteCustomer () {
+            await deleteCustomer(this.customerToDelete.idCustomer).then(async res => {
+                if (res.status === 204) {
+                    await getCustomers().then(res => {
+                        if (res.data.length > 0){
+                            this.sortedCustomers = res.data
+                            this.formatLoadedData()
+                        } 
+                    })
+                    this.deleteCustomerModalOpen = false
+                    this.$toast.open({
+                        message: 'Cliente excluído com sucesso.',
+                        type: 'success',
+                        position: 'top-right'
+                    })
+                }
+            })
+            .catch(() => {
+                this.deleteCustomerModalOpen = false
+                this.$toast.open({
+                    message: 'Não foi possível excluir o cliente.',
+                    type: 'error',
+                    position: 'top-right'
+                })
+            })
         }
     },
-    mounted() {
-        console.log(this.getCustomers)
-        this.sortedCustomers = this.getCustomers
+    async mounted() {
+        //this.sortedCustomers = this.getCustomers
+        await getCustomers().then(res => {
+            if (res.data.length > 0){
+                this.sortedCustomers = res.data
+                this.formatLoadedData()
+            } 
+        })
+
     },
     watch: {
         searchText: {
@@ -141,7 +186,7 @@ export default {
                     this.sortedCustomers = this.getCustomers.filter(customer => {
                         // return customer.name.toLowerCase().includes(val.toLowerCase()) 
                         // match id, or name, or email
-                        return customer.id.toString().includes(val) || customer.name.toLowerCase().includes(val.toLowerCase()) || customer.email.toLowerCase().includes(val.toLowerCase())
+                        return customer.idCustomer.toString().includes(val) || customer.User.name.toLowerCase().includes(val.toLowerCase()) || customer.User.email.toLowerCase().includes(val.toLowerCase())
                     })
                 }
             },

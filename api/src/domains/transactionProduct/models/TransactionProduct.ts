@@ -9,6 +9,7 @@ export interface TransactionProductInterface extends Model<InferAttributes<Trans
     idProduct: string;
     quantity: number;
     selectedOption: string;
+    price: number;
     createdAt: CreationOptional<Date>;
     updatedAt: CreationOptional<Date>;
 }
@@ -36,6 +37,10 @@ export const TransactionProduct = sequelize.define<TransactionProductInterface>(
         type: DataTypes.STRING,
         allowNull: true,
     },
+    price: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
     createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -46,11 +51,11 @@ export const TransactionProduct = sequelize.define<TransactionProductInterface>(
     },
 });
 
-TransactionProduct.belongsTo(Transaction, { foreignKey: 'idTransaction' });
-Transaction.hasMany(TransactionProduct, { foreignKey: 'idTransaction', onDelete: 'CASCADE' });
+TransactionProduct.belongsTo(Transaction, { foreignKey: 'idTransaction', onDelete: 'CASCADE' });
+Transaction.hasMany(TransactionProduct, { foreignKey: 'idTransaction' });
 
-TransactionProduct.belongsTo(Product, { foreignKey: 'idProduct' });
-Product.hasMany(TransactionProduct, { foreignKey: 'idProduct', onDelete: 'CASCADE' });
+TransactionProduct.belongsTo(Product, { foreignKey: 'idProduct', onDelete: 'CASCADE' });
+Product.hasMany(TransactionProduct, { foreignKey: 'idProduct' });
 
 TransactionProduct.sync({alter: false, force: false})
     .then(() => {

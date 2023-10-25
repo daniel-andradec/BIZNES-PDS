@@ -1,5 +1,5 @@
 import { Customer, CustomerInterface, CustomerCreationAttributes } from "../models/Customer";
-import { UserService } from "../../users/services/UserService";
+import { UserService } from "../../users/ports/UserService";
 import { User, UserInterface } from "../../users/models/User";
 import { Attributes, CreationAttributes } from 'sequelize/types';
 import { userRoles } from "../../users/constants/userRoles";
@@ -8,10 +8,12 @@ import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { validateRegisterCustomer, validateUpdateCustomer } from "../../../../utils/functions/validation/validateCustomer";
 import { deleteObject } from "../../../../utils/functions/aws";
-import { AddressService } from "../../address/services/AddressService";
+import { AddressService } from "../../address/ports/AddressService";
+import { CustomerRepository } from "../repository/CustomerRepository";
+import { Address, AddressInterface } from "../../address/models/Address";
 
-class CustomerServiceClass {
-    async create(body: CustomerCreationAttributes) {
+export class SequelizeCustomerRepository implements CustomerRepository{
+    async create(body: CustomerCreationAttributes): Promise<CustomerInterface> {
         try {
             //validateRegisterCustomer(body);
             console.log(body);
@@ -46,13 +48,17 @@ class CustomerServiceClass {
         }
     }
 
-    async getAll() {
+    async getAll() : Promise<CustomerInterface[]> {
         try {
             const customers = await Customer.findAll({
                 attributes: ['idCustomer', 'phone', 'CPF', 'birthDate'],
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],
+                    include: [{
+                        model: Address,
+                        attributes: ['city', 'state']
+                    }]
                 }],
             });
             return customers;
@@ -61,11 +67,11 @@ class CustomerServiceClass {
         }
     }
 
-    async getLogged(idUser: string) {
+    async getLogged(idUser: string) : Promise<{customer: CustomerInterface | null, address: AddressInterface | null, user: UserInterface | null}> {
         try{
             const customer = await Customer.findOne({where: {idUser}});
             const user = await UserService.getById(idUser);
-            const address = await AddressService.getAddress(user);
+            const address = await AddressService.getAddress(idUser);
             const costumerWithAddress = { customer, address, user};
             return costumerWithAddress;
         }
@@ -74,17 +80,17 @@ class CustomerServiceClass {
         }
     }
 
-    async getById(id: string) {
+    async getById(id: string) : Promise<CustomerInterface> {
         try {
             const customer = await Customer.findByPk(id, {
-                attributes: ['idCustomer', 'phone', 'CPF', 'birthDate'],
+                attributes: ['idCustomer', 'idUser', 'phone', 'CPF', 'birthDate'],
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],
                 }],
             });
             if (!customer) {
-                throw new QueryError(`Não há loja com o ID ${id}!`);
+                throw new QueryError(`Não há usuário com o ID ${id}!`);
             }
             return customer;
         } catch (error) {
@@ -92,11 +98,15 @@ class CustomerServiceClass {
         }
     }
 
-    async update(body: CustomerCreationAttributes, idUser: string ) {
+    async update(body: CustomerCreationAttributes, idUser: string ) : Promise<void> {
         try {
             validateUpdateCustomer(body);
            
             const user = await UserService.getById(idUser);
+
+            if(!user){
+                throw new QueryError(`Não há usuário com o ID ${idUser}!`);
+            }
 
             const newCustomer = {
                 phone: body.phone,
@@ -125,24 +135,29 @@ class CustomerServiceClass {
             await UserService.update(user.idUser, newUser);
             await Customer.update(newCustomer, {where: {idUser: idUser}});
             await AddressService.update(newAddress, user.idUser);
+
         } catch (error) {
             throw(error);
         }
     }
 
-    async delete(id: string, loggedUser: PayloadParams) {
+    async delete(id: string, loggedUser: PayloadParams) : Promise<void> {
         try{
             const customer = await this.getById(id);
+
+            if(!customer){
+                throw new QueryError(`Não há customer com o ID ${id}!`);
+            }
+
 
             if(loggedUser.role != userRoles.admin && loggedUser.idUser != id){
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
             }
 
-            await UserService.delete(customer.idUser, loggedUser.idUser);
+            await UserService.delete(customer.idUser);
         } catch (error) {
             throw(error);
         }
     }
 }
 
-export const CustomerService = new CustomerServiceClass();

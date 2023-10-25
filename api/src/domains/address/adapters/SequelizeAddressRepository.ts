@@ -1,8 +1,9 @@
-import { Address, AddressInterface} from "../models/Address";
-import { Attributes, CreationAttributes } from 'sequelize/types';
-import { PayloadParams } from "../../users/types/PayloadParams";
+import {Address, AddressInterface} from "../models/Address";
+import {CreationAttributes} from "sequelize";
+import {AddressRepository} from "../repository/AddressRepository";
+import {PayloadParams} from "../../users/types/PayloadParams";
 
-class AddressServiceClass {
+export class SequelizeAddressRepository implements AddressRepository{
     async create(body: CreationAttributes<AddressInterface>) {
         try {
             const newAddress: CreationAttributes<AddressInterface> = {
@@ -23,11 +24,11 @@ class AddressServiceClass {
         }
     }
 
-    async getAddress(user: PayloadParams) {
+    async getAddress(id: string) {
         try {
             const address = await Address.findOne({
                 where: {
-                    idUser: user.idUser,
+                    idUser: id,
                 }
             });
             return address;
@@ -36,20 +37,28 @@ class AddressServiceClass {
         }
     }
 
-    async update(body: CreationAttributes<AddressInterface>, idUser: string) {
+    async update(body: CreationAttributes<AddressInterface>, idUser: string): Promise<AddressInterface> {
         try {
-            const updatedAddress = await Address.update(body, {
+            await Address.update(body, {
                 where: {
                     idUser: idUser,
                 }
             });
+            
+            const updatedAddress = await Address.findOne({
+                where: {
+                    idUser: idUser,
+                }
+            });
+    
+            if (!updatedAddress) {
+                throw new Error("Endereço não encontrado após a atualização");
+            }
+    
             return updatedAddress;
+    
         } catch (error) {
             throw(error);
         }
-    }
-
-
+    }    
 }
-
-export const AddressService = new AddressServiceClass();

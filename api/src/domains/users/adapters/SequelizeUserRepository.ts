@@ -66,13 +66,9 @@ export class SequelizeUserRepository implements UserRepository {
         }
     }
 
-    async update(id: string, userToUpdate: UserInterface, loggedUser: PayloadParams): Promise<UserInterface> {
+    async update(id: string, userToUpdate: UserInterface): Promise<UserInterface> {
         try {
             const user = await this.getById(id);
-    
-            if (loggedUser.role !== userRoles.admin && loggedUser.idUser !== id) {
-                throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
-            }
     
             if (userToUpdate.password) {
                 userToUpdate.password = await this.encryptPassword(userToUpdate.password);
@@ -92,7 +88,11 @@ export class SequelizeUserRepository implements UserRepository {
 
     async delete(id: string): Promise<void> {
         try {
-            await User.destroy({ where: { idUser: id } });
+            const user = await User.findByPk(id);
+            if (!user) {
+                throw new QueryError(`Não há um usuário com o ID ${id}!`);
+            }
+            await user.destroy();
         } catch (error) {
             throw(error);
         }

@@ -70,11 +70,10 @@ export const Product = sequelize.define<ProductInterface>('Products', {
     },
 });
 
-Product.belongsTo(Vendor, { foreignKey: 'idVendor' });
+Product.belongsTo(Vendor, { foreignKey: 'idVendor', onDelete: 'CASCADE' });
 
 Vendor.hasMany(Product, { 
     foreignKey: 'idVendor',
-    onDelete: 'CASCADE',
 });
 
 

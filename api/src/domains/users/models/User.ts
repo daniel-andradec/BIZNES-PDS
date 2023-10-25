@@ -47,7 +47,7 @@ export const User = sequelize.define<UserInterface>('Users', {
   },
 });
 
-//User.hasOne(Customer, { foreignKey: 'idUser' });
+
 
 User.sync({alter: false, force: false})
   .then(() => {

@@ -1,16 +1,19 @@
-import { Vendor, VendorInterface, VendorCreationAttributes } from "../models/Vendor";
-import { UserService } from "../../users/services/UserService";
-import { AddressService } from "../../address/services/AddressService";
-import { User, UserInterface } from "../../users/models/User";
-import { Address, AddressInterface } from "../../address/models/Address";
-import { Attributes, CreationAttributes } from 'sequelize/types';
-import { userRoles } from "../../users/constants/userRoles";
-import { NotAuthorizedError } from '../../../../errors/NotAuthorizedError';
-import { QueryError } from '../../../../errors/QueryError';
-import { PayloadParams } from "../../users/types/PayloadParams";
+import {Vendor, VendorCreationAttributes, VendorInterface} from "../models/Vendor";
+import {vendorRepository} from "../repository/VendorRepository";
 import { validateRegisterVendor, validateUpdateVendor } from "../../../../utils/functions/validation/validateVendor";
+import { CreationAttributes } from "sequelize";
+import { UserInterface } from "../../users/models/User";
+import { userRoles } from "../../users/constants/userRoles";
+import { Address, AddressInterface } from "../../address/models/Address";
+import { SequelizeAddressRepository } from "../../address/adapters/SequelizeAddressRepository";
+import { UserService } from "../../users/ports/UserService";
+import { SequelizeUserRepository } from "../../users/adapters/SequelizeUserRepository";
+import { User } from "../../users/models/User";
+import { QueryError } from "../../../../errors/QueryError";
+import { AddressService } from "../../address/ports/AddressService";
 
-class VendorServiceClass {
+
+export class SequelizeVendorRepository implements vendorRepository{
     async create(body: VendorCreationAttributes) { 
         try {
             validateRegisterVendor(body);
@@ -77,7 +80,9 @@ class VendorServiceClass {
     async getById(id: string) {
         try {
             const user = await User.findByPk(id);
-            const vendor = await Vendor.findOne({ where: { idUser: user?.idUser } });
+            const vendor = await Vendor.findByPk(id, {
+                attributes: ['idVendor', 'idUser', 'CNPJ', 'companyName', 'fantasyName', 'phone', 'devolutionPolicy']
+            });
             if (!vendor) {
                 throw new QueryError(`Não há loja com o ID ${id}!`);
             }
@@ -91,7 +96,7 @@ class VendorServiceClass {
         try{
             const vendor = await Vendor.findOne({where: {idUser}});
             const user = await UserService.getById(idUser);
-            const address = await AddressService.getAddress(user);
+            const address = await AddressService.getAddress(idUser);
             const vendorWithAddress = { vendor, address, user };
             return vendorWithAddress;
         }
@@ -105,6 +110,10 @@ class VendorServiceClass {
             validateUpdateVendor(body);
             const vendor = await this.getById(id);;
             const user = await UserService.getById(vendor.idUser);
+
+            if(!user){
+                throw new QueryError(`Não há usuário com o ID ${id}!`);
+            }
 
             const newVendor = {
                 CNPJ: body.CNPJ,
@@ -143,18 +152,12 @@ class VendorServiceClass {
         }
     }
 
-    async delete(id: string, loggedUser: PayloadParams) {  
+    async delete(id: string) {  
         try {
             const vendor = await this.getById(id);
-            if (loggedUser.role != userRoles.admin && loggedUser.idUser != id) {
-                throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
-            }
-
-            await UserService.delete(vendor.idUser, loggedUser.idUser);
+            await UserService.delete(vendor.idUser);
         } catch (error) {
             throw(error);
         }
-    } 
+    }
 }
-
-export const VendorService = new VendorServiceClass();

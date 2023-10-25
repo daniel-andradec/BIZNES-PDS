@@ -62,12 +62,12 @@ export const Transaction = sequelize.define<TransactionInterface>('Transactions'
     },
 });
 
-Transaction.hasOne(User, { foreignKey: 'idUser' });
-User.belongsTo(Transaction, { foreignKey: 'idUser' });
+User.hasMany(Transaction, { foreignKey: 'idUser'});
+Transaction.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE' });
 
 
 Transaction.sync({alter: false, force: false})
     .then(() => {
-        console.log('TransactionProduct table was (re)created');
+        console.log('Transaction table was (re)created');
     })
     .catch((err) => console.log(err));

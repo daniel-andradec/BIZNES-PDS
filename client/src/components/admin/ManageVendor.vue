@@ -9,13 +9,13 @@
             </div>
 
             <div class="vendors" v-for="(vendor, ckey) in sortedVendors" :key="ckey">
-                <h2>{{ vendor.id }}</h2>
+                <h2>{{ vendor.idVendor }}</h2>
                 <h2>{{ vendor.companyName }}</h2>
                 <h2>{{ vendor.fantasyName }}</h2>
-                <h2>{{ vendor.cnpj }}</h2>
-                <h2>{{ vendor.city }}/{{ vendor.state }}</h2>
+                <h2>{{ vendor.CNPJ }}</h2>
+                <h2>{{ vendor.User.Address.city }}/{{ vendor.User.Address.state }}</h2>
                 <h2>{{ vendor.phone }}</h2>
-                <h2>{{ vendor.email }}</h2>                
+                <h2>{{ vendor.User.email }}</h2>                
                 <i class="fa-solid fa-trash red" @click="openDeleteVendorModal(vendor)"></i>
             </div>
         </div>
@@ -41,6 +41,10 @@
 import ModalComponent from '../modals/ModalComponent.vue'
 
 import { mapGetters } from 'vuex'
+import { getVendors } from '@/controllers/AdminController'
+import { formatValue } from '@/libs/Util'
+import { deleteVendor } from '@/controllers/AdminController'
+
 export default {
     name: 'ManageVendor',
     props: ['searchText'],
@@ -52,7 +56,7 @@ export default {
             listFields: [
                 {
                     display: 'ID',
-                    name: 'id',
+                    name: 'idVendor',
                     sort: true
                 },
                 {
@@ -101,6 +105,7 @@ export default {
                 this.isSorted = !this.isSorted
 
                 this.sortedVendors.sort((a, b) => {
+                    console.log(a)
                     if (this.isSorted) {
                         return a[field.name] < b[field.name] ? -1 : a[field.name] > b[field.name] ? 1 : 0;
                     } else {
@@ -113,10 +118,47 @@ export default {
             this.vendorToDelete = vendor
             this.deleteVendorModalOpen = true
         },
+        formatLoadedData() {
+            this.sortedVendors.forEach(vendor => {
+                vendor.phone = formatValue(vendor.phone, 'phone')
+                vendor.CNPJ = formatValue(vendor.CNPJ, 'cnpj')
+            })
+        },
+        async deleteVendor () {
+            await deleteVendor(this.vendorToDelete.idVendor).then(async res => {
+                if (res.status === 204) {
+                    await getVendors().then(res => {
+                        if (res.data.length > 0){
+                            this.sortedVendors = res.data
+                            this.formatLoadedData()
+                        }
+                    })
+                    this.deleteVendorModalOpen = false
+                    this.$toast.open({
+                        message: 'Loja excluída com sucesso.',
+                        type: 'success',
+                        position: 'top-right'
+                    })
+                }
+            })
+            .catch(() => {
+                this.deleteVendorModalOpen = false
+                this.$toast.open({
+                    message: 'Não foi possível excluir a loja.',
+                    type: 'error',
+                    position: 'top-right'
+                })
+            })
+        }
     },
-    mounted() {
-        console.log(this.getVendors)
-        this.sortedVendors = this.getVendors
+    async mounted() {
+        //this.sortedVendors = this.getVendors
+        await getVendors().then(res => {
+            if (res.data.length > 0){
+                this.sortedVendors = res.data
+                this.formatLoadedData()
+            }
+        })
     },
     watch: {
         searchText: {
@@ -126,7 +168,7 @@ export default {
                 } else {
                     this.sortedVendors = this.getVendors.filter(vendors => {
                         //match id, company name, fantasy name or email
-                        return vendors.id.toString().includes(val) || vendors.companyName.toLowerCase().includes(val.toLowerCase()) || vendors.fantasyName.toLowerCase().includes(val.toLowerCase()) || vendors.email.toLowerCase().includes(val.toLowerCase())
+                        return vendors.idVendor.toString().includes(val) || vendors.companyName.toLowerCase().includes(val.toLowerCase()) || vendors.fantasyName.toLowerCase().includes(val.toLowerCase()) || vendors.User.email.toLowerCase().includes(val.toLowerCase())
                     })
                 }
             },
