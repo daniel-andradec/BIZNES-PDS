@@ -3,7 +3,8 @@ import { loginMiddleware,
     verifyJWT,
     notLoggedIn } from '../../../middlewares/auth-middlewares';
 import { statusCodes } from '../../../../utils/constants/statusCodes';
-import { CustomerService } from '../service/CustomerService';
+import { CustomerService } from '../ports/CustomerService';
+import { SequelizeCustomerRepository } from '../adapters/SequelizeCustomerRepository';
 import { upload } from '../../../../utils/functions/aws';
 
 export const router = Router();
