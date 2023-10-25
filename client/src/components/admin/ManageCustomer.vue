@@ -11,7 +11,7 @@
             <div class="customers" v-for="(customer, ckey) in sortedCustomers" :key="ckey">
                 <h2>{{ customer.idCustomer }}</h2>
                 <h2>{{ customer.User.name }}</h2>
-                <h2>{{ formatDate(customer.birthDate) }}</h2>
+                <h2>{{ customer.birthDate }}</h2>
                 <h2>{{ customer.CPF }}</h2>
                 <h2>{{ customer.User.Address.city }}/{{ customer.User.Address.state }}</h2>
                 <h2>{{ customer.User.email }}</h2>
@@ -42,8 +42,8 @@ import ModalComponent from '../modals/ModalComponent.vue'
 
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-
 import { getCustomers } from '@/controllers/AdminController'
+import { formatValue } from '@/libs/Util'
 
 export default {
     name: 'ManageCustomer',
@@ -56,7 +56,7 @@ export default {
             listFields: [
                 {
                     display: 'ID',
-                    name: 'id',
+                    name: 'idCustomer',
                     sort: true
                 },
                 {
@@ -96,22 +96,27 @@ export default {
         ...mapGetters(['getCustomers'])
     },
     methods: {
-        formatDate (date) {
-            return moment(date).format('DD/MM/YYYY')
-        },
         sortCustomers(field) {
             if (field.sort) {
                 this.isSorted = !this.isSorted;
 
                  if (field.name === 'birthDate') {
                     this.sortedCustomers.sort((a, b) => {
-                        const dateA = moment(a[field.name], "DD/MM/YYYY");
-                        const dateB = moment(b[field.name], "DD/MM/YYYY");
+                        const dateA = moment(a[field.name]);
+                        const dateB = moment(b[field.name]);
 
                         if (this.isSorted) {
                             return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
                         } else {
                             return dateA.isAfter(dateB) ? -1 : dateA.isBefore(dateB) ? 1 : 0;
+                        }
+                    });
+                 } else if (field.name === 'name') {
+                    this.sortedCustomers.sort((a, b) => {
+                        if (this.isSorted) {
+                            return a.User[field.name] < b.User[field.name] ? -1 : a.User[field.name] > b.User[field.name] ? 1 : 0;
+                        } else {
+                            return a.User[field.name] > b.User[field.name] ? -1 : a.User[field.name] < b.User[field.name] ? 1 : 0;
                         }
                     });
                 } else {
@@ -129,6 +134,12 @@ export default {
             this.customerToDelete = customer
             this.deleteCustomerModalOpen = true
         },
+        formatLoadedData () {
+            this.sortedCustomers.forEach(customer => {
+                customer.CPF = formatValue(customer.CPF, 'cpf')
+                customer.birthDate = moment(customer.birthDate).format('DD/MM/YYYY')
+            })
+        },
         deleteCustomer () {
             // todo - delete customer
         }
@@ -137,8 +148,8 @@ export default {
         //this.sortedCustomers = this.getCustomers
         await getCustomers().then(res => {
             if (res.data.length > 0){
-                console.log(res.data)
                 this.sortedCustomers = res.data
+                this.formatLoadedData()
             } 
         })
 
@@ -152,7 +163,7 @@ export default {
                     this.sortedCustomers = this.getCustomers.filter(customer => {
                         // return customer.name.toLowerCase().includes(val.toLowerCase()) 
                         // match id, or name, or email
-                        return customer.id.toString().includes(val) || customer.name.toLowerCase().includes(val.toLowerCase()) || customer.email.toLowerCase().includes(val.toLowerCase())
+                        return customer.idCustomer.toString().includes(val) || customer.User.name.toLowerCase().includes(val.toLowerCase()) || customer.User.email.toLowerCase().includes(val.toLowerCase())
                     })
                 }
             },
