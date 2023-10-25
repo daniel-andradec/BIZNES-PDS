@@ -9,6 +9,7 @@ export interface TransactionProductInterface extends Model<InferAttributes<Trans
     idProduct: string;
     quantity: number;
     selectedOption: string;
+    price: number;
     createdAt: CreationOptional<Date>;
     updatedAt: CreationOptional<Date>;
 }
@@ -34,6 +35,10 @@ export const TransactionProduct = sequelize.define<TransactionProductInterface>(
     },
     selectedOption: {
         type: DataTypes.STRING,
+        allowNull: true,
+    },
+    price: {
+        type: DataTypes.FLOAT,
         allowNull: true,
     },
     createdAt: {
