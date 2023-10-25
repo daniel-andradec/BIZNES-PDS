@@ -75,7 +75,7 @@ router.put('/:id',
   verifyJWT,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await userService.update(req.params.id, req.body, req.user!);
+      await userService.update(req.params.id, req.body);
       res.status(statusCodes.NO_CONTENT).end();
     } catch (error) {
       next(error);
