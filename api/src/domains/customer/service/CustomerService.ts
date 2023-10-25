@@ -82,7 +82,7 @@ class CustomerServiceClass {
     async getById(id: string) {
         try {
             const customer = await Customer.findByPk(id, {
-                attributes: ['idCustomer', 'phone', 'CPF', 'birthDate'],
+                attributes: ['idCustomer', 'phone', 'CPF', 'birthDate', 'idUser'],
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],

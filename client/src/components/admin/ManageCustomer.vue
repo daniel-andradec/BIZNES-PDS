@@ -45,6 +45,8 @@ import moment from 'moment'
 import { getCustomers } from '@/controllers/AdminController'
 import { formatValue } from '@/libs/Util'
 
+import { getCustomers, deleteCustomer } from '@/controllers/AdminController'
+
 export default {
     name: 'ManageCustomer',
     props: ['searchText'],
@@ -140,8 +142,22 @@ export default {
                 customer.birthDate = moment(customer.birthDate).format('DD/MM/YYYY')
             })
         },
-        deleteCustomer () {
-            // todo - delete customer
+        async deleteCustomer () {
+            console.log(this.customerToDelete)
+            await deleteCustomer(this.customerToDelete.idCustomer).then(res => {
+                if (res.data) {
+                    this.sortedCustomers = this.sortedCustomers.filter(customer => customer.idCustomer !== this.customerToDelete.idCustomer)
+                    this.deleteCustomerModalOpen = false
+                }
+            })
+            .catch(() => {
+                this.deleteCustomerModalOpen = false
+                this.$toast.open({
+                    message: 'Não foi possível excluir o cliente.',
+                    type: 'error',
+                    position: 'top-right'
+                })
+            })
         }
     },
     async mounted() {
