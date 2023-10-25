@@ -42,10 +42,8 @@ import ModalComponent from '../modals/ModalComponent.vue'
 
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-import { getCustomers } from '@/controllers/AdminController'
-import { formatValue } from '@/libs/Util'
-
 import { getCustomers, deleteCustomer } from '@/controllers/AdminController'
+import { formatValue } from '@/libs/Util'
 
 export default {
     name: 'ManageCustomer',
