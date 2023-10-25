@@ -13,4 +13,9 @@ const getVendors = async () => {
     return response;
 }
 
-export { getCustomers, getVendors };
+const deleteCustomer = async (id) => {
+    const response = await makeRequest('DELETE', `/customer/${id}`);
+    return response;
+}
+
+export { getCustomers, getVendors, deleteCustomer };
