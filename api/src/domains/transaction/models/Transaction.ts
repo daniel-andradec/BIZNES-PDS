@@ -62,7 +62,7 @@ export const Transaction = sequelize.define<TransactionInterface>('Transactions'
     },
 });
 
-User.hasMany(Transaction, { foreignKey: 'idUser' });
+User.hasMany(Transaction, { foreignKey: 'idUser'});
 Transaction.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE' });
 
 

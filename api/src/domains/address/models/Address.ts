@@ -70,11 +70,11 @@ export const Address = sequelize.define<AddressInterface>('Addresses', {
     },
 });
 
-Address.belongsTo(User, { foreignKey: 'idUser' });
-User.hasOne(Address, { foreignKey: 'idUser', onDelete: 'CASCADE' });
+Address.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE' });
+User.hasOne(Address, { foreignKey: 'idUser' });
 
-Address.belongsTo(Transaction, { foreignKey: 'idTransaction' });
-Transaction.hasOne(Address, { foreignKey: 'idTransaction', onDelete: 'CASCADE' });
+Address.belongsTo(Transaction, { foreignKey: 'idTransaction', onDelete: 'CASCADE' });
+Transaction.hasOne(Address, { foreignKey: 'idTransaction' });
 
 Address.sync({alter: false, force: false})
     .then(() => {

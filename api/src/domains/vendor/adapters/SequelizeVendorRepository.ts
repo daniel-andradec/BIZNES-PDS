@@ -12,11 +12,6 @@ import { User } from "../../users/models/User";
 import { QueryError } from "../../../../errors/QueryError";
 import { AddressService } from "../../address/ports/AddressService";
 
-const userRepository = new SequelizeUserRepository();
-const userService = new UserService(userRepository);
-
-const addressRepository = new SequelizeAddressRepository();
-const addressService = new AddressService(addressRepository);
 
 export class SequelizeVendorRepository implements vendorRepository{
     async create(body: VendorCreationAttributes) { 
@@ -49,13 +44,13 @@ export class SequelizeVendorRepository implements vendorRepository{
                 idUser: '',
             };
 
-            const user = await userService.create(newUser);
+            const user = await UserService.create(newUser);
             
             newVendor.idUser = user.idUser;
             const vendor = await Vendor.create(newVendor);
 
             newAddress.idUser = user.idUser;
-            const address = await addressService.create(newAddress);
+            const address = await AddressService.create(newAddress);
 
             return vendor;
         } catch (error) {
@@ -96,8 +91,8 @@ export class SequelizeVendorRepository implements vendorRepository{
     async getLogged(idUser: string) {
         try{
             const vendor = await Vendor.findOne({where: {idUser}});
-            const user = await userService.getById(idUser);
-            const address = await addressService.getAddress(user!);
+            const user = await UserService.getById(idUser);
+            const address = await AddressService.getAddress(idUser);
             const vendorWithAddress = { vendor, address, user };
             return vendorWithAddress;
         }
@@ -110,7 +105,7 @@ export class SequelizeVendorRepository implements vendorRepository{
         try {
             validateUpdateVendor(body);
             const vendor = await this.getById(id);;
-            const user = await userService.getById(vendor.idUser);
+            const user = await UserService.getById(vendor.idUser);
 
             if(!user){
                 throw new QueryError(`Não há usuário com o ID ${id}!`);
@@ -142,9 +137,9 @@ export class SequelizeVendorRepository implements vendorRepository{
                 idUser: user.idUser,
             };
 
-            await userService.update(user.idUser, newUser);
+            await UserService.update(user.idUser, newUser);
             await Vendor.update(newVendor, { where: { idUser: id } });
-            await addressService.update(newAddress, user.idUser);
+            await AddressService.update(newAddress, user.idUser);
 
             return vendor;
 
@@ -156,8 +151,7 @@ export class SequelizeVendorRepository implements vendorRepository{
     async delete(id: string) {  
         try {
             const vendor = await this.getById(id);
-            await userService.delete(vendor.idUser);
-            await vendor.destroy();
+            await UserService.delete(vendor.idUser);
         } catch (error) {
             throw(error);
         }

@@ -88,7 +88,11 @@ export class SequelizeUserRepository implements UserRepository {
 
     async delete(id: string): Promise<void> {
         try {
-            await User.destroy({ where: { idUser: id } });
+            const user = await User.findByPk(id);
+            if (!user) {
+                throw new QueryError(`Não há um usuário com o ID ${id}!`);
+            }
+            await user.destroy();
         } catch (error) {
             throw(error);
         }

@@ -2,8 +2,9 @@ import { UserRepository } from "../repository/UserRepository";
 import { UserInterface } from "../models/User";
 import { PayloadParams } from "../types/PayloadParams";
 import { CreationAttributes } from "sequelize/types";
+import { SequelizeUserRepository } from "../adapters/SequelizeUserRepository";
 
-export class UserService{
+class UserServiceClass{
     constructor(private userRepository: UserRepository) {}
 
     async encryptPassword(password: string): Promise<string> {
@@ -38,3 +39,6 @@ export class UserService{
         return await this.userRepository.updatePassword(id, newPassword, oldPassword, loggedUser);
     }
 }
+
+const userRepository = new SequelizeUserRepository();
+export const UserService = new UserServiceClass(userRepository);

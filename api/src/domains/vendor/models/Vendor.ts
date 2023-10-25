@@ -69,11 +69,10 @@ export const Vendor = sequelize.define<VendorInterface>('Vendors', {
     },
 });
 
-Vendor.belongsTo(User, { foreignKey: 'idUser' });
+Vendor.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE' });
 
 User.hasOne(Vendor, { 
     foreignKey: 'idUser',
-    onDelete: 'CASCADE',
 });
 
 Vendor.sync({alter: false, force: false})

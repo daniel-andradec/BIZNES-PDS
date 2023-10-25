@@ -59,8 +59,8 @@ export const Customer = sequelize.define<CustomerInterface>('Customers', {
     },
 });
 
-Customer.belongsTo(User, { foreignKey: 'idUser'});
-User.hasOne(Customer, { foreignKey: 'idUser', onDelete: 'CASCADE' });
+Customer.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE'});
+User.hasOne(Customer, { foreignKey: 'idUser' });
 
 Customer.sync({alter: false, force: false})
     .then(() => {

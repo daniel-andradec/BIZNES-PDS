@@ -1,5 +1,5 @@
 import { Customer, CustomerInterface, CustomerCreationAttributes } from "../models/Customer";
-import { UserService } from "../../users/services/UserService";
+import { UserService } from "../../users/ports/UserService";
 import { User, UserInterface } from "../../users/models/User";
 import { Attributes, CreationAttributes } from 'sequelize/types';
 import { userRoles } from "../../users/constants/userRoles";
@@ -8,7 +8,7 @@ import { QueryError } from '../../../../errors/QueryError';
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { validateRegisterCustomer, validateUpdateCustomer } from "../../../../utils/functions/validation/validateCustomer";
 import { deleteObject } from "../../../../utils/functions/aws";
-import { AddressService } from "../../address/services/AddressService";
+import { AddressService } from "../../address/ports/AddressService";
 import { CustomerRepository } from "../repository/CustomerRepository";
 import { AddressInterface } from "../../address/models/Address";
 
@@ -67,7 +67,7 @@ export class SequelizeCustomerRepository implements CustomerRepository{
         try{
             const customer = await Customer.findOne({where: {idUser}});
             const user = await UserService.getById(idUser);
-            const address = await AddressService.getAddress(user);
+            const address = await AddressService.getAddress(idUser);
             const costumerWithAddress = { customer, address, user};
             return costumerWithAddress;
         }
@@ -79,7 +79,7 @@ export class SequelizeCustomerRepository implements CustomerRepository{
     async getById(id: string) : Promise<CustomerInterface> {
         try {
             const customer = await Customer.findByPk(id, {
-                attributes: ['idCustomer', 'phone', 'CPF', 'birthDate'],
+                attributes: ['idCustomer', 'idUser', 'phone', 'CPF', 'birthDate'],
                 include: [{
                     model: User,
                     attributes: ['name', 'email'],
@@ -99,6 +99,10 @@ export class SequelizeCustomerRepository implements CustomerRepository{
             validateUpdateCustomer(body);
            
             const user = await UserService.getById(idUser);
+
+            if(!user){
+                throw new QueryError(`Não há usuário com o ID ${idUser}!`);
+            }
 
             const newCustomer = {
                 phone: body.phone,
@@ -137,11 +141,16 @@ export class SequelizeCustomerRepository implements CustomerRepository{
         try{
             const customer = await this.getById(id);
 
+            if(!customer){
+                throw new QueryError(`Não há customer com o ID ${id}!`);
+            }
+
+
             if(loggedUser.role != userRoles.admin && loggedUser.idUser != id){
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
             }
 
-            await UserService.delete(customer.idUser, loggedUser.idUser);
+            await UserService.delete(customer.idUser);
         } catch (error) {
             throw(error);
         }

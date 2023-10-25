@@ -24,11 +24,11 @@ export class SequelizeAddressRepository implements AddressRepository{
         }
     }
 
-    async getAddress(user: PayloadParams) {
+    async getAddress(id: string) {
         try {
             const address = await Address.findOne({
                 where: {
-                    idUser: user.idUser,
+                    idUser: id,
                 }
             });
             return address;
