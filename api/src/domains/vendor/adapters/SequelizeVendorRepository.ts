@@ -80,9 +80,13 @@ export class SequelizeVendorRepository implements vendorRepository{
     async getById(id: string) {
         try {
             const user = await User.findByPk(id);
-            const vendor = await Vendor.findByPk(id, {
+            const vendor = await Vendor.findOne({
+                where: {
+                    idUser: id
+                },
                 attributes: ['idVendor', 'idUser', 'CNPJ', 'companyName', 'fantasyName', 'phone', 'devolutionPolicy']
             });
+
             if (!vendor) {
                 throw new QueryError(`Não há loja com o ID ${id}!`);
             }

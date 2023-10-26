@@ -15,11 +15,10 @@ export class SequelizeTransactionRepository implements TransactionRepository{
     async create(transaction: TransactionInterface, transactionProducts: TransactionProductInterface[], address: AddressInterface): Promise<TransactionInterface> {
         try{
             const transactionCreated = await Transaction.create(transaction);
-            transactionProducts.forEach(async (transactionProduct) => {
+            for (const transactionProduct of transactionProducts) {
                 transactionProduct.idTransaction = transactionCreated.idTransaction;
-                console.log(transactionProduct);
                 await TransactionProductService.create(transactionProduct);
-            });
+            }
             address.idTransaction = transactionCreated.idTransaction;
             await AddressService.create(address);
             return transactionCreated;
