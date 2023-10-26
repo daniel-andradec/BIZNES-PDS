@@ -77,7 +77,7 @@ router.put('/:id',
     upload.single('photo'),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await ProductService.update(req.params.id, req.body, req.user!, req.file);
+            await ProductService.update(req.params.id, req.body, req.file);
             res.status(statusCodes.NO_CONTENT).end();
         } catch (error) {
             next(error);

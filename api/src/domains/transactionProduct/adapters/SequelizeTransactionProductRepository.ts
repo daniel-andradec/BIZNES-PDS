@@ -8,10 +8,11 @@ export class SequelizeTransactionProductRepository implements TransactionProduct
     async create(transactionProduct: TransactionProductInterface): Promise<TransactionProductInterface> {
         try{
             const product = await ProductService.getById(transactionProduct.idProduct);
-            console.log(product);
             if (!product) {
                 throw new QueryError(`Produto de id: ${transactionProduct.idProduct} não encontrado`);
             }
+            product.setDataValue('quantity', product.quantity - transactionProduct.quantity);
+            await ProductService.update(transactionProduct.idProduct, product['dataValues'], null);
             return await TransactionProduct.create(transactionProduct);
         }
         catch(error){

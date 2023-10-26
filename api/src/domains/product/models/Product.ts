@@ -77,8 +77,8 @@ Vendor.hasMany(Product, {
 });
 
 
-Product.sync({alter: false, force: false})
+/* Product.sync({alter: false, force: false})
   .then(() => {
     console.log('Product table was (re)created');
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err)); */
