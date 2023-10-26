@@ -38,7 +38,7 @@
             </div>
 
             <div class="bottom-fields">
-                <div class="options-input">
+                <div class="options-input" @keyup.enter="addOption()">
                     <label for="options">Opções <span @click="clearOptions">Limpar escolha</span></label>
                     <input type="text" placeholder="Opções" ref="options" />
                     <i class="fa fa-plus" @click="addOption()"></i>
@@ -61,7 +61,11 @@
 
             <div class="buttons">
                 <button class="cancel" @click="this.$emit('closeModal')">Cancelar</button>
-                <button class="save" @click="handleSave">Salvar</button>
+                <button class="save" @click="handleSave" v-if="!loading">Salvar</button>
+                <div class="loading" v-else>
+                    <i class="fa fa-spinner fa-spin"></i>
+                    <h2>Salvando...</h2>
+                </div>
             </div>
         </ModalComponent>
     </div>
@@ -89,12 +93,24 @@ export default {
             imgFile: null,
             categoryModalOpen: false,
             chosenOptions: [],
-            fileChanged: false
+            fileChanged: false,
+            loading: false
         }
     },
     methods: {
         handleFileUpload(event) {
             const file = event.target.files[0];
+
+            // verificar se imagem é jpg ou png
+            if (file?.type !== 'image/jpeg' && file?.type !== 'image/png') {
+                this.$toast.open({
+                    message: 'Formato de imagem inválido. A imagem deve ser JPG ou PNG.',
+                    type: 'warning',
+                    position: 'top-right',
+                    duration: 5000
+                })
+                return
+            }
 
             if (file) {
                 this.fileChanged = true
@@ -103,8 +119,6 @@ export default {
                 this.imagePreviewUrl = URL.createObjectURL(file);
                 this.imgFile = file
             }
-
-            // todo: send file to backend
         },
         triggerFileInput() {
             this.$refs.inputfile.click()
@@ -169,6 +183,8 @@ export default {
                     options,
                     category
                 }
+
+                this.loading = true
                 await createProduct(data, img).then(() => {
                     this.$toast.open({
                         message: 'Produto adicionado com sucesso',
@@ -185,6 +201,8 @@ export default {
                         duration: 5000
                     })
                 })
+
+                this.loading = false
             }
             else {
                 this.$toast.open({
@@ -215,6 +233,8 @@ export default {
                     options,
                     category
                 }
+
+                this.loading = true
                 await updateProduct(id, data, img).then(() => {
                     this.$toast.open({
                         message: 'Produto editado com sucesso',
@@ -231,7 +251,8 @@ export default {
                         duration: 5000
                     })
                 })
-                console.log(id, name, description, price, quantity, options, category, img)
+
+                this.loading = false
             }
             else {
                 this.$toast.open({
@@ -277,8 +298,8 @@ export default {
             deep: true
         },
         modalOpen: {
-            handler: function (newVal) {
-                if (!newVal) {
+            handler: function () {
+                if (!this.editProduct) {
                     this.$nextTick(() => { 
                         this.fileChanged = false
                         this.imagePreviewUrl = null
@@ -528,6 +549,20 @@ export default {
         .save {
             background-color: var(--primaryColor);
             color: #fff;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: var(--primaryColor);
+
+            h2 {
+                font-size: 16px;
+                font-weight: 500;
+            }
         }
     }
 }

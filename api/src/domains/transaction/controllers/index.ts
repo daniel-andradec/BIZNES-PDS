@@ -21,8 +21,6 @@ router.post('/',
 );
 
 router.get('/',
-    verifyJWT,
-    //checkRole([userRoles.admin]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const transactions = await TransactionService.getAll();

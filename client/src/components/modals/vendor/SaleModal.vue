@@ -39,7 +39,7 @@
                                     <h2>{{ prod.name }}</h2>
                                 </div>
                                 <h2>{{ prod.quantity }}</h2>
-                                <h2>{{ formatValue(getProductTotal(prod)) }}</h2>
+                                <h2>{{ formatValue(getProductTotal(prod.price, prod)) }}</h2>
                                 <h2>
                                     <template v-if="prod.option">
                                         {{ prod.option }}
@@ -83,8 +83,8 @@ export default {
         closeModal() {
             this.$emit('closeModal')
         },
-        getProductTotal(product) {
-            return product.price * product.quantity
+        getProductTotal(price, product) {
+            return price * product.quantity
         },
         formatValue(value) {
             if (value)
@@ -113,6 +113,7 @@ export default {
                     return {
                         ...this.getProductInStock(prod.idProduct),
                         quantity: prod.quantity,
+                        price: prod.price,
                         option: prod.selectedOption
                     }
                 })

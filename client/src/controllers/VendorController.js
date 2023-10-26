@@ -30,6 +30,7 @@ const getVendorSales = async () => {
     const vendorData = (await getVendorData())?.data;
     const idVendor = vendorData?.vendor?.idVendor;
     const response = await makeRequest('GET', `/transaction/vendor/${idVendor}`);
+    console.log(response.data);
 
     // // trata a response.data para que o valor total da sale seja calculado com base apenas no valor dos produtos do vendor logado
     const vendorSales = response.data.map(sale => {
@@ -37,7 +38,7 @@ const getVendorSales = async () => {
         // com base no valor e na quantidade de cada produto, calcula o valor total da sale
         let total = 0
         sale.TransactionProducts.forEach(product => {
-            total += product.Product.price * product.quantity
+            total += product.price * product.quantity
         })
         // retorna a sale com o valor total calculado
         return { ...sale, total }

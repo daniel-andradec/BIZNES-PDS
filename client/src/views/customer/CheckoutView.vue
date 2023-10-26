@@ -257,7 +257,8 @@ export default {
                 return {
                     idProduct: product.idProduct,
                     quantity: product.quantity,
-                    selectedOption: product.selectedOption
+                    selectedOption: product.selectedOption,
+                    price: product.price,
                 }
             })
 

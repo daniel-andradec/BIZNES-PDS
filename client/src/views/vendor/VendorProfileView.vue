@@ -105,14 +105,16 @@ export default {
                         label: 'Razão Social',
                         type: 'text',
                         placeholder: 'Razão Social',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'fantasyName',
                         label: 'Nome Fantasia',
                         type: 'text',
                         placeholder: 'Nome Fantasia',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'phone',
@@ -120,7 +122,8 @@ export default {
                         type: 'tel',
                         placeholder: '',
                         required: true,
-                        format: 'phone'
+                        format: 'phone',
+                        minSize: 8
                     },
                     {
                         ref: 'cnpj',
@@ -129,7 +132,8 @@ export default {
                         placeholder: 'CNPJ',
                         required: true,
                         disable: true,
-                        format: 'cnpj'
+                        format: 'cnpj',
+                        minSize: 14
                     }
                 ],
                 'Dados de acesso': [
@@ -167,7 +171,8 @@ export default {
                         type: 'text',
                         placeholder: 'Logradouro',
                         value: '',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'number',
@@ -268,8 +273,8 @@ export default {
             console.log(this.formData);
         },
         submitForm() {
-            //this.sanitizeData()
-            console.log(this.formData);
+            if (!this.validateFields()) return;
+            this.sanitizeData();
             
             const data = this.formData;
             delete data.password
@@ -283,6 +288,7 @@ export default {
                 });
 
                 this.formData.password = '********';
+                this.formatLoadedData();
             }).catch(err => {
                 console.log(err);
                 this.$toast.open({
@@ -297,6 +303,16 @@ export default {
             if (!this.passwordData.password || !this.passwordData.newPassword || !this.passwordData.confirmPassword) {
                 this.$toast.open({
                     message: 'Preencha todos os campos obrigatórios',
+                    type: 'warning',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                return;
+            }
+
+            if (this.passwordData.newPassword.length < 6) {
+                this.$toast.open({
+                    message: 'A senha deve ter no mínimo 6 caracteres',
                     type: 'warning',
                     duration: 5000,
                     position: 'top-right'
@@ -343,14 +359,55 @@ export default {
             this.formData.phone = formatValue(this.formData.phone, 'phone')
             this.formData.cep = formatValue(this.formData.cep, 'cep')
         },
+        validateFields() {
+            const fields = this.sections
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.required && !this.formData[field.ref]) {
+                        this.$toast.open({
+                            message: 'Preencha todos os campos obrigatórios',
+                            type: 'warning',
+                            duration: 5000,
+                            position: 'top-right'
+                        });
+                        return false
+                    }
+                }
+            }
+
+            // validate minSize fields
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.minSize && this.formData[field.ref].length < field.minSize) {
+                        this.$toast.open({
+                            message: `O campo ${field.label} deve ter no mínimo ${field.minSize} caracteres.`,
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                        return false
+                    }
+                }
+            }
+
+            return true
+        },
+        sanitizeData: function () { // sanitize data before sending to backend - remove special characters, format dates, etc
+            const fields = this.sections
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.format) {
+                        this.formData[field.ref] = formatValue(this.formData[field.ref], field.format, true) // true - sanitize
+                    }
+                }
+            }
+        }
     },
     computed: {
         ...mapGetters(['getVendorData'])
     },
     async mounted() {
         await getVendorData()
-        console.log('getVendorData')
-        console.log(this.getVendorData)
         if (this.getVendorData) {
             this.formData.companyName = this.getVendorData.companyName
             this.formData.fantasyName = this.getVendorData.fantasyName

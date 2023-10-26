@@ -314,9 +314,6 @@ export default {
                     }
                 }
             }
-
-            // sanitize birthDate to format DD/MM/YYYY
-            // this.formData.birthDate = moment(this.formData.birthDate).format('DD/MM/YYYY')
         }
     }
 }

@@ -10,7 +10,7 @@
                 
             <span @click="this.$router.push('/')">Outros produtos</span>
         </div>
-        <div v-else>
+        <div class="not-found-bs" v-else>
             <h2>Não há produtos cadastrados</h2>
         </div>
     </div>
@@ -89,6 +89,13 @@ export default {
         gap: 20px;
         margin-top: 20px;
         max-width: 100%;
+    }
+
+    .not-found-bs {
+        h2 {
+            font-size: 22px !important;
+            font-weight: 500 !important;
+        }
     }
 }
 </style>
