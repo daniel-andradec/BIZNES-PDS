@@ -11,6 +11,14 @@ const getProducts = async () => {
     return response?.data
 }
 
+const checkQuantity = async (idProduct, quantity) => {
+    const response = await makeRequest('GET', `/product/${idProduct}`)
+    if (response?.data) {
+        return response.data.quantity >= quantity
+    }
+    return false
+}
+
 const saveBestSellers = async () => {
     const transactions = (await makeRequest('GET', '/transaction/'))?.data
 
@@ -35,4 +43,4 @@ const saveBestSellers = async () => {
     store.dispatch('saveBestSellers', bestSellersProducts)
 }
 
-export { getProducts, saveBestSellers }
+export { getProducts, saveBestSellers, checkQuantity }

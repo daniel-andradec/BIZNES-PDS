@@ -67,10 +67,21 @@ export default {
     methods: {
         ...mapActions(['setUser']),
         registerCostumer () {
-            this.$router.push({ name: 'register', params: { userType: 1 } })
+            if (this.$route.params.redirect) {
+                console.log(this.$route.params.redirect)
+                this.$router.push({ name: 'register', params: { userType: 1, redirect: this.$route.params.redirect } })
+                return
+            }
+            else
+                this.$router.push({ name: 'register', params: { userType: 1 } })
         },
         registerSeller () {
-            this.$router.push({ name: 'register', params: { userType: 2 } })
+            if (this.$route.params.redirect) {
+                this.$router.push({ name: 'register', params: { userType: 2, redirect: this.$route.params.redirect } })
+                return
+            }
+            else
+                this.$router.push({ name: 'register', params: { userType: 2 } })
         },
         async login () {
             // logout to clear session if user is logged in - review this
@@ -145,9 +156,6 @@ export default {
         ...mapGetters(['loggedInUser'])
     },
     mounted() {
-        // get red param
-        const red = this.$route.params.red
-        console.log(red)
     }
 }
 </script>

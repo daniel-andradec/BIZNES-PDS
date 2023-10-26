@@ -41,7 +41,7 @@ const routes = [
     component: LoginView,
   },
   {
-    path: "/register/:userType",
+    path: "/register/:userType?/:redirect?",
     name: "register",
     meta: {
       title: "Cadastro",

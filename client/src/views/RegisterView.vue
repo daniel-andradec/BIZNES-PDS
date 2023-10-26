@@ -35,6 +35,7 @@ export default {
     },
     mounted () {
         this.isCostumer = this.$route.params.userType == 1
+        console.log(this.$route.params.redirect)
     }
 }
 </script>

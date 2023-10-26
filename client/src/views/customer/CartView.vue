@@ -31,7 +31,7 @@
                                     Opção selecionada: <b>{{ product.selectedOption }}</b>
                                 </div>
                                 <div>Vendido por <b>{{ product.seller }}</b></div>
-                                <div class="price"> Total: <span>{{ formatValue(product.price) }}</span></div>
+                                <div class="price"> Total: <span>{{ formatValue(calculateProdTotalPrice(product)) }}</span></div>
                             </div>
 
                             <div class="actions">
@@ -108,6 +108,7 @@ import CategoryMenu from '@/components/menus/CategoryMenu.vue';
 import ModalComponent from '@/components/modals/ModalComponent.vue';
 import BestSellersList from '@/components/lists/BestSellersList.vue';
 import { mapActions, mapGetters } from 'vuex';
+import { checkQuantity } from '@/controllers/ProductController';
 
 export default {
     name: 'CartView',
@@ -150,6 +151,9 @@ export default {
                 duration: 3000
             })
         },
+        calculateProdTotalPrice(product) {
+            return product.price * product.quantity
+        },
         calculateTotalQuantity() {
             return this.getCartProducts.reduce((acc, product) => acc + product.quantity, 0)
         },
@@ -159,9 +163,27 @@ export default {
         goToProduct(product) {
             this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         },
-        goToCheckout() {
+        async goToCheckout() {
             // cart transaction - no product selected
             localStorage.removeItem('directTransacProduct')
+            let quantityOk = true
+
+            for (let i = 0; i < this.getCartProducts.length; i++) {
+                const prodQuantityOk = await checkQuantity(this.getCartProducts[i].idProduct, this.getCartProducts[i].quantity)
+                if(!prodQuantityOk) {
+                    this.$toast.open({
+                        message: 'O produto ' + this.getCartProducts[i].name + ' não possui estoque suficiente!',
+                        type: 'warning',
+                        position: 'top-right',
+                        duration: 3000
+                    })
+                    quantityOk = false
+                }
+            }
+
+            if (!quantityOk) {
+                return
+            }
 
             if (!this.loggedInUser.id) {
                 this.$toast.open({
@@ -186,8 +208,6 @@ export default {
         ...mapGetters(['getCartProducts', 'getBestSellers', 'loggedInUser'])
     },
     mounted () {
-        console.log(this.getCartProducts)
-        console.log(localStorage.getItem('cart'))
         window.scrollTo(0, 0)
     }
 }

@@ -14,7 +14,7 @@
             </div>
             
             <div class="info">
-                <p>Olá, {{ consumerName }}! 
+                <p>Olá, {{ loggedInUser?.name }}! 
                     Obrigado por comprar conosco. Seu pedido será enviado em breve. Para ver os detalhes do pedido
                     ou política de devolução, acesse 
                     <span @click="this.$router.push('/customer-profile')">
@@ -95,11 +95,10 @@ export default {
     },
     data() {
         return {
-            consumerName: 'Pedro',
         }
     },
     computed: {
-        ...mapGetters(['getOrderData', 'getBestSellers'])
+        ...mapGetters(['getOrderData', 'getBestSellers', 'loggedInUser'])
     },
     methods: {
         ...mapActions(['toggleCategoryMenu']),

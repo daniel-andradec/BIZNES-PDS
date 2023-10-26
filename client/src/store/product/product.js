@@ -83,18 +83,15 @@ export default {
             return product
         },
         getCategoryProducts: state => (categories, id) => {
-            console.log(categories);
             // get other products from the same category but not the one with the given id - max 4 products
             return state.products.filter(product => product.category.split(',').some(category => categories?.includes(category)) && product.idProduct != id).slice(0, 4)
         },
         getSearchProducts: state => (search) => {
             // get products that contain the search term in the name or description or category
-            console.log(search)
             return state.products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()) || product.description.toLowerCase().includes(search.toLowerCase()) || product.category.split(',').some(category => category.toLowerCase().includes(search.toLowerCase())))
         },
         // best sellers products - by now, just return the products from index 3 to 7
         getBestSellers: state => {            
-            console.log(state.bestSellers, state.products.slice(0, 4))
             if (Object.keys(state.bestSellers).length > 0) {
                 return state.bestSellers
             }

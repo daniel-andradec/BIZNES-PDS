@@ -39,12 +39,12 @@ export default {
             listFields: [
                 {
                     display: 'Pedido Nº',
-                    name: 'id',
+                    name: 'idTransaction',
                     sort: true
                 },
                 {
                     display: 'Cliente',
-                    name: 'customer',
+                    name: 'recipientName',
                     sort: true
                 },
                 {
@@ -54,7 +54,7 @@ export default {
                 },
                 {
                     display: 'Valor',
-                    name: 'value',
+                    name: 'total',
                     sort: true
                 },
                 {
@@ -90,8 +90,9 @@ export default {
 
                 if (field.name === 'date' || field.name === 'deliveryDate') {
                     this.sortedSales.sort((a, b) => {
-                        const dateA = moment(a[field.name], "DD/MM/YYYY");
-                        const dateB = moment(b[field.name], "DD/MM/YYYY");
+                        console.log(a)
+                        const dateA = moment(a[field.name]);
+                        const dateB = moment(b[field.name]);
 
                         if (this.isSorted) {
                             return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
@@ -99,7 +100,17 @@ export default {
                             return dateA.isAfter(dateB) ? -1 : dateA.isBefore(dateB) ? 1 : 0;
                         }
                     });
-                } else {
+                } 
+                else if (field.name === 'city') {
+                    this.sortedSales.sort((a, b) => {
+                        if (this.isSorted) {
+                            return a.Address[field.name] < b.Address[field.name] ? -1 : a.Address[field.name] > b.Address[field.name] ? 1 : 0;
+                        } else {
+                            return a.Address[field.name] > b.Address[field.name] ? -1 : a.Address[field.name] < b.Address[field.name] ? 1 : 0;
+                        }
+                    });
+                }
+                else {
                     this.sortedSales.sort((a, b) => {
                         if (this.isSorted) {
                             return a[field.name] < b[field.name] ? -1 : a[field.name] > b[field.name] ? 1 : 0;

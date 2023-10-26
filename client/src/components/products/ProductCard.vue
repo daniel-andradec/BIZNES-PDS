@@ -53,6 +53,7 @@ export default {
     height: min(500px, 100%);
     padding: 10px;
     min-width: 250px;
+    cursor: pointer;
 
     img {
         width: 100%;

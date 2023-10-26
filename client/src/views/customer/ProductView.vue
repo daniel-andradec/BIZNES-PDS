@@ -132,6 +132,19 @@ export default {
             })
         },
         directTransaction() {
+            if (!this.loggedInUser.id) {
+                this.$toast.open({
+                    message: 'Você precisa estar logado para finalizar a compra!',
+                    type: 'warning',
+                    position: 'top-right',
+                    duration: 3000
+                })
+
+                // go to login informing that user will be redirected to checkout after login
+                this.$router.push({ name: 'login', params: { redirect: '/checkout' } })
+                return
+            }
+            
             if (!this.selectedOption && this.product.options?.length > 0) return this.$toast.open({
                 message: 'Selecione uma opção!',
                 type: 'error',
@@ -145,7 +158,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getBestSellers', 'getCategoryProducts'])
+        ...mapGetters(['getBestSellers', 'getCategoryProducts', 'loggedInUser'])
     },
     mounted() {
         const productID = this.$route.params.idProduct

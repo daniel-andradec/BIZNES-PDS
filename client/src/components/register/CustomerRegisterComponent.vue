@@ -221,7 +221,11 @@ export default {
                         duration: 5000,
                         position: 'top-right'
                     });
-                    this.$router.push('/login')
+                    if (this.$route.params.redirect) {
+                        this.$router.push({ name: 'login', params: { redirect: this.$route.params.redirect } })
+                    } 
+                    else
+                        this.$router.push('/login')
                 } else {
                     this.$toast.open({
                         message: 'Erro ao cadastrar usuário. Verifique os dados e tente novamente.',
