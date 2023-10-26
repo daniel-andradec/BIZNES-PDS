@@ -57,7 +57,7 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-// import moment from 'moment'
+import moment from 'moment'
 import ModalComponent from '@/components/modals/ModalComponent.vue'
 import { getCustomerData } from '@/controllers/CustomerController'
 import { formatValue } from '@/libs/Util'
@@ -78,7 +78,8 @@ export default {
                         label: 'Nome Completo',
                         type: 'text',
                         placeholder: 'Nome Completo',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'birthDate',
@@ -94,7 +95,8 @@ export default {
                         placeholder: 'CPF',
                         required: true,
                         disable: true,
-                        format: 'cpf'
+                        format: 'cpf',
+                        minSize: 11
                     },
                     {
                         ref: 'cellphone',
@@ -102,7 +104,8 @@ export default {
                         type: 'tel',
                         placeholder: 'Celular',
                         required: true,
-                        format: 'cellphone'
+                        format: 'cellphone',
+                        minSize: 8
                     }
                 ],
                 'Dados de acesso': [
@@ -140,7 +143,8 @@ export default {
                         type: 'text',
                         placeholder: 'Logradouro',
                         value: '',
-                        required: true
+                        required: true,
+                        minSize: 3
                     },
                     {
                         ref: 'number',
@@ -239,6 +243,8 @@ export default {
             }
         },
         submitForm() {
+            if (!this.validateFields()) return
+
             this.sanitizeData()
             console.log(this.formData);
             
@@ -252,6 +258,9 @@ export default {
                     duration: 5000,
                     position: 'top-right'
                 });
+
+                this.password = '*********';
+                this.formatLoadedData();
             }).catch(err => {
                 console.log(err);
                 this.$toast.open({
@@ -266,6 +275,16 @@ export default {
             if (!this.passwordData.password || !this.passwordData.newPassword || !this.passwordData.confirmPassword) {
                 this.$toast.open({
                     message: 'Preencha todos os campos obrigatórios',
+                    type: 'warning',
+                    duration: 5000,
+                    position: 'top-right'
+                });
+                return;
+            }
+
+            if (this.passwordData.newPassword.length < 6) {
+                this.$toast.open({
+                    message: 'A senha deve ter no mínimo 6 caracteres',
                     type: 'warning',
                     duration: 5000,
                     position: 'top-right'
@@ -311,6 +330,54 @@ export default {
             this.formData.cpf = formatValue(this.formData.cpf, 'cpf')
             this.formData.cellphone = formatValue(this.formData.cellphone, 'cellphone')
             this.formData.cep = formatValue(this.formData.cep, 'cep')
+        },
+        validateFields: function () { // check if fields are valid
+            // validate required fields
+            const fields = this.sections
+            let valid = true
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.required && !this.formData[field.ref]) {
+                        valid = false
+                        this.$toast.open({
+                            message: `O campo ${field.label} é obrigatório.`,
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                    }
+                }
+            }
+
+            // validate minSize fields
+            for (const section in fields) {
+                for (const field of fields[section]) {
+                    if (field.minSize && this.formData[field.ref].length < field.minSize) {
+                        valid = false
+                        this.$toast.open({
+                            message: `O campo ${field.label} deve ter no mínimo ${field.minSize} caracteres.`,
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                    }
+                }
+            }
+
+            // validate if birthDate is not in the future
+            const birthDate = moment(this.formData.birthDate)
+            const today = moment()
+            if (birthDate > today) {
+                valid = false
+                this.$toast.open({
+                    message: 'Data de nascimento inválida.',
+                    type: 'error',
+                    duration: 3000,
+                    position: 'top-right'
+                });
+            }
+
+            return valid
         },
         sanitizeData: function () { // sanitize data before sending to backend - remove special characters, format dates, etc
             const fields = this.sections

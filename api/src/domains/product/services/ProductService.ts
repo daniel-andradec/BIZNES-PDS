@@ -49,7 +49,7 @@ class ProductServiceClass {
                 attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
                 include: [{
                     model: Vendor,
-                    attributes: ['fantasyName'],
+                    attributes: ['fantasyName', 'devolutionPolicy', 'idVendor']
                 }]
             });
             return products;

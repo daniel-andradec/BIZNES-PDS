@@ -9,8 +9,8 @@
         <div class="list-header">
             <div class="select-categories">
                 <i class="fas fa-bars" @click="toggleCategoryMenu"></i>
+                <h1>Sua conta</h1>
             </div>
-            <h1>Sua conta</h1>
         </div>
         
         <div class="choose-tab">
@@ -30,14 +30,16 @@
         <div class="customer-orders" v-if="currentTab === 'profile'">
             <div v-if="Object.values(getCustomerOrders).length > 0">
                 <div class="list">
-                    <div class="list-item" v-for="(order, key) in getCustomerOrders" :key="key">
-                        <CustomerOrder :key="order.id" :order="order" />
+                    <div class="list-item" v-for="(dateGroup, key) in groupedOrders" :key="key">
+                        <h2 class="date">{{ key }}</h2>
+                        <!-- <CustomerOrder :key="order.idTransaction" :order="order" /> -->
+                        <CustomerOrder v-for="order in dateGroup" :key="order.idTransaction" :order="order" />
                     </div>
                 </div>
             </div>
             <div v-else class="no-orders">
                 <h2>Você ainda não realizou pedidos no Biznes. Aqui você encontra tudo, dê uma olhadinha nas categorias :)</h2>
-                <BestSellersList />
+                <BestSellersList :showHeader="true" />
             </div>
         </div>
 
@@ -56,6 +58,8 @@ import CustomerOrder from '@/components/customer/CustomerOrder.vue'
 import CustomerProfileReg from '@/components/customer/CustomerProfileReg.vue'
 
 import { mapGetters, mapActions } from 'vuex'
+import { getCustomerTransactions } from '@/controllers/CustomerController'
+import moment from 'moment'
 
 export default {
     name: 'CustomerProfileView',
@@ -69,18 +73,32 @@ export default {
     data() {
         return {
             consumerName: 'Pedro',
-            currentTab: 'profile'
+            currentTab: 'profile',
+            groupedOrders: []
         }
     },
     computed: {
-        ...mapGetters(['getCustomerOrders'])
+        ...mapGetters(['getCustomerOrders', 'loggedInUser'])
     },
     methods: {
         ...mapActions(['toggleCategoryMenu'])
     },
-    mounted() {
+    async mounted() {
         console.log(this.getCustomerOrders)
         window.scrollTo(0, 0)
+        const idUser = this.loggedInUser.id
+        console.log(idUser)
+        await getCustomerTransactions(idUser).then((res) => {
+            if (res.data) {
+                console.log(this.getCustomerOrders)
+                // group orders by date (order.date) using moment
+                this.groupedOrders = this.getCustomerOrders.reduce((r, a) => {
+                    r[moment(a.date).format('DD/MM/YYYY')] = [...r[moment(a.date).format('DD/MM/YYYY')] || [], a]
+                    return r
+                }, {})
+                console.log(this.groupedOrders)
+            }
+        })
     },
     
 }
@@ -94,7 +112,8 @@ export default {
         
     .list-header {
         padding-top: 30px;
-        margin-bottom: 20px;
+        margin-bottom: 2px;
+        display: flex;
 
         .select-categories {
             display: flex;
@@ -102,17 +121,18 @@ export default {
             justify-content: flex-start;
             align-items: center;
             margin: 48px 50px 20px 50px;
-            color: var(--secondaryColor);
+            
             i {
+                color: var(--secondaryColor);
                 font-size: 25px;
             }
-        }
 
-        h1 {
-            font-weight: 500;
-            font-size: 30px;
-            text-align: left;
-            margin-left: 50px;
+            h1 {
+                font-weight: 500;
+                font-size: 30px;
+                text-align: left;
+                margin-left: 20px;
+            }
         }
     }
 
@@ -138,17 +158,17 @@ export default {
                 display: flex;
                 align-items: baseline;
                 justify-content: center;
-                margin: 0 50px;
+                margin: 0 30px;
                 cursor: pointer;
                 color: #0f0f0fd3;
     
                 i {
-                    font-size: 25px;
+                    font-size: 20px;
                     margin-right: 10px;
                 }
     
                 h2 {
-                    font-size: 25px;
+                    font-size: 20px;
                     font-weight: 500;
                 }
 
@@ -168,8 +188,12 @@ export default {
         .list {
             padding: 0px 100px;
 
-            .list-item {
-                margin-bottom: 30px;
+            .list-item {                
+                .date {
+                    text-align: left;
+                    font-size: 20px;
+                    font-weight: 600;
+                }
             }
         }
 

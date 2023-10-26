@@ -104,8 +104,8 @@ export default {
             ],
             formData: {
                 cep: '',
-                addressName: '',
-                addressNumber: '',
+                street: '',
+                number: '',
                 complement: '',
                 city: '',
                 state: '',
@@ -132,18 +132,36 @@ export default {
         },
         async calcCEP(event) {
             const cep = event.target.value;
-            if (cep.length >= 8) {
+            if (cep.length >= 8 && cep.length <= 9) {
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((resp) => {
-                    console.log(resp.data)
+                    console.log(resp.data);
+                    if (resp.data.erro) {
+                        this.$toast.open({
+                            message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                            type: 'error',
+                            duration: 3000,
+                            position: 'top-right'
+                        });
+                        event.target.value = '';
+                        return
+                    }
                     this.formData.cep = resp.data.cep;
-                    this.formData.addressName = resp.data.logradouro;
+                    this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
-                }).catch(err => {
-                    console.log(err);
+                    this.formData.neighborhood = resp.data.bairro;
+                }).catch(() => {
+                    console.log('Erro ao buscar CEP');
+                    this.$toast.open({
+                        message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
+                        type: 'error',
+                        duration: 3000,
+                        position: 'top-right'
+                    });
+                    event.target.value = '';
                 });
             }
-        }
+        },
     }
 }
 </script>

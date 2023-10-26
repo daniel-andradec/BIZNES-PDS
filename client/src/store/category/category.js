@@ -3,7 +3,7 @@ export default {
         categories: [
             {
                 id: 1,
-                name: 'Computadores e informática',
+                name: 'Computadores e Informática',
                 icon: 'fa fa-laptop'
             },
             {
@@ -18,63 +18,38 @@ export default {
             },
             {
                 id: 4,
-                name: 'Consoles',
+                name: 'Games e Consoles',
                 icon: 'fa fa-gamepad'
             },
             {
                 id: 5,
-                name: 'Educação',
-                icon: 'fa fa-graduation-cap'
-            },
-            {
-                id: 6,
-                name: 'Finanças',
-                icon: 'fa fa-money-bill'
-            },
-            {
-                id: 7,
-                name: 'Autoajuda',
-                icon: 'fa fa-heart'
-            },
-            {
-                id: 8,
-                name: 'Eletrônicos',
+                name: 'TV e Áudio',
                 icon: 'fa fa-plug'
             },
             {
-                id: 9,
-                name: 'TVs',
-                icon: 'fa fa-tv'
-            },
-            {
-                id: 10,
-                name: 'Fotografia',
+                id: 6,
+                name: 'Fotografia e Câmeras',
                 icon: 'fa fa-camera'
             },
             {
-                id: 11,
-                name: 'Câmeras',
-                icon: 'fa fa-camera-retro'
-            },
-            {
-                id: 12,
-                name: 'Áudio',
-                icon: 'fa fa-headphones'
-            },
-            {
-                id: 13,
-                name: 'Leitores de eBooks',
-                icon: 'fa fa-book-reader'
-            },
-            {
-                id: 14,
-                name: 'Smartwatches',
+                id: 7,
+                name: 'Smartwatches e Acessórios',
                 icon: 'fa fa-clock'
             },
             {
-                id: 15,
-                name: 'Games',
-                icon: 'fa fa-gamepad'
+                id: 8,
+                name: 'Bolsas e Mochilas',
+                icon: 'fa fa-suitcase'
+            },
+            {
+                id: 9,
+                name: 'Esporte e Lazer',
+                icon: 'fa fa-futbol'
+            },
+            {
+                id: 10,
+                name: 'Roupas e Calçados',
+                icon: 'fa fa-tshirt'
             }
         ]
     },

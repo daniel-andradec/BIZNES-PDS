@@ -44,7 +44,7 @@
 
 
                 <div class="actions">
-                    <button class="btn btn-primary">Comprar</button>
+                    <button class="btn btn-primary" @click="directTransaction()">Comprar</button>
                     <button class="btn btn-secondary" @click="addToCart()">
                         <i class="fas fa-shopping-cart"></i>
                     </button>
@@ -60,15 +60,12 @@
                     <ProductCard :key="product.id" :product="product" :fixSize="true" />
                 </div>
                     
-                <span @click="this.$router.push('/')">Voltar à página inicial</span>
+                <span @click="this.$router.push('/')">Voltar à <br>página inicial</span>
             </div>
 
             <div class="list" v-else>
                 <!-- Produtos mais vendidos -->
-                <div class="list-item" v-for="(product, key) in getBestSellers" :key="key" @click="goToProduct(product)">
-                    <ProductCard :key="product.id" :product="product" :fixSize="true" />
-                </div>
-                <span @click="this.$router.push('/')">Voltar à página inicial</span>
+                <BestSellersList />
             </div>
         </div>
     </div>
@@ -78,6 +75,7 @@
 import CustomerHeader from '@/components/headers/CustomerHeader.vue'
 import CategoryMenu from '@/components/menus/CategoryMenu.vue'
 import ProductCard from '@/components/products/ProductCard.vue'
+import BestSellersList from '@/components/lists/BestSellersList.vue'
 
 import { mapActions, mapGetters } from 'vuex'
 
@@ -86,7 +84,8 @@ export default {
     components: {
         CustomerHeader,
         CategoryMenu,
-        ProductCard
+        ProductCard,
+        BestSellersList
     },
     data() {
         return {
@@ -119,14 +118,30 @@ export default {
                 position: 'top-right',
                 duration: 3000
             })
-            this.product.selectedOption = this.selectedOption
-            this.addProductToCart(this.product)
+            const newProd = {
+                ...this.product,
+                selectedOption: this.selectedOption,
+                quantity: 1
+            } 
+            this.addProductToCart(newProd)
             this.$toast.open({
                 message: 'Produto adicionado ao carrinho!',
                 type: 'success',
                 position: 'top-right',
                 duration: 3000
             })
+        },
+        directTransaction() {
+            if (!this.selectedOption && this.product.options?.length > 0) return this.$toast.open({
+                message: 'Selecione uma opção!',
+                type: 'error',
+                position: 'top-right',
+                duration: 3000
+            })
+            this.product.selectedOption = this.selectedOption
+            this.product.quantity = 1
+            localStorage.setItem('directTransacProduct', JSON.stringify(this.product))
+            this.$router.push('/checkout')
         }
     },
     computed: {
@@ -135,7 +150,8 @@ export default {
     mounted() {
         const productID = this.$route.params.idProduct
         this.product = this.$store.getters.getProduct(productID)
-        this.categoryProducts = this.$store.getters.getCategoryProducts(this.product?.category, this.product?.id)
+        console.log(this.product)
+        this.categoryProducts = this.$store.getters.getCategoryProducts(this.product?.category.split(','), this.product?.idProduct)
         window.scrollTo(0, 0)
     },
     created() {
@@ -143,7 +159,7 @@ export default {
             () => this.$route.params.id,
             (newVal) => {
                 this.product = this.$store.getters.getProduct(newVal)
-                this.categoryProducts = this.$store.getters.getCategoryProducts(this.product?.category, this.product?.id)
+                this.categoryProducts = this.$store.getters.getCategoryProducts(this.product?.category, this.product?.idProduct)
             }
         )
     }
@@ -187,7 +203,7 @@ export default {
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        margin-bottom: 120px;
+        margin-bottom: 100px;
         
         .product-image {
             max-width: 400px;
@@ -197,6 +213,7 @@ export default {
                 width: 100%;
                 height: 50vh;
                 max-height: 500px;
+                max-width: 380px;
                 border-radius: 5px;
                 object-fit: contain;
                 margin-top: 10px;
@@ -212,7 +229,7 @@ export default {
 
 
         .info {
-            width: 40%;
+            width: 35%;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -360,6 +377,26 @@ export default {
             gap: 20px;
             margin-top: 20px;
             max-width: 100%;
+        }
+    }
+
+    @media (max-width: 1090px) {
+        .product-container {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 50px;
+
+            .product-image {
+                margin-right: 0px;
+                margin-bottom: 50px;
+            }
+
+            .info {
+                width: 50%;
+                padding: 0px;
+                text-align: center;
+            }
         }
     }
 }

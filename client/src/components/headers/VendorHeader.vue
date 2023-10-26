@@ -3,9 +3,9 @@
         <img @click="this.$router.push('/vendor-panel')" alt="Vue logo" :src="logo">
 
         <div class="login-container" @mouseover="showDropdown" @mouseleave="hideDropdown">
-            <div class="login">
+            <div class="login" @click="this.$router.push('/store-registration')">
                 <i class="fa-solid fa-store"></i>
-                <span>{{ loggedInUser?.name }}</span>
+                <span>{{ getVendorData?.fantasyName }}</span>
             </div>
             <!-- Olá, faça seu <br><span>login</span> -->
 
@@ -26,6 +26,7 @@
 <script>
 import { logout } from '@/controllers/UserController'
 import { mapGetters } from 'vuex'
+import { getVendorData } from '@/controllers/VendorController'
 
 export default {
     name: 'VendorHeader',
@@ -51,7 +52,13 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['loggedInUser'])
+        ...mapGetters(['loggedInUser', 'getVendorData'])
+    },
+    async mounted() {
+        if (!this.getVendorData?.fantasyName) {
+            console.log('getVendorData')
+            await getVendorData()
+        }
     }
 }
 </script>

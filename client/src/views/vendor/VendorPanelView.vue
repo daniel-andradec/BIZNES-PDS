@@ -35,7 +35,8 @@
 <script>
 import VendorHeader from '@/components/headers/VendorHeader.vue';
 import VendorMenu from '@/components/menus/VendorMenu.vue';
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import { getVendorSales, getProducts } from '@/controllers/VendorController';
 
 export default {
     name: 'VendorPanelView',
@@ -104,13 +105,62 @@ export default {
                 value = this.formatValue(field.value)
             } 
             if (field.fixLength) {
-                value = field.value.length > 30 ? field.value.substring(0, 30) + '...' : field.value
+                value = field.value?.length > 30 ? field.value?.substring(0, 30) + '...' : field.value
             }
 
             return value
         },
+        setPanelData() {
+            let salesTotal = 0
+            let totalOrders = 0
+            let productsCount = {}
+            let categoriesCount = {}
+
+            this.getVendorSales.forEach(sale => {
+                salesTotal += sale.total;
+                totalOrders += 1;
+
+                sale.TransactionProducts.forEach(product => {
+                    productsCount[product.Product.name] = (productsCount[product.Product.name] || 0) + 1;
+                    
+                    const categories = product.Product.category.split(',');
+                    categories.forEach(category => {
+                        categoriesCount[category.trim()] = (categoriesCount[category.trim()] || 0) + 1;
+                    });
+                });
+            });
+
+            const bestSellingProduct = Object.keys(productsCount).reduce((a, b) => productsCount[a] > productsCount[b] ? a : b, "");
+            const bestSellingCategory = Object.keys(categoriesCount).reduce((a, b) => categoriesCount[a] > categoriesCount[b] ? a : b, "");
+
+            this.panelData[0].value = salesTotal || 0;
+            this.panelData[1].value = totalOrders || 0;
+            this.panelData[2].value = bestSellingProduct || '-';
+            this.panelData[3].value = bestSellingCategory || '-';
+        }
     },
     computed: {
+        ...mapGetters(['getVendorSales']),
+    },
+    async mounted() {
+        // load sales to use in panel data
+        await getVendorSales().then((res) => {
+            if (res.data && res.data.length > 0) {
+                console.log(this.getVendorSales)
+                this.setPanelData()
+            }
+        }).catch((err) => {
+            console.log(err)
+            this.$toast.open({
+                message: 'Erro ao carregar resumo de vendas. Tente novamente mais tarde.',
+                position: 'top-right',
+                duration: 5000,
+                type: 'error'
+            })
+        })
+
+        // load stock
+        await getProducts()
     }
     
 }

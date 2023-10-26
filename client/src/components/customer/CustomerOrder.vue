@@ -1,7 +1,6 @@
 <template>
     <div class="customer-order-container">
         <div class="date">
-            <h2>{{ order.orderDate }}</h2>
         </div>
         <div class="order-card">
             <div class="order-products">
@@ -12,13 +11,14 @@
                         </div>
                         <div class="product-details">
                             <h3>{{ product.name }}</h3>
-                            <p>{{ formatValue(product.price) }} <span>x{{ product.quantity }}</span></p>
+                            <p>{{ formatValue(product.price) }} <span>x{{ product.quantity }}</span> <template v-if="product.selectedOption"> - {{ product.selectedOption }}</template></p>
                             <p>Vendido por <b>{{ product.seller }}</b> e entregue por Biznes</p>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <h3 id="policy">Política(s) de devolução</h3>
+                    <h3 id="policy" @click="showPolicy = !showPolicy" v-if="products.filter(product => product.devolutionPolicy).length > 0">
+                        Política(s) de devolução</h3>
                 </div>
 
             </div>
@@ -42,20 +42,36 @@
                     </div>
                     <div class="detail">
                         <h3>Endereço de entrega</h3>
-                        <p>{{ address2text(order.address) }}</p>
+                        <p>
+                            {{ order.recipientName }} <br>
+                            {{ address2text(order.Address) }}</p>
                     </div>
                 </div>
 
                 <div class="order-total">
                     <h3>Total</h3>
-                    <p>{{ formatValue(order.totalPrice) }}</p>
+                    <p>{{ formatValue(order.total) }}</p>
                 </div>
             </div>
         </div>
+
+        <ModalComponent :modalOpen="showPolicy" @closeModal="showPolicy = false">
+            <!-- politica de devolução de cada produto -->
+            <div class="prods-dev-policy">
+                <div v-for="policy in devolutionPolicies" :key="policy.seller">
+                    <div class="policy">
+                        <h3>{{ policy.seller }}</h3>
+                        <p>{{ policy.policy }}</p>
+                    </div>
+                </div>
+            </div>
+        </ModalComponent>
+
     </div>
 </template>
 
 <script>
+import ModalComponent from '../modals/ModalComponent.vue'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
@@ -63,10 +79,13 @@ export default {
     name: 'CustomerOrder',
     props: ['order'],
     components: {
+        ModalComponent
     },
     data() {
         return {
-            products: []
+            products: [],
+            showPolicy: false,
+            devolutionPolicies: {}
         }
     },
     computed: {
@@ -74,13 +93,13 @@ export default {
     },
     methods: {
         address2text(address) {
-            return `${address.street}, ${address.number} - ${address.complement}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.zipCode}`
+            return `${address.street}, ${address.number} - ${address.complement}, ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
         },
         formatValue(value) {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
         },
         getOrderStatus() {
-            const deliveryDate = moment(this.order.deliveryDate, 'DD/MM/YYYY')
+            const deliveryDate = moment(this.order.deliveryDate)
             const today = moment()
             const diff = deliveryDate.diff(today, 'days')
             if (diff < 0) {
@@ -90,15 +109,32 @@ export default {
             } else {
                 return 'Em preparo'
             }
+        },
+        fixDate(date) {
+            return moment(date).format('DD/MM/YYYY')
         }
     },
     mounted() {
-        this.order.products.forEach(product => {
+        this.order.TransactionProducts.forEach(product => {
             this.products.push({
-                ...this.getProduct(product.id),
-                quantity: product.quantity
+                ...this.getProduct(product.idProduct),
+                quantity: product.quantity,
+                selectedOption: product.selectedOption
             })
         })
+        
+        // se todos os produtos forem da mesma loja "product.idVendor", entao a politica de devolucao é a mesma
+        // caso contrário, mostra a política de devolução por loja, sendo que a chave é o product.seller
+        const policies = {}
+        this.products.forEach(product => {
+            if (!policies[product.idVendor]) {
+                policies[product.idVendor] = {
+                    policy: product.devolutionPolicy,
+                    seller: product.seller
+                }
+            }
+        })
+        this.devolutionPolicies = policies
     },
     
 }
@@ -109,24 +145,15 @@ export default {
     display: flex;
     flex-direction: column;
 
-    .date {
-        text-align: left;
-
-        h2 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-    }
-
     .order-card {
         height: auto;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-top: 10px;
+        margin: 15px 0;
         padding: 25px;
         border-radius: 5px;
-        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
 
         .order-products {
             width: 50%;
@@ -256,6 +283,37 @@ export default {
         color: #858586;
         text-align: left;
         cursor: pointer;
+    }
+
+    .prods-dev-policy {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .policy {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 30px;
+
+            h3 {
+                font-size: 18px;
+                font-weight: 500;
+                margin-bottom: 5px;
+                text-align: left;
+            }
+
+            p {
+                font-size: 15px;
+                font-weight: 400;
+                margin-bottom: 5px;
+                text-align: left;
+                max-width: 400px;
+                text-align: justify;
+            }
+        }
     }
 }
     

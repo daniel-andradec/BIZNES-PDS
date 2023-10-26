@@ -11,7 +11,7 @@ export const validateRegisterVendor = (vendor: VendorCreationAttributes) => {
         companyName: Joi.string().min(3).max(255).required(),
         fantasyName: Joi.string().min(3).max(255).required(),
         phone: Joi.string().min(3).max(255).required(),
-        devolutionPolicy: Joi.string().min(3).max(255).required(),
+        devolutionPolicy: Joi.string().min(3).required(),
         street: Joi.string().min(3).max(255).required(),
         number: Joi.string().required(),
         complement: Joi.string().min(3).max(255),

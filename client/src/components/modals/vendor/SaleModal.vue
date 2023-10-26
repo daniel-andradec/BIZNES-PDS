@@ -6,20 +6,20 @@
             </h2>
 
             <div class="sale-details">
-                <div class="info">
+                <div class="sale-info">
                     <div class="left">
-                        <h2>Data: <span>{{ sale.date }}</span></h2>
-                        <h2>Entrega Prevista: <span>{{sale.deliveryDate }}</span></h2>
+                        <h2>Data: <span>{{ formatDate(sale.date) }}</span></h2>
+                        <h2>Entrega Prevista: <span>{{ formatDate(sale.deliveryDate) }}</span></h2>
                         <h2>Forma de Pagamento: <span>{{ sale.paymentMethod }}</span></h2>
                     </div>
                     <div class="right">
                         <h2>Endereço de entrega</h2>
                         <span>
-                            {{ sale.deliveryAddress?.recipient }} <br>
-                            {{ sale.deliveryAddress?.street }}, {{ sale.deliveryAddress?.number }} - {{ sale.deliveryAddress?.complement }} -
-                            {{ sale.deliveryAddress?.neighborhood }}, 
-                            {{ sale.deliveryAddress?.city }} - {{ sale.deliveryAddress?.state }} <br>
-                            {{ sale.deliveryAddress?.zipCode }}
+                            {{ sale.recipientName }} <br>
+                            {{ sale.Address?.street }}, {{ sale.Address?.number }} - {{ sale.Address?.complement }} -
+                            {{ sale.Address?.neighborhood }}, 
+                            {{ sale.Address?.city }} - {{ sale.Address?.state }} <br>
+                            {{ sale.Address?.cep }}
                         </span>
                     </div>
                 </div>
@@ -35,12 +35,19 @@
                         <div class="sale-products">
                             <div class="sale-prod" v-for="(prod, pkey) in productsList" :key="pkey">
                                 <div class="prod-info">
-                                    <img :src="prod.img" alt="product">
+                                    <img :src="prod.photo" alt="product">
                                     <h2>{{ prod.name }}</h2>
                                 </div>
                                 <h2>{{ prod.quantity }}</h2>
-                                <h2>{{ formatValue(getProductTotal(prod)) }}</h2>
-                                <h2> {{ prod.option?.join(', ') }}</h2>
+                                <h2>{{ formatValue(getProductTotal(prod.price, prod)) }}</h2>
+                                <h2>
+                                    <template v-if="prod.option">
+                                        {{ prod.option }}
+                                    </template>
+                                    <template v-else>
+                                        -
+                                    </template>
+                                </h2>
                             </div>
                         </div>
                     </div>
@@ -57,33 +64,8 @@
 
 <script>
 import ModalComponent from '../ModalComponent.vue'
-
+import moment from 'moment'
 import { mapGetters } from 'vuex'
-
-/**sale
- * {
-                id: 11,
-                customer: 'Lucas Martins',
-                date: '09/08/2023',
-                total: 650.00,
-                city: 'Florianópolis',
-                deliveryDate: '12/08/2023',
-                paymentMethod: 'Cartão de Débito',
-                deliveryAddress: {
-                    recipient: 'Ricardo Pereira',
-                    street: 'Av. K',
-                    city: 'Florianópolis',
-                    state: 'Santa Catarina',
-                    complement: 'Apto 10',
-                    number: '1010',
-                    zipCode: '30350230'
-                },
-                products: [
-                    { id: 1, quantity: 3 },
-                    { id: 2, quantity: 2 }
-                ]
-            }
- */
 
 export default {
     name: 'SaleModal',
@@ -101,21 +83,24 @@ export default {
         closeModal() {
             this.$emit('closeModal')
         },
-        getProductTotal(product) {
-            return product.price * product.quantity
+        getProductTotal(price, product) {
+            return price * product.quantity
         },
         formatValue(value) {
             if (value)
                 return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
         },
+        formatDate(date) {
+            return moment(date).format("DD/MM/YYYY")
+        },
     },
     computed: {
-        ...mapGetters(['getProduct'])
+        ...mapGetters(['getProductInStock'])
     },
     mounted() {
         this.productsList = this.sale.products?.map((prod) => {
             return {
-                ...this.getProduct(prod.id),
+                ...this.getProductInStock(prod.id),
                 quantity: prod.quantity,
                 option: prod.option
             }
@@ -124,11 +109,12 @@ export default {
     watch: {
         modalOpen() {
             if (this.modalOpen) {
-                this.productsList = this.sale.products.map((prod) => {
+                this.productsList = this.sale.TransactionProducts.map((prod) => {
                     return {
-                        ...this.getProduct(prod.id),
+                        ...this.getProductInStock(prod.idProduct),
                         quantity: prod.quantity,
-                        option: prod.option
+                        price: prod.price,
+                        option: prod.selectedOption
                     }
                 })
             }
@@ -153,26 +139,25 @@ export default {
     .sale-details {
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
 
-        .info {
+        .sale-info {
             display: flex;
             flex-direction: row;
             text-align: left;
+            justify-content: space-evenly;
+            gap: 20px;
 
             .left {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
                 justify-content: flex-start;
-                margin-right: 50px;
             }
 
             .right {
                 display: flex;
                 flex-direction: column;
-                align-items: flex;
                 justify-content: flex-start;
                 max-width: 350px;
                 word-break: break-word;

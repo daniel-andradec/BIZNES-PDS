@@ -86,13 +86,13 @@ export default {
                     },
                 ],
                 'Dados de acesso': [
-                {
-                    ref: 'email',
-                    label: 'Email', 
-                    type: 'email', 
-                    placeholder: 'Email', 
-                    required: true
-                },
+                    {
+                        ref: 'email',
+                        label: 'Email', 
+                        type: 'email', 
+                        placeholder: 'Email', 
+                        required: true
+                    },
                     {
                         ref: 'password',
                         label: 'Senha', 

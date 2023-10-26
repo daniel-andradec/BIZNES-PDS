@@ -55,7 +55,7 @@ export default {
 
     img {
         width: 100%;
-        height: 200px;
+        height: 150px;
         object-fit: contain;
         margin-top: 10px;
         border-radius: 5px;

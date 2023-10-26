@@ -192,6 +192,7 @@ export default {
                     this.formData.street = resp.data.logradouro;
                     this.formData.city = resp.data.localidade;
                     this.formData.state = resp.data.uf;
+                    this.formData.neighborhood = resp.data.bairro;
                 }).catch(() => {
                     this.$toast.open({
                         message: 'CEP não encontrado. Verifique o CEP e tente novamente.',
@@ -313,9 +314,6 @@ export default {
                     }
                 }
             }
-
-            // sanitize birthDate to format DD/MM/YYYY
-            // this.formData.birthDate = moment(this.formData.birthDate).format('DD/MM/YYYY')
         }
     }
 }

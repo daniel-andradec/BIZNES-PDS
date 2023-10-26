@@ -9,8 +9,8 @@
         <div class="list-header">
             <div class="select-categories">
                 <i class="fas fa-bars" @click="toggleCategoryMenu"></i>
+                <h1>Carrinho de compras</h1>
             </div>
-            <h1>Carrinho de compras</h1>
         </div>
 
         <div class="cart" v-if="Object.values(getCartProducts).length > 0">
@@ -36,11 +36,11 @@
 
                             <div class="actions">
                                 <div class="edit">
-                                    <div class="button" @click="checkDecreaseQuantity(product.id)">
+                                    <div class="button" @click="checkDecreaseQuantity(product.idProduct, product.selectedOption)">
                                         <i class="fa fa-minus"></i>
                                     </div>
                                     <input type="text" v-model="product.quantity" disabled />
-                                    <div class="button" @click="incrementProductQuantity(product.id)">
+                                    <div class="button" @click="incrementProductQuantity({ idProduct: product.idProduct, selectedOption: product.selectedOption })">
                                         <i class="fa fa-plus"></i>
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
         </div>
 
         <div>
-            <BestSellersList />
+            <BestSellersList :showHeader="true" />
         </div>
         
 
@@ -128,10 +128,10 @@ export default {
         formatValue(value) {
             return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
         },
-        checkDecreaseQuantity(productId) {
-            const product = this.getCartProducts.find(product => product.id === productId)
+        checkDecreaseQuantity(productId, selectedOption) {
+            const product = this.getCartProducts.find(product => product.idProduct === productId && product.selectedOption === selectedOption)
             if (product.quantity > 1) {
-                this.decrementProductQuantity(productId)
+                this.decrementProductQuantity({ idProduct: product.idProduct, selectedOption: product.selectedOption })
             } else {
                 this.openRemoveProdModal(product)
             }
@@ -141,7 +141,7 @@ export default {
             this.selectedProduct = product
         },
         removeProduct() {
-            this.removeProductFromCart(this.selectedProduct.id)
+            this.removeProductFromCart({ idProduct: this.selectedProduct.idProduct, selectedOption: this.selectedProduct.selectedOption })
             this.removeProdModalOpen = false
             this.$toast.open({
                 message: 'Produto removido do carrinho!',
@@ -160,6 +160,9 @@ export default {
             this.$router.push({ name: 'product', params: { idProduct: product.idProduct } })
         },
         goToCheckout() {
+            // cart transaction - no product selected
+            localStorage.removeItem('directTransacProduct')
+
             if (!this.loggedInUser.id) {
                 this.$toast.open({
                     message: 'Você precisa estar logado para finalizar a compra!',
@@ -168,9 +171,11 @@ export default {
                     duration: 3000
                 })
 
-                this.$router.push('/login')
+                // go to login informing that user will be redirected to checkout after login
+                this.$router.push({ name: 'login', params: { redirect: '/checkout' } })
                 return
             }
+            
             this.$router.push('/checkout')
         },
         goToHome() {
@@ -204,17 +209,16 @@ export default {
             justify-content: flex-start;
             align-items: center;
             margin: 48px 50px 20px 50px;
-            color: var(--secondaryColor);
             i {
+                color: var(--secondaryColor);
                 font-size: 25px;
             }
-        }
-
-        h1 {
-            font-weight: 500;
-            font-size: 30px;
-            text-align: left;
-            margin-left: 50px;
+            h1 {
+                font-weight: 500;
+                font-size: 30px;
+                text-align: left;
+                margin-left: 20px;
+            }
         }
     }
 
@@ -225,6 +229,8 @@ export default {
         display: flex;
         justify-content: center;
         gap: 30px;
+        padding: 20px;
+        padding-top: 0;
 
         .cart-products {
             padding-top: 0;
@@ -242,7 +248,8 @@ export default {
                     display: grid;
                     grid-template-columns: 1fr 1.3fr 1fr;
                     width: 100%;
-                    min-width: 500px;
+                    min-width: 620px;
+                    max-width: 925px;
                     text-align: center;
                     border-radius: 5px;
                     border: 1px solid rgba(0, 0, 0, 0.18);
@@ -509,7 +516,7 @@ export default {
 
 
     // media - width less than 1200px puts the summary below the products list
-    @media (max-width: 1000px) {
+    @media (max-width: 1130px) {
         .cart {
             flex-direction: column;
             gap: 0px;
