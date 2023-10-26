@@ -76,8 +76,8 @@ User.hasOne(Address, { foreignKey: 'idUser' });
 Address.belongsTo(Transaction, { foreignKey: 'idTransaction', onDelete: 'CASCADE' });
 Transaction.hasOne(Address, { foreignKey: 'idTransaction' });
 
-Address.sync({alter: false, force: false})
+/* Address.sync({alter: false, force: false})
     .then(() => {
     console.log('Address table was (re)created');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err)); */

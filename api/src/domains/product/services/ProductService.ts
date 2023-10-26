@@ -70,7 +70,7 @@ class ProductServiceClass {
             throw(error);
         }
     }
-    async update(idProduct: string, body: Attributes<ProductInterface>, user: PayloadParams, file: any) {
+    async update(idProduct: string, body: Attributes<ProductInterface>, file: any) {
         try {
             const product = await this.getById(idProduct);
             if(file){
@@ -81,8 +81,8 @@ class ProductServiceClass {
                 body.photo = product.photo;
                 body.awsKey = product.awsKey;
             }
-            
-            const vendor = await VendorService.getById(user.idUser);
+            console.log(body);
+            console.log(body);
             await product.update(body);
         } catch (error) {
             throw(error);

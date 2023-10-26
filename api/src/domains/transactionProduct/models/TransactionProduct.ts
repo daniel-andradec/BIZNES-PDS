@@ -57,9 +57,9 @@ Transaction.hasMany(TransactionProduct, { foreignKey: 'idTransaction' });
 TransactionProduct.belongsTo(Product, { foreignKey: 'idProduct', onDelete: 'CASCADE' });
 Product.hasMany(TransactionProduct, { foreignKey: 'idProduct' });
 
-TransactionProduct.sync({alter: false, force: false})
+/* TransactionProduct.sync({alter: false, force: false})
     .then(() => {
         console.log('TransactionProduct table was (re)created');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err)); */
 

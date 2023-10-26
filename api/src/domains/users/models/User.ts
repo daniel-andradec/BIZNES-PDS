@@ -49,8 +49,8 @@ export const User = sequelize.define<UserInterface>('Users', {
 
 
 
-User.sync({alter: false, force: false})
+/* User.sync({alter: false, force: false})
   .then(() => {
     console.log('User table was (re)created');
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err)); */
