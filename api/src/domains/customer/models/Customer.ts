@@ -62,9 +62,9 @@ export const Customer = sequelize.define<CustomerInterface>('Customers', {
 Customer.belongsTo(User, { foreignKey: 'idUser', onDelete: 'CASCADE'});
 User.hasOne(Customer, { foreignKey: 'idUser' });
 
-/* Customer.sync({alter: false, force: false})
+Customer.sync({alter: false, force: false})
     .then(() => {
     console.log('Customer table was (re)created');
     })
-    .catch((err) => console.log(err)); */
+    .catch((err) => console.log(err)); 
     
