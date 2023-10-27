@@ -213,7 +213,7 @@ Optamos por utilizar a Arquitetura Hexagonal, também conhecida como "Portas e A
 
 ### Exemplo:
 
-Imagine que nosso domínio precise buscar um endereço pelo ID do usuário:
+Nosso domínio deve buscar o endereço de um usuário:
 
 1. **Porta**: Criamos uma classe `AddressService` no domínio com um método `getAddress`.
 
@@ -236,15 +236,15 @@ export class AddressService{
 
 ```
 
-2. **Adaptador**: Implementamos essa interface na camada de infraestrutura usando, por exemplo, Sequelize.
+2. **Adaptador**: Implementamos essa interface na camada de infraestrutura usando Sequelize.
 
 ```typescript
-// Exemplo de metódo do adadptador
-async getAddress(user: PayloadParams) {
+export class SequelizeAddressRepository implements AddressRepository{
+    async getAddress(id: string) {
         try {
             const address = await Address.findOne({
                 where: {
-                    idUser: user.idUser,
+                    idUser: id,
                 }
             });
             return address;
@@ -252,6 +252,9 @@ async getAddress(user: PayloadParams) {
             throw(error);
         }
     }
+
+    //demais metódos da classe
+}
 ```
 
 
