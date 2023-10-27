@@ -218,22 +218,21 @@ Nosso domínio deve buscar o endereço de um usuário:
 1. **Porta**: Criamos uma classe `AddressService` no domínio com um método `getAddress`.
 
 ```typescript
-export class AddressService{
+class AddressServiceClass{
     constructor(private addressRepository: AddressRepository) {}
 
     async create(address: CreationAttributes<AddressInterface>): Promise<AddressInterface> {
         return await this.addressRepository.create(address);
     }
 
-    async getAddress(user: PayloadParams | null): Promise<AddressInterface | null> {
-        return await this.addressRepository.getAddress(user);
+    async getAddress(id: string): Promise<AddressInterface | null> {
+        return await this.addressRepository.getAddress(id);
     }
 
     async update(address: CreationAttributes<AddressInterface>, idUser: string): Promise<AddressInterface> {
         return await this.addressRepository.update(address, idUser);
     }
 }
-
 ```
 
 2. **Adaptador**: Implementamos essa interface na camada de infraestrutura usando Sequelize.
