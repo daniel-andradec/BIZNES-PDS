@@ -5,9 +5,11 @@ import { TransactionProductInterface } from "../../transactionProduct/models/Tra
 import { TransactionProductService } from "../../transactionProduct/ports/TransactionProductService";
 import { TransactionRepository } from "../repository/TransactionRepository";
 import { Product } from "../../product/models/Product";
+import { ProductService } from "../../product/services/ProductService";
 import { AddressService } from "../../address/ports/AddressService";
 import { AddressInterface } from "../../address/models/Address";
 import { Address } from "../../address/models/Address";
+import { VendorService } from "../../vendor/ports/VendorService";
 
 
 export class SequelizeTransactionRepository implements TransactionRepository{
@@ -16,6 +18,19 @@ export class SequelizeTransactionRepository implements TransactionRepository{
         try{
             const transactionCreated = await Transaction.create(transaction);
             for (const transactionProduct of transactionProducts) {
+                const product = await Product.findByPk(transactionProduct.idProduct);
+                if (!product) {
+                    throw new Error('Produto não encontrado');
+                }
+
+                const vendor = await VendorService.getById(product.idVendor);
+                if (!vendor) {
+                    throw new Error('Vendedor não encontrado');
+                }
+
+                transactionProduct.vendorName = vendor.fantasyName;
+                transactionProduct.productPhoto = product.photo;
+                transactionProduct.productName = product.name;
                 transactionProduct.idTransaction = transactionCreated.idTransaction;
                 await TransactionProductService.create(transactionProduct);
             }

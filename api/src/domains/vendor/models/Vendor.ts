@@ -75,8 +75,8 @@ User.hasOne(Vendor, {
     foreignKey: 'idUser',
 });
 
-/* Vendor.sync({alter: false, force: false})
+Vendor.sync({alter: false, force: false})
   .then(() => {
     console.log('Vendor table was (re)created');
   })
-  .catch((err) => console.log(err)); */
+  .catch((err) => console.log(err)); 
