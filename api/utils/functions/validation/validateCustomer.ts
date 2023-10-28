@@ -16,7 +16,7 @@ export const validateRegisterCustomer = (customer: CustomerCreationAttributes) =
         neighborhood: Joi.string().min(1).max(255).required(),
         city: Joi.string().min(1).max(255).required(),
         state: Joi.string().min(1).max(255).required(),
-        cep: Joi.string().min(3).max(255).required(),
+        cep: Joi.string().min(1).max(255).required(),
     });
 
     const { error } = schema.validate(customer);

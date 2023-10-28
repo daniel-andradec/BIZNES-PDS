@@ -5,11 +5,9 @@ import { TransactionProductInterface } from "../../transactionProduct/models/Tra
 import { TransactionProductService } from "../../transactionProduct/ports/TransactionProductService";
 import { TransactionRepository } from "../repository/TransactionRepository";
 import { Product } from "../../product/models/Product";
-import { ProductService } from "../../product/services/ProductService";
 import { AddressService } from "../../address/ports/AddressService";
 import { AddressInterface } from "../../address/models/Address";
 import { Address } from "../../address/models/Address";
-import { VendorService } from "../../vendor/ports/VendorService";
 import { Vendor } from "../../vendor/models/Vendor";
 
 export class SequelizeTransactionRepository implements TransactionRepository{

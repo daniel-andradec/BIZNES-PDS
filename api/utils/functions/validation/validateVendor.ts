@@ -4,8 +4,8 @@ import { QueryError } from "../../../errors/QueryError";
 
 export const validateRegisterVendor = (vendor: VendorCreationAttributes) => {
     const schema = Joi.object<VendorCreationAttributes>({
-        name: Joi.string().min(3).max(255).required(),
-        email: Joi.string().min(3).max(255).required().email(),
+        name: Joi.string().min(1).max(255).required(),
+        email: Joi.string().min(1).max(255).required().email(),
         password: Joi.string().min(6).max(255).required(),
         CNPJ: Joi.string().min(14).max(14).required(),
         companyName: Joi.string().min(3).max(255).required(),
@@ -15,7 +15,7 @@ export const validateRegisterVendor = (vendor: VendorCreationAttributes) => {
         street: Joi.string().min(3).max(255).required(),
         number: Joi.string().required(),
         complement: Joi.string().min(0).max(255),
-        neighborhood: Joi.string().min(3).max(255).required(),
+        neighborhood: Joi.string().min(1).max(255).required(),
         city: Joi.string().min(3).max(255).required(),
         state: Joi.string().min(2).max(255).required(),
         cep: Joi.string().min(3).max(255).required(),
