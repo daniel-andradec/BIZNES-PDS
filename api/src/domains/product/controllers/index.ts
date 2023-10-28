@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { ProductService } from '../services/ProductService';
+import { ProductService } from '../port/ProductService';
 import { verifyJWT, checkRole } from '../../../middlewares/auth-middlewares';
 import { userRoles } from '../../users/constants/userRoles';
 import { statusCodes } from '../../../../utils/constants/statusCodes';

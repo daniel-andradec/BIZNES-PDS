@@ -10,7 +10,7 @@ import { AddressService } from "../../address/ports/AddressService";
 import { AddressInterface } from "../../address/models/Address";
 import { Address } from "../../address/models/Address";
 import { VendorService } from "../../vendor/ports/VendorService";
-
+import { Vendor } from "../../vendor/models/Vendor";
 
 export class SequelizeTransactionRepository implements TransactionRepository{
 
@@ -23,7 +23,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
                     throw new Error('Produto não encontrado');
                 }
 
-                const vendor = await VendorService.getById(product.idVendor);
+                const vendor = await Vendor.findByPk(product.idVendor);
                 if (!vendor) {
                     throw new Error('Vendedor não encontrado');
                 }
