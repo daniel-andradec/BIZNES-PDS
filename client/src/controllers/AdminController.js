@@ -9,6 +9,7 @@ const getCustomers = async () => {
 
 const getVendors = async () => {
     const response = await makeRequest('GET', '/vendor');
+    console.log(response)
     store.dispatch('saveVendors', response.data)
     return response;
 }

@@ -125,7 +125,7 @@ export default {
             })
         },
         async deleteVendor () {
-            await deleteVendor(this.vendorToDelete.idVendor).then(async res => {
+            await deleteVendor(this.vendorToDelete.User.idUser).then(async res => {
                 if (res.status === 204) {
                     await getVendors().then(res => {
                         if (res.data.length > 0){

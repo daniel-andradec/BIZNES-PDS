@@ -64,7 +64,7 @@ export class SequelizeVendorRepository implements vendorRepository{
                 attributes: ['idVendor', 'CNPJ', 'companyName', 'fantasyName', 'phone', 'devolutionPolicy'],
                 include: [{
                     model: User,
-                    attributes: ['name', 'email'],
+                    attributes: ['name', 'email', 'idUser'],
                     include: [{
                         model: Address,
                         attributes: ['city', 'state']
