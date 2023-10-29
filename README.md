@@ -226,12 +226,6 @@ export class SequelizeAddressRepository implements AddressRepository{
     //demais metódos da classe
 }
 ```
-3. Instanciando o Service.
-   
-```typescript
-const addressRepository = new SequelizeAddressRepository();
-export const AddressService = new AddressServiceClass(addressRepository);
-```
 
 
 
