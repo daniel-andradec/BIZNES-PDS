@@ -201,6 +201,9 @@ class AddressServiceClass{
         return await this.addressRepository.update(address, idUser);
     }
 }
+
+const addressRepository = new SequelizeAddressRepository();
+export const AddressService = new AddressServiceClass(addressRepository);
 ```
 
 2. **Adaptador**: Implementamos essa interface na camada de infraestrutura usando Sequelize.
