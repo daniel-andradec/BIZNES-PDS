@@ -41,6 +41,7 @@ export default {
     },
     async mounted() {
         await saveBestSellers()
+        console.log(this.getBestSellers)
     }
 }
 </script>

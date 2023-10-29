@@ -27,8 +27,10 @@ export class SequelizeTransactionRepository implements TransactionRepository{
                 }
 
                 transactionProduct.vendorName = vendor.fantasyName;
+                transactionProduct.idVendor = vendor.idVendor;
                 transactionProduct.productPhoto = product.photo;
                 transactionProduct.productName = product.name;
+                transactionProduct.productCategory = product.category;
                 transactionProduct.idTransaction = transactionCreated.idTransaction;
                 await TransactionProductService.create(transactionProduct);
             }
@@ -45,11 +47,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
             attributes: {exclude: ['createdAt', 'updatedAt']},
             include: [{
                 model: TransactionProduct,
-                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
-                include: [{
-                    model: Product,
-                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
-                }]
+                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']}
             }, {
                 model: Address,
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
@@ -62,11 +60,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
             attributes: {exclude: ['createdAt', 'updatedAt']},
             include: [{
                 model: TransactionProduct,
-                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
-                include: [{
-                    model: Product,
-                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
-                }]
+                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']}
             }, {
                 model: Address,
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
@@ -84,11 +78,7 @@ export class SequelizeTransactionRepository implements TransactionRepository{
             where: {idUser: id},
             include: [{
                 model: TransactionProduct,
-                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
-                include: [{
-                    model: Product,
-                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
-                }]
+                attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']}
             }, {
                 model: Address,
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
@@ -99,14 +89,10 @@ export class SequelizeTransactionRepository implements TransactionRepository{
     async getByVendorId(id: string): Promise<TransactionInterface[]> {
         return await Transaction.findAll({
             attributes: {exclude: ['createdAt', 'updatedAt']},
-            where:{ '$TransactionProducts.Product.idVendor$': id},
+            where:{ '$TransactionProducts.idVendor$': id},
             include: [{
                 model: TransactionProduct,
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},
-                include: [{
-                    model: Product,
-                    attributes: ['idProduct', 'idVendor', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
-                }]
             }, {
                 model: Address,
                 attributes: {exclude: ['idTransaction', 'createdAt', 'updatedAt']},

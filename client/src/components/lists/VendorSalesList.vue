@@ -122,6 +122,7 @@ export default {
             }
         },
         saleDetails(sale) {
+            console.log(sale)
             this.saleToView = sale
             this.saleModalOpen = true
         }

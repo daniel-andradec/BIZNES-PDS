@@ -104,7 +104,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.products)
     }
 }
 </script>

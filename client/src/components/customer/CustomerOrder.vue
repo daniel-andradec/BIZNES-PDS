@@ -89,7 +89,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getProduct'])
+        ...mapGetters(['getProduct', 'getDevolutionPolicy'])
     },
     methods: {
         address2text(address) {
@@ -117,9 +117,14 @@ export default {
     mounted() {
         this.order.TransactionProducts.forEach(product => {
             this.products.push({
-                ...this.getProduct(product.idProduct),
+                id: product.idProduct,
+                photo: product.productPhoto,
+                price: product.price,
+                name: product.productName,
+                seller: product.vendorName,
                 quantity: product.quantity,
-                selectedOption: product.selectedOption
+                selectedOption: product.selectedOption,
+                devolutionPolicy: this.getDevolutionPolicy(product.idProduct)
             })
         })
         

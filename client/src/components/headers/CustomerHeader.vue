@@ -20,7 +20,7 @@
             <!-- Olá, faça seu <br><span>login</span> -->
 
             <div class="options" v-if="isDropDownVisible">
-                <div class="option" @click="this.$router.push('/customer-profile')">
+                <div class="option" @click="navigateToProfile()">
                     <i class="fa fa-user-circle"></i>
                     Minha conta
                 </div>
@@ -75,6 +75,13 @@ export default {
         },
         getFirstName(name) {
             return name.split(' ')[0]
+        },
+        navigateToProfile() {
+            console.log(this.loggedInUser)
+            if (this.loggedInUser?.role === 'customer')
+                this.$router.push('/customer-profile')
+            else if (this.loggedInUser?.role === 'vendor')
+                this.$router.push('/store-registration')
         }
     },
     computed: {

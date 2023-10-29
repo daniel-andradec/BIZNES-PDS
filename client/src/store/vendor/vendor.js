@@ -55,7 +55,6 @@ export default {
                 }
             }
             return state.vendorSales
-        },
-        getProductInStock: state => id => state.vendorStock.find(product => product.idProduct == id)
+        }
     }
 }

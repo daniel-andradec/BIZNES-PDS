@@ -78,6 +78,7 @@ import ProductCard from '@/components/products/ProductCard.vue'
 import BestSellersList from '@/components/lists/BestSellersList.vue'
 
 import { mapActions, mapGetters } from 'vuex'
+import { checkQuantity } from '@/controllers/ProductController'
 
 export default {
     name: 'ProductView',
@@ -131,7 +132,15 @@ export default {
                 duration: 3000
             })
         },
-        directTransaction() {
+        async directTransaction() {
+            const prodQuantityOk = await checkQuantity(this.product.idProduct, 1)
+            if (!prodQuantityOk) return this.$toast.open({
+                message: 'Não há estoque suficiente para essa compra!',
+                type: 'error',
+                position: 'top-right',
+                duration: 3000
+            })
+
             if (!this.loggedInUser.id) {
                 this.$toast.open({
                     message: 'Você precisa estar logado para finalizar a compra!',

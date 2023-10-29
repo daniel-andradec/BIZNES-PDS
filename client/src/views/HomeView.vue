@@ -32,10 +32,7 @@ export default {
     methods: {
     },
     async mounted() {
-        await getProducts().then((response) => {
-            console.log(response);
-        });
-        console.log(this.getProducts);
+        await getProducts()
     }
 }
 </script>

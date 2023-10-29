@@ -27,6 +27,7 @@ const saveBestSellers = async () => {
     // compute best sellers
     const bestSellers = transactions.reduce((acc, transaction) => {
         transaction.TransactionProducts.forEach(product => {
+            if (!store.getters.getProduct(product.idProduct)) return
             acc[product.idProduct] = (acc[product.idProduct] || 0) + product.quantity
         })
         return acc

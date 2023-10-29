@@ -96,6 +96,10 @@ export default {
                 return state.bestSellers
             }
             return state.products.slice(0, 4)
-        }
+        },
+        getDevolutionPolicy: state => id => {
+            let product = state.products.find(product => product.idProduct == id)
+            return product?.devolutionPolicy || 'Política de devolução não informada ou produto não encontrado'
+        },
     }
 }

@@ -65,7 +65,6 @@
 <script>
 import ModalComponent from '../ModalComponent.vue'
 import moment from 'moment'
-import { mapGetters } from 'vuex'
 
 export default {
     name: 'SaleModal',
@@ -95,13 +94,15 @@ export default {
         },
     },
     computed: {
-        ...mapGetters(['getProductInStock'])
     },
     mounted() {
-        this.productsList = this.sale.products?.map((prod) => {
+        this.productsList = this.sale.TransactionProducts?.map((prod) => {
+            console.log(prod)
             return {
-                ...this.getProductInStock(prod.id),
+                photo: prod.productPhoto,
+                name: prod.productName,
                 quantity: prod.quantity,
+                price: prod.price,
                 option: prod.option
             }
         })
@@ -111,7 +112,8 @@ export default {
             if (this.modalOpen) {
                 this.productsList = this.sale.TransactionProducts.map((prod) => {
                     return {
-                        ...this.getProductInStock(prod.idProduct),
+                        photo: prod.productPhoto,
+                        name: prod.productName,
                         quantity: prod.quantity,
                         price: prod.price,
                         option: prod.selectedOption

@@ -121,9 +121,9 @@ export default {
                 totalOrders += 1;
 
                 sale.TransactionProducts.forEach(product => {
-                    productsCount[product.Product.name] = (productsCount[product.Product.name] || 0) + (product.quantity || 0)
+                    productsCount[product.productName] = (productsCount[product.productName] || 0) + (product.quantity || 0)
                     
-                    const categories = product.Product.category.split(',');
+                    const categories = product.productCategory.split(',');
                     categories.forEach(category => {
                         categoriesCount[category.trim()] = (categoriesCount[category.trim()] || 0) + (product.quantity || 0)
                     });

@@ -7,6 +7,7 @@ import { Vendor } from "../../vendor/models/Vendor";
 import { VendorService } from "../../vendor/ports/VendorService";
 import { deleteObject } from "../../../../utils/functions/aws";
 import { Attributes, CreationAttributes } from 'sequelize/types';
+import { Op } from 'sequelize';
 
 export class SequelizeProductRepository implements ProductRepository {
     async create(body: CreationAttributes<ProductInterface>, user: PayloadParams, file: any) {
@@ -48,6 +49,12 @@ export class SequelizeProductRepository implements ProductRepository {
         try {
             const products = await Product.findAll({
                 attributes: ['idProduct', 'name', 'description', 'price', 'quantity', 'category', 'options', 'photo'],
+                // quantity > 0
+                where: {
+                    quantity: {
+                        [Op.gt]: 0
+                    }
+                },
                 include: [{
                     model: Vendor,
                     attributes: ['fantasyName', 'devolutionPolicy', 'idVendor']
@@ -91,7 +98,7 @@ export class SequelizeProductRepository implements ProductRepository {
         try {
             const product = await this.getById(idProduct);
             const vendor = await VendorService.getById(user.idUser);
-            await deleteObject(product.awsKey);
+            // await deleteObject(product.awsKey);
             await product.destroy();
         } catch (error) {
             throw(error);
