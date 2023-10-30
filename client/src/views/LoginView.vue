@@ -1,6 +1,6 @@
 <template>
     <div class="login-view">
-        <img class="logo" alt="Biznes logo" :src="logo">
+        <img class="logo" alt="Biznes logo" :src="logo" @click="this.$router.push('/')">
 
         <div class="login">
             <img :src="imgLogin">
@@ -171,6 +171,7 @@ export default {
         height: 200px;
         object-fit: contain;
         margin-left: 20px;
+        cursor: pointer;
     }
 
     .login {
