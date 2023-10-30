@@ -133,6 +133,13 @@ export default {
             })
         },
         async directTransaction() {
+            if (!this.selectedOption && this.product.options?.length > 0) return this.$toast.open({
+                message: 'Selecione uma opção!',
+                type: 'error',
+                position: 'top-right',
+                duration: 3000
+            })
+
             const prodQuantityOk = await checkQuantity(this.product.idProduct, 1)
             if (!prodQuantityOk) return this.$toast.open({
                 message: 'Não há estoque suficiente para essa compra!',
@@ -141,6 +148,7 @@ export default {
                 duration: 3000
             })
 
+            localStorage.setItem('directTransacProduct', JSON.stringify(this.product))
             if (!this.loggedInUser.id) {
                 this.$toast.open({
                     message: 'Você precisa estar logado para finalizar a compra!',
@@ -162,7 +170,6 @@ export default {
             })
             this.product.selectedOption = this.selectedOption
             this.product.quantity = 1
-            localStorage.setItem('directTransacProduct', JSON.stringify(this.product))
             this.$router.push('/checkout')
         }
     },

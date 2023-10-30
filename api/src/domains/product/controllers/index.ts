@@ -59,8 +59,6 @@ router.get('/store/:id',
 );
 
 router.get('/:id',
-    verifyJWT,
-    checkRole([userRoles.vendor, userRoles.admin, userRoles.customer]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const product = await ProductService.getById(req.params.id);
