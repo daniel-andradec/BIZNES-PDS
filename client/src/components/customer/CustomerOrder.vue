@@ -124,7 +124,8 @@ export default {
                 seller: product.vendorName,
                 quantity: product.quantity,
                 selectedOption: product.selectedOption,
-                devolutionPolicy: this.getDevolutionPolicy(product.idProduct)
+                devolutionPolicy: this.getDevolutionPolicy(product.idProduct),
+                idVendor: product.idVendor
             })
         })
         
