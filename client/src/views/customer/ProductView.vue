@@ -148,7 +148,10 @@ export default {
                 duration: 3000
             })
 
+            this.product.selectedOption = this.selectedOption
+            this.product.quantity = 1
             localStorage.setItem('directTransacProduct', JSON.stringify(this.product))
+
             if (!this.loggedInUser.id) {
                 this.$toast.open({
                     message: 'Você precisa estar logado para finalizar a compra!',
@@ -162,14 +165,6 @@ export default {
                 return
             }
             
-            if (!this.selectedOption && this.product.options?.length > 0) return this.$toast.open({
-                message: 'Selecione uma opção!',
-                type: 'error',
-                position: 'top-right',
-                duration: 3000
-            })
-            this.product.selectedOption = this.selectedOption
-            this.product.quantity = 1
             this.$router.push('/checkout')
         }
     },
