@@ -113,12 +113,12 @@ export class SequelizeUserRepository implements UserRepository {
 
     async updatePassword(id: string, newPassword: string, oldPassword: string, loggedUser: PayloadParams): Promise<void> {
         try {
-            const user = await this.getById(id);
             if (loggedUser.role !== userRoles.admin && loggedUser.idUser !== id) {
                 throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
             }
 
             if (await this.checkPassword(oldPassword, id)) {
+                console.log("Senha correta!");
                 const encryptedNewPassword = await this.encryptPassword(newPassword);
                 await User.update({ password: encryptedNewPassword }, { where: { idUser: id } });
             } else {
