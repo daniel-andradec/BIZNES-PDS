@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -90,56 +90,56 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AddressRepository } from "../repository/AddressRepository";
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { AddressRepository } from "../repository/AddressRepository";
 import { AddressInterface } from "../models/Address";
 import { PayloadParams } from "../../users/types/PayloadParams";
 import { CreationAttributes } from "sequelize";
-<span class="cstat-no" title="statement not covered" >import {SequelizeAddressRepository} from "../adapters/SequelizeAddressRepository";</span>
+import {SequelizeAddressRepository} from "../adapters/SequelizeAddressRepository";
 &nbsp;
 class AddressServiceClass{
-<span class="fstat-no" title="function not covered" >    constructor(private <span class="cstat-no" title="statement not covered" >a</span>ddressRepository: AddressRepository)</span> {}
+    constructor(private addressRepository: AddressRepository) {}
 &nbsp;
-    async <span class="fstat-no" title="function not covered" >create(</span>address: CreationAttributes&lt;AddressInterface&gt;): Promise&lt;AddressInterface&gt; {
-<span class="cstat-no" title="statement not covered" >        return await this.addressRepository.create(address);</span>
+    async create(address: CreationAttributes&lt;AddressInterface&gt;): Promise&lt;AddressInterface&gt; {
+        return await this.addressRepository.create(address);
     }
 &nbsp;
-    async <span class="fstat-no" title="function not covered" >getAddress(</span>id: string): Promise&lt;AddressInterface | null&gt; {
-<span class="cstat-no" title="statement not covered" >        return await this.addressRepository.getAddress(id);</span>
+    async getAddress(id: string): Promise&lt;AddressInterface | null&gt; {
+        return await this.addressRepository.getAddress(id);
     }
 &nbsp;
-    async <span class="fstat-no" title="function not covered" >update(</span>address: CreationAttributes&lt;AddressInterface&gt;, idUser: string): Promise&lt;AddressInterface&gt; {
-<span class="cstat-no" title="statement not covered" >        return await this.addressRepository.update(address, idUser);</span>
+    async update(address: CreationAttributes&lt;AddressInterface&gt;, idUser: string): Promise&lt;AddressInterface&gt; {
+        return await this.addressRepository.update(address, idUser);
     }
 }
 &nbsp;
-const addressRepository = <span class="cstat-no" title="statement not covered" >new SequelizeAddressRepository();</span>
-export const <span class="cstat-no" title="statement not covered" >AddressService = new AddressServiceClass(addressRepository);</span></pre></td></tr></table></pre>
+const addressRepository = new SequelizeAddressRepository();
+export const AddressService = new AddressServiceClass(addressRepository);</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-01T00:50:51.376Z
+                at 2023-11-05T00:59:31.902Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
