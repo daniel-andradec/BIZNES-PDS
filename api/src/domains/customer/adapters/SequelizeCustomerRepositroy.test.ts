@@ -26,7 +26,7 @@ describe('Teste de criação de cliente',  () => {
     jest.resetAllMocks();
   });
 
-    test('should create a new customer and return the created customer', async () => {
+    test('cria usuário com sucesso', async () => {
       const customerData: CustomerCreationAttributes = {
         name: 'John Doe',
         email: 'john@example.com',
@@ -69,7 +69,7 @@ describe('Teste de criação de cliente',  () => {
       jest.clearAllMocks
   });
 
-    test('should retrieve all customers', async () => {
+    test('retorna todos os clientes', async () => {
       const customer1 = {
         idCustomer: '1',
         phone: '1234567890',
@@ -101,7 +101,7 @@ describe('Teste de criação de cliente',  () => {
       jest.clearAllMocks();
   });
 
-    test('should retrieve the logged customer', async () => {
+    test('retorna o cliente logado', async () => {
       const idUser = '1';
       const mockCustomer = {};
       const mockUser = {};
@@ -123,7 +123,7 @@ describe('Teste de criação de cliente',  () => {
       jest.clearAllMocks();
   });
 
-    test('should retrieve a customer by id', async () => {
+    test('retona o cliente pelo ID', async () => {
       const id = '1';
       const mockCustomer = {};
       Customer.findByPk = jest.fn().mockResolvedValue(mockCustomer);
@@ -145,17 +145,16 @@ describe('Teste de criação de cliente',  () => {
       jest.clearAllMocks();
   });
 
-    test('should delete a customer', async () => {
+    test('deleta cliente com sucesso', async () => {
       const loggedUser = { idUser: '1', role: 'admin', name: 'John Doe', email: 'email@gmail.com' };
       const mockCustomer = { idUser: '1' };
-  
-      // Mock the getById method to return the mockCustomer
+
       CustomerService.getById = jest.fn().mockResolvedValue(mockCustomer);
+
+      Customer.findByPk= jest.fn().mockResolvedValue(mockCustomer);
   
-      // Call the delete method of CustomerService
       await CustomerService.delete('1', loggedUser);
   
-      //user service delete deves ser chamado uma vez
       expect(UserService.delete).toHaveBeenCalledTimes(1);
     });
 
@@ -164,11 +163,10 @@ describe('Teste de criação de cliente',  () => {
 
       const deletedUser = { idUser: '2', role: 'customer', name: 'Avelar', email: 'avelar@gmail.com'}
 
-      // Mock the getById method to return the mockCustomer
       CustomerService.getById = jest.fn().mockResolvedValue(deletedUser);
 
-      // Call the delete method of CustomerService
+      Customer.findByPk= jest.fn().mockResolvedValue(deletedUser);
+
       await expect(CustomerService.delete('2', loggedUser)).rejects.toThrow('Você não tem permissão para deletar outro usuário');
-});
-  
+  });
 });
