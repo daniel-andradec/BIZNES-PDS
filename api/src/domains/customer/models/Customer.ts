@@ -3,11 +3,11 @@ import { sequelize } from '../../../../database/index';
 import { User } from '../../users/models/User';
 
 export interface CustomerInterface extends Model<InferAttributes<CustomerInterface>, InferCreationAttributes<CustomerInterface>> {
-    idCustomer: CreationOptional<string>;
+    idCustomer?: CreationOptional<string>;
     phone: string;
     CPF: string;
     birthDate: string;
-    idUser: string;
+    idUser?: string;
     createdAt: CreationOptional<Date>;
     updatedAt: CreationOptional<Date>;
 }

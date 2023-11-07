@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>9/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>9/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -100,70 +100,70 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CustomerRepository } from "../repository/CustomerRepository";
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { CustomerRepository } from "../repository/CustomerRepository";
 import { CustomerInterface } from "../models/Customer";
 import { AddressInterface } from "../../address/models/Address";
 import { UserInterface } from "../../users/models/User";
 import { CreationAttributes } from "sequelize";
 import { PayloadParams } from "../../users/types/PayloadParams";
-<span class="cstat-no" title="statement not covered" >import { SequelizeCustomerRepository } from "../adapters/SequelizeCustomerRepository";</span>
+import { SequelizeCustomerRepository } from "../adapters/SequelizeCustomerRepository";
 &nbsp;
 class CustomerServiceClass{
-<span class="fstat-no" title="function not covered" >    constructor(private <span class="cstat-no" title="statement not covered" >c</span>ustomerRepository: CustomerRepository)</span> {}
-    async <span class="fstat-no" title="function not covered" >create(</span>body: CreationAttributes&lt;CustomerInterface&gt;) : Promise&lt;CustomerInterface&gt;{
-<span class="cstat-no" title="statement not covered" >        return await this.customerRepository.create(body);</span>
+    constructor(private customerRepository: CustomerRepository) {}
+    async create(body: CreationAttributes&lt;CustomerInterface&gt;) : Promise&lt;CustomerInterface&gt;{
+        return await this.customerRepository.create(body);
     }
-    async <span class="fstat-no" title="function not covered" >getAll(</span>) : Promise&lt;CustomerInterface[]&gt;{
-<span class="cstat-no" title="statement not covered" >        return await this.customerRepository.getAll();</span>
+    async getAll() : Promise&lt;CustomerInterface[]&gt;{
+        return await this.customerRepository.getAll();
     }
-    async <span class="fstat-no" title="function not covered" >getLogged(</span>id: string) : Promise&lt;{customer: CustomerInterface | null, address: AddressInterface | null, user: UserInterface | null}&gt;{
-<span class="cstat-no" title="statement not covered" >        return await this.customerRepository.getLogged(id);</span>
+    async getLogged(id: string) : Promise&lt;{customer: CustomerInterface | null, address: AddressInterface | null, user: UserInterface | null}&gt;{
+        return await this.customerRepository.getLogged(id);
     }
-    async <span class="fstat-no" title="function not covered" >getById(</span>id: string) : Promise&lt;CustomerInterface&gt;{
-<span class="cstat-no" title="statement not covered" >        return await this.customerRepository.getById(id);</span>
+    async getById(id: string) : Promise&lt;CustomerInterface&gt;{
+        return await this.customerRepository.getById(id);
     }
     async <span class="fstat-no" title="function not covered" >update(</span>body: CreationAttributes&lt;CustomerInterface&gt;, id: string) : Promise&lt;void&gt;{
 <span class="cstat-no" title="statement not covered" >        return await this.customerRepository.update(body, id);</span>
     }
-    async <span class="fstat-no" title="function not covered" >delete(</span>id: string, loggedUser: PayloadParams): Promise&lt;void&gt;{
-<span class="cstat-no" title="statement not covered" >        return await this.customerRepository.delete(id, loggedUser);</span>
+    async delete(id: string, loggedUser: PayloadParams): Promise&lt;void&gt;{
+        return await this.customerRepository.delete(id, loggedUser);
     }
 }
 &nbsp;
-const customerRepository = <span class="cstat-no" title="statement not covered" >new SequelizeCustomerRepository();</span>
-export const <span class="cstat-no" title="statement not covered" >CustomerService = new CustomerServiceClass(customerRepository);</span></pre></td></tr></table></pre>
+const customerRepository = new SequelizeCustomerRepository();
+export const CustomerService = new CustomerServiceClass(customerRepository);</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-05T00:59:31.902Z
+                at 2023-11-07T14:06:17.672Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
