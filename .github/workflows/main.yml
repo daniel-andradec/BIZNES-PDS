@@ -14,11 +14,8 @@ jobs:
       with:
         node-version: '14'
 
-    - name: Change to API directory
-      run: cd api
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Run Jest
-      run: npm test
+    - name: Install dependencies and run tests
+      run: |
+        cd api
+        npm install
+        npm test
