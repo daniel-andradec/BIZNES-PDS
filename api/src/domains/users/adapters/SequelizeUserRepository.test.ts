@@ -72,6 +72,10 @@ describe('Teste de criação de usuário', () => {
 });
 
 describe('Teste da listagem de usuários', () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+
     test('Retorna todos os usuários', async () => {
         const mockUsers = [
             { idUser: '1', name: 'User1', email: 'user1@gmail.com', role: 'customer', get: jest.fn().mockReturnValue({ idUser: '1', name: 'User1', email: 'user1@gmail.com', role: 'customer' }) },
@@ -93,6 +97,10 @@ describe('Teste da listagem de usuários', () => {
 });
 
 describe('Teste do get de usuários pelo id', () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+
     test('Retorna usuário pelo ID', async () => {
         const mockUserData = { idUser: '1', name: 'User1', email: 'user1@gmail.com', role: 'customer' };
         const mockUserInstance = {
@@ -112,6 +120,10 @@ describe('Teste do get de usuários pelo id', () => {
 });
 
 describe('Teste de atualização de usuário', () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+
     test('Atualiza usuário com sucesso', async () => {
         const user = {
             name: 'Teste',
@@ -156,6 +168,10 @@ describe('Teste de atualização de usuário', () => {
 });
 
 describe('Teste de remoção de usuário', () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+
     test('Remove usuário com sucesso', async () => {
         const user = {
             name: 'Teste',
@@ -231,6 +247,9 @@ describe('Teste de autenticação de usuário', () => {
 });
 
 describe('Teste de atualização de senha', () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
     test('Permite que um administrador atualize a senha', async () => {
         const id = '1';
         const oldPassword = 'oldPassword';
@@ -245,5 +264,28 @@ describe('Teste de atualização de senha', () => {
         (User.update as jest.MockedFunction<typeof User.update>).mockResolvedValue([1]);
         await UserService.updatePassword(id, newPassword, oldPassword, loggedUser);
         expect(User.update).toHaveBeenCalledTimes(1);
+    });
+
+    test('Tenta atualizar a senha de um usuário sem permissão', async () => {
+        const id = '1';
+        const oldPassword = 'oldPassword';
+        const newPassword = 'newPassword';
+        const loggedUser = { role: userRoles.customer, idUser: '2' } as any;
+        await expect(UserService.updatePassword(id, newPassword, oldPassword, loggedUser)).rejects.toThrow(new PermissionError('Você não tem permissão para editar outro usuário!'));
+    });
+
+    test('Senha antiga incorreta', async () => {
+        const id = '1';
+        const oldPassword = 'oldPassword';
+        const newPassword = 'newPassword';
+        const encryptedNewPassword = 'encryptedNewPassword';
+        const loggedUser = { role: userRoles.admin, idUser: 'admin' } as any;
+
+        jest.spyOn(UserService, 'checkPassword').mockResolvedValue(false);
+        (bcrypt.compare as jest.Mock<any, any>).mockResolvedValue(false);
+        (User.findByPk as jest.MockedFunction<typeof User.findByPk>).mockResolvedValue(loggedUser as any);
+        UserService.encryptPassword = jest.fn().mockResolvedValue(encryptedNewPassword);
+        (User.update as jest.MockedFunction<typeof User.update>).mockResolvedValue([1]);
+        await expect(UserService.updatePassword(id, newPassword, oldPassword, loggedUser)).rejects.toThrow(new PermissionError('Senha incorreta!'));
     });
 });

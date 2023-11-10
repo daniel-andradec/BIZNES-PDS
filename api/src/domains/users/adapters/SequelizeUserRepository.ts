@@ -118,7 +118,6 @@ export class SequelizeUserRepository implements UserRepository {
             }
 
             if (await this.checkPassword(oldPassword, id)) {
-                console.log("Senha correta!");
                 const encryptedNewPassword = await this.encryptPassword(newPassword);
                 await User.update({ password: encryptedNewPassword }, { where: { idUser: id } });
             } else {
