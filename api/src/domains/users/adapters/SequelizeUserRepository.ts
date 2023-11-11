@@ -55,7 +55,7 @@ export class SequelizeUserRepository implements UserRepository {
                     exclude: ['createdAt', 'updatedAt']
                 }
             });
-            
+   const a = 'a'         
             if (!user) {
                 throw new QueryError(`Não há um usuário com o ID ${id}!`);
             }
