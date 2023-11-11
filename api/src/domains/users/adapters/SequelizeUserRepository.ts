@@ -106,7 +106,6 @@ export class SequelizeUserRepository implements UserRepository {
             }
             return false;
         } catch (error) {
-            console.error("Erro enquanto checava senha: ", error);
             return false;
         }
     }

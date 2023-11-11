@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.92% </span>
+                <span class="strong">89.47% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>41/57</span>
+                <span class='fraction'>51/57</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.92% </span>
+                <span class="strong">89.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>41/57</span>
+                <span class='fraction'>51/57</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -323,42 +323,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -483,30 +483,30 @@ export class SequelizeCustomerRepository implements CustomerRepository{
         }
     }
 &nbsp;
-    async <span class="fstat-no" title="function not covered" >update(</span>body: CustomerCreationAttributes, idUser: string ) : Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >        try {</span>
-<span class="cstat-no" title="statement not covered" >            validateUpdateCustomer(body);</span>
+    async update(body: CustomerCreationAttributes, idUser: string ) : Promise&lt;void&gt; {
+        try {
+            validateUpdateCustomer(body);
            
-            const user = <span class="cstat-no" title="statement not covered" >await UserService.getById(idUser);</span>
+            const user = await UserService.getById(idUser);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            <span class="missing-if-branch" title="if path not taken" >I</span>if(!user){</span>
+            <span class="missing-if-branch" title="if path not taken" >I</span>if(!user){
 <span class="cstat-no" title="statement not covered" >                throw new QueryError(`Não há usuário com o ID ${idUser}!`);</span>
             }
 &nbsp;
-            const newCustomer = <span class="cstat-no" title="statement not covered" >{</span>
+            const newCustomer = {
                 phone: body.phone,
                 CPF: body.CPF,
                 birthDate: body.birthDate,
             }
 &nbsp;
-            const newUser = <span class="cstat-no" title="statement not covered" >{</span>
+            const newUser = {
                 name: body.name,
                 email: body.email,
                 password: body.password,
                 role: userRoles.customer,
             };
 &nbsp;
-            const newAddress = <span class="cstat-no" title="statement not covered" >{</span>
+            const newAddress = {
                 street: body.street,
                 number: body.number,
                 complement: body.complement,
@@ -517,9 +517,9 @@ export class SequelizeCustomerRepository implements CustomerRepository{
                 idUser: user.idUser,
             }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            await UserService.update(user.idUser, newUser);</span>
-<span class="cstat-no" title="statement not covered" >            await Customer.update(newCustomer, {where: {idUser: idUser}});</span>
-<span class="cstat-no" title="statement not covered" >            await AddressService.update(newAddress, user.idUser);</span>
+            await UserService.update(user.idUser, newUser);
+            await Customer.update(newCustomer, {where: {idUser: idUser}});
+            await AddressService.update(newAddress, user.idUser);
 &nbsp;
         } catch (error) {
 <span class="cstat-no" title="statement not covered" >            throw(error);</span>
@@ -553,7 +553,7 @@ export class SequelizeCustomerRepository implements CustomerRepository{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-10T23:37:55.694Z
+                at 2023-11-11T01:15:07.848Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

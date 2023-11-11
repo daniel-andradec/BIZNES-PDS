@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699659475711" clover="3.2.0">
-  <project timestamp="1699659475711" name="All files">
-    <metrics statements="282" coveredstatements="116" conditionals="31" coveredconditionals="19" methods="37" coveredmethods="17" elements="350" coveredelements="152" complexity="0" loc="282" ncloc="282" packages="7" files="7" classes="7"/>
+<coverage generated="1699665307867" clover="3.2.0">
+  <project timestamp="1699665307867" name="All files">
+    <metrics statements="281" coveredstatements="126" conditionals="31" coveredconditionals="19" methods="37" coveredmethods="18" elements="349" coveredelements="163" complexity="0" loc="281" ncloc="281" packages="7" files="7" classes="7"/>
     <package name="address.adapters">
       <metrics statements="18" coveredstatements="16" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
       <file name="SequelizeAddressRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/address/adapters/SequelizeAddressRepository.ts">
@@ -27,9 +27,9 @@
       </file>
     </package>
     <package name="customer.adapters">
-      <metrics statements="57" coveredstatements="41" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="5"/>
+      <metrics statements="57" coveredstatements="51" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="6"/>
       <file name="SequelizeCustomerRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/customer/adapters/SequelizeCustomerRepository.ts">
-        <metrics statements="57" coveredstatements="41" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="5"/>
+        <metrics statements="57" coveredstatements="51" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="6"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -66,17 +66,17 @@
         <line num="91" count="1" type="stmt"/>
         <line num="93" count="3" type="stmt"/>
         <line num="95" count="1" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="105" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="100" count="1" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="103" count="1" type="stmt"/>
+        <line num="105" count="1" type="cond" truecount="0" falsecount="1"/>
         <line num="106" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
-        <line num="134" count="0" type="stmt"/>
-        <line num="135" count="0" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="133" count="1" type="stmt"/>
+        <line num="134" count="1" type="stmt"/>
+        <line num="135" count="1" type="stmt"/>
         <line num="138" count="0" type="stmt"/>
         <line num="143" count="2" type="stmt"/>
         <line num="144" count="2" type="stmt"/>
@@ -196,9 +196,9 @@
       </file>
     </package>
     <package name="users.adapters">
-      <metrics statements="62" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
+      <metrics statements="61" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
       <file name="SequelizeUserRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/users/adapters/SequelizeUserRepository.ts">
-        <metrics statements="62" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
+        <metrics statements="61" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
         <line num="1" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
@@ -252,15 +252,14 @@
         <line num="105" count="4" type="stmt"/>
         <line num="107" count="1" type="stmt"/>
         <line num="109" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="115" count="3" type="stmt"/>
-        <line num="116" count="3" type="cond" truecount="3" falsecount="0"/>
-        <line num="117" count="1" type="stmt"/>
-        <line num="120" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="114" count="3" type="stmt"/>
+        <line num="115" count="3" type="cond" truecount="3" falsecount="0"/>
+        <line num="116" count="1" type="stmt"/>
+        <line num="119" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="120" count="1" type="stmt"/>
         <line num="121" count="1" type="stmt"/>
-        <line num="122" count="1" type="stmt"/>
-        <line num="124" count="1" type="stmt"/>
-        <line num="127" count="2" type="stmt"/>
+        <line num="123" count="1" type="stmt"/>
+        <line num="126" count="2" type="stmt"/>
       </file>
     </package>
     <package name="vendor.adapters">

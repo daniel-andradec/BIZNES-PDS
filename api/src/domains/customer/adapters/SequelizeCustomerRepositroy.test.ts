@@ -1,9 +1,25 @@
 import { SequelizeCustomerRepository } from './SequelizeCustomerRepository';
-import { Customer, CustomerCreationAttributes } from '../models/Customer';
+import { Customer, CustomerCreationAttributes, CustomerInterface } from '../models/Customer';
 import { UserService } from '../../users/ports/UserService';
 import { AddressService } from '../../address/ports/AddressService';
 import { CustomerService } from '../ports/CustomerService';
 import { User } from '../../users/models/User';
+
+function createMockSequelizeModel() {
+  return {
+    belongsTo: jest.fn(),
+    hasOne: jest.fn(),
+    findByPk: jest.fn(),
+  };
+}
+
+jest.mock('../../users/models/User', () => {
+  return { User: createMockSequelizeModel()};
+});
+
+jest.mock('../../address/models/Address', () => {
+  return { Address: createMockSequelizeModel() };
+});
 
 jest.mock('../models/Customer', () => ({
   Customer: {
@@ -16,6 +32,7 @@ jest.mock('../models/Customer', () => ({
       upsert: jest.fn(),
   }
 }));
+
 jest.mock('../../users/ports/UserService');
 jest.mock('../../address/ports/AddressService');
 
@@ -132,7 +149,7 @@ describe('Teste de criação de cliente',  () => {
       expect(result).toEqual(mockCustomer);
     });
 
-    test('should throw an error when customer is not found', async () => {
+    test('cliente não encontrado', async () => {
       const id = '1';
       Customer.findByPk = jest.fn().mockResolvedValue(null);
       await expect(CustomerService.getById(id)).rejects.toThrow('Não há usuário com o ID 1!');
@@ -170,3 +187,56 @@ describe('Teste de criação de cliente',  () => {
       await expect(CustomerService.delete('2', loggedUser)).rejects.toThrow('Você não tem permissão para deletar outro usuário');
   });
 });
+
+describe('update', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+    jest.clearAllMocks();
+  });
+
+
+  test('atualiza cliente com sucesso', async () => {
+    const idCustomer = '1';
+    const mockCustomer = {idUser: '1'};
+
+    const updatedCustomerData: CustomerCreationAttributes = {
+      name: 'Jane Doe',
+      email: 'jane@example.com',
+      password: 'newPassword123', 
+      phone: '9876543210',
+      CPF: '987.654.321-98',
+      birthDate: '1990-02-01',
+      street: 'New Street',
+      number: 456,
+      complement: 'New Complement',
+      neighborhood: 'New Neighborhood',
+      city: 'New City',
+      state: 'New State',
+      cep: '98765-432',
+      createdAt: new Date(), 
+      updatedAt: new Date(), 
+    };
+
+    const mockUserData = { idUser: '1'};
+        const mockUserInstance = {
+            ...mockUserData,
+            get: jest.fn().mockReturnValue(mockUserData)
+        };
+
+    (User.findByPk as jest.MockedFunction<typeof User.findByPk>).mockResolvedValue(mockUserInstance as any);
+    UserService.getById = jest.fn().mockResolvedValue(mockUserData.idUser);
+
+    Customer.findByPk= jest.fn().mockResolvedValue(mockCustomer);
+
+    await CustomerService.update(updatedCustomerData, idCustomer);
+
+    AddressService.create = jest.fn().mockResolvedValue({});
+
+    expect(UserService.update).toHaveBeenCalledTimes(1);
+    expect(Customer.update).toHaveBeenCalledTimes(1);
+    expect(AddressService.update).toHaveBeenCalledTimes(1);
+  });
+
+});
+
+
