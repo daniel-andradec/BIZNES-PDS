@@ -146,7 +146,7 @@ export class SequelizeCustomerRepository implements CustomerRepository{
             if(!customer){
                 throw new QueryError(`Não há customer com o ID ${id}!`);
             }
-
+console.log(loggedUser);
 
             if(loggedUser.role != userRoles.admin && loggedUser.idUser != id){
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
