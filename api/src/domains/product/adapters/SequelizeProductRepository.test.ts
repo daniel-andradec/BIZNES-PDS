@@ -11,6 +11,7 @@ jest.mock('../models/Product', () => ({
         findOne: jest.fn(),
         update: jest.fn(),
         destroy: jest.fn(),
+        findByPk: jest.fn(),
     }
 }));
 
@@ -43,7 +44,7 @@ describe("Teste de criação de produto", () => {
         const spy = jest.spyOn(Product, 'create').mockResolvedValueOnce(product);
         const result = await ProductService.create(product, user, file);
         expect(result).toEqual(product);
-        expect(spy).toBeCalledTimes(1);
+        expect(spy).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -83,7 +84,7 @@ describe("Teste de busca de produtos", () => {
         const spy = jest.spyOn(Product, 'findAll').mockResolvedValueOnce(products);
         const result = await ProductService.getAllByStore("1");
         expect(result).toEqual(products);
-        expect(spy).toBeCalledTimes(1);
+        expect(spy).toHaveBeenCalledTimes(1);
     });
 
     test("Busca todos os produtos", async () => {
@@ -116,7 +117,7 @@ describe("Teste de busca de produtos", () => {
         const spy = jest.spyOn(Product, 'findAll').mockResolvedValueOnce(products);
         const result = await ProductService.getAll();
         expect(result).toEqual(products);
-        expect(spy).toBeCalledTimes(1);
+        expect(spy).toHaveBeenCalledTimes(1);
     });
 
     test("Busca um produto por ID", async () => {
@@ -135,7 +136,7 @@ describe("Teste de busca de produtos", () => {
         const spy = jest.spyOn(Product, 'findByPk').mockResolvedValueOnce(product);
         const result = await ProductService.getById("1");
         expect(result).toEqual(product);
-        expect(spy).toBeCalledTimes(1);
+        expect(spy).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -146,7 +147,7 @@ describe("Teste de edição de produtos", () => {
     });
 
     test("Edita um produto com sucesso", async () => {
-        const product: ProductInterface = {
+        const product = {
             idProduct: "1",
             name: "Produto 1",
             description: "Descrição do produto 1",
@@ -157,7 +158,8 @@ describe("Teste de edição de produtos", () => {
             photo: "photo",
             awsKey: "awsKey",
             idVendor: "1",
-        } as ProductInterface;
+            update: jest.fn().mockResolvedValue(undefined)
+        } as unknown as ProductInterface;;
         const body: Attributes<ProductInterface> = {
             name: "Produto 1",
             description: "Descrição do produto 1",
@@ -168,13 +170,13 @@ describe("Teste de edição de produtos", () => {
             photo: "photo",
             awsKey: "awsKey",
             idVendor: "1",
-        };
+        } as Attributes<ProductInterface>;
         const file = { location: "location", key: "key" };
         const spy = jest.spyOn(Product, 'findByPk').mockResolvedValueOnce(product);
-        const spy2 = jest.spyOn(Product, 'update').mockResolvedValueOnce();
+        const spy2 = jest.spyOn(product, 'update');
         await ProductService.update("1", body, file);
-        expect(spy).toBeCalledTimes(1);
-        expect(spy2).toBeCalledTimes(1);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy2).toHaveBeenCalledTimes(1)
     });
 });
 
@@ -185,7 +187,7 @@ describe("Teste de deleção de produtos", () => {
     });
 
     test("Deleta um produto com sucesso", async () => {
-        const product: ProductInterface = {
+        const product = {
             idProduct: "1",
             name: "Produto 1",
             description: "Descrição do produto 1",
@@ -196,12 +198,19 @@ describe("Teste de deleção de produtos", () => {
             photo: "photo",
             awsKey: "awsKey",
             idVendor: "1",
-        } as ProductInterface;
+            destroy: jest.fn().mockResolvedValue(undefined)
+        } as unknown as ProductInterface;
+        const user : PayloadParams = {
+            idUser: "1",
+            email: "email",
+            name: "name",
+            role: "role",
+        } as PayloadParams;
         const spy = jest.spyOn(Product, 'findByPk').mockResolvedValueOnce(product);
-        const spy2 = jest.spyOn(Product, 'destroy').mockResolvedValueOnce();
-        await ProductService.delete("1");
-        expect(spy).toBeCalledTimes(1);
-        expect(spy2).toBeCalledTimes(1);
+        const spy2 = jest.spyOn(product, 'destroy');
+        await ProductService.delete("1", user);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy2).toHaveBeenCalledTimes(1);
     });
 });
 
