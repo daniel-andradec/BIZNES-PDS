@@ -1,5 +1,4 @@
-import { SequelizeCustomerRepository } from './SequelizeCustomerRepository';
-import { Customer, CustomerCreationAttributes, CustomerInterface } from '../models/Customer';
+import { Customer, CustomerCreationAttributes} from '../models/Customer';
 import { UserService } from '../../users/ports/UserService';
 import { AddressService } from '../../address/ports/AddressService';
 import { CustomerService } from '../ports/CustomerService';
