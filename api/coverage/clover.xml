@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699996859860" clover="3.2.0">
-  <project timestamp="1699996859860" name="All files">
-    <metrics statements="281" coveredstatements="173" conditionals="31" coveredconditionals="20" methods="37" coveredmethods="25" elements="349" coveredelements="218" complexity="0" loc="281" ncloc="281" packages="7" files="7" classes="7"/>
+<coverage generated="1700105825774" clover="3.2.0">
+  <project timestamp="1700105825775" name="All files">
+    <metrics statements="281" coveredstatements="182" conditionals="31" coveredconditionals="20" methods="37" coveredmethods="26" elements="349" coveredelements="228" complexity="0" loc="281" ncloc="281" packages="7" files="7" classes="7"/>
     <package name="address.adapters">
       <metrics statements="18" coveredstatements="16" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
       <file name="SequelizeAddressRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\address\adapters\SequelizeAddressRepository.ts">
         <metrics statements="18" coveredstatements="16" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="6" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
@@ -93,12 +93,12 @@
       <metrics statements="43" coveredstatements="33" conditionals="4" coveredconditionals="1" methods="6" coveredmethods="6"/>
       <file name="SequelizeProductRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\product\adapters\SequelizeProductRepository.ts">
         <metrics statements="43" coveredstatements="33" conditionals="4" coveredconditionals="1" methods="6" coveredmethods="6"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
         <line num="16" count="1" type="cond" truecount="0" falsecount="1"/>
@@ -178,34 +178,34 @@
       </file>
     </package>
     <package name="transactionProduct.adapters">
-      <metrics statements="12" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="12" coveredstatements="9" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="SequelizeTransactionProductRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\transactionProduct\adapters\SequelizeTransactionProductRepository.ts">
-        <metrics statements="12" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="0" type="stmt"/>
-        <line num="3" count="0" type="stmt"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="cond" truecount="0" falsecount="1"/>
+        <metrics statements="12" coveredstatements="9" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="cond" truecount="0" falsecount="1"/>
         <line num="12" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
       </file>
     </package>
     <package name="users.adapters">
       <metrics statements="61" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
       <file name="SequelizeUserRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\users\adapters\SequelizeUserRepository.ts">
         <metrics statements="61" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="4" count="3" type="stmt"/>
-        <line num="5" count="3" type="stmt"/>
-        <line num="6" count="3" type="stmt"/>
-        <line num="7" count="3" type="stmt"/>
-        <line num="10" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
         <line num="12" count="3" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
         <line num="17" count="3" type="stmt"/>
@@ -266,15 +266,15 @@
       <metrics statements="57" coveredstatements="14" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="1"/>
       <file name="SequelizeVendorRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\vendor\adapters\SequelizeVendorRepository.ts">
         <metrics statements="57" coveredstatements="14" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="1"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>

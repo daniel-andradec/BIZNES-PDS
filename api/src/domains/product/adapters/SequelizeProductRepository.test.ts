@@ -1,4 +1,3 @@
-import { Payload } from "aws-sdk/clients/iotdata";
 import { Product, ProductInterface,  } from "../models/Product";
 import { ProductService } from "../ports/ProductService";
 import { Attributes, CreationAttributes } from 'sequelize/types';
