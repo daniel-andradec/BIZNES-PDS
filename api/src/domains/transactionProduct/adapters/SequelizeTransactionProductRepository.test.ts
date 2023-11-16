@@ -3,6 +3,7 @@ import { TransactionProductService } from "../ports/TransactionProductService";
 import { Attributes, CreationAttributes } from 'sequelize/types';
 import { ProductService } from "../../product/ports/ProductService";
 import { ProductInterface } from "../../product/models/Product";
+import { Product } from "../../product/models/Product";
 
 jest.mock('../models/TransactionProduct', () => ({
     TransactionProduct: {
@@ -59,11 +60,13 @@ describe("Teste de criação de TransactionProduct", () => {
             idVendor: "1",
             setDataValue: jest.fn(),
         } as unknown as ProductInterface;
-        const spy = jest.spyOn(ProductService, 'getById').mockResolvedValueOnce(product);
+        const spy = jest.spyOn(ProductService, 'getById').mockImplementationOnce(() => Promise.resolve(product));
         const spy2 = jest.spyOn(TransactionProduct, 'create').mockResolvedValueOnce(transactionProduct);
+        const spy3 = jest.spyOn(ProductService, 'update').mockImplementationOnce(() => Promise.resolve(null));
         const result = await TransactionProductService.create(transactionProduct);
         expect(result).toEqual(transactionProduct);
         expect(spy).toHaveBeenCalledTimes(1);
         expect(spy2).toHaveBeenCalledTimes(1);
+        expect(spy3).toHaveBeenCalledTimes(1);
     });
 });
