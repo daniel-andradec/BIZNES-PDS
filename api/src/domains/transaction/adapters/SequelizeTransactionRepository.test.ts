@@ -32,7 +32,7 @@ jest.mock('../../transactionProduct/models/TransactionProduct', () => ({
     }
 }));
 
-jest.mock('../../Address/models/Address', () => ({
+jest.mock('../../address/models/Address', () => ({
     Address: {
         create: jest.fn(),
         findAll: jest.fn(),
