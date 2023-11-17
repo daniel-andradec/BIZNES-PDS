@@ -34,7 +34,7 @@
     
                 <div class="options" v-if="product.options?.length > 0">
                     <label for="color-options">Opção:</label>
-                    <select id="color-options" v-model="selectedOption">
+                    <select id="color-options" v-model="selectedOption" data-testid="option-select">
                         <option value="" disabled selected>Selecione uma opção</option>
                         <option v-for="(option, index) in product.options?.split(',')" :key="index" :value="option">
                             {{ option }}
@@ -45,7 +45,7 @@
 
                 <div class="actions">
                     <button class="btn btn-primary" @click="directTransaction()">Comprar</button>
-                    <button class="btn btn-secondary" @click="addToCart()">
+                    <button class="btn btn-secondary" @click="addToCart()" data-testid="add-to-cart-button">
                         <i class="fas fa-shopping-cart"></i>
                     </button>
                 </div>

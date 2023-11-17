@@ -36,16 +36,17 @@
 
                             <div class="actions">
                                 <div class="edit">
-                                    <div class="button" @click="checkDecreaseQuantity(product.idProduct, product.selectedOption)">
+                                    <div class="button" @click="checkDecreaseQuantity(product.idProduct, product.selectedOption)" data-testid="decrease-quantity-button">
                                         <i class="fa fa-minus"></i>
                                     </div>
-                                    <input type="text" v-model="product.quantity" disabled />
-                                    <div class="button" @click="incrementProductQuantity({ idProduct: product.idProduct, selectedOption: product.selectedOption })">
+                                    <input type="text" v-model="product.quantity" disabled data-testid="product-quantity-input"/>
+                                    <div class="button" @click="incrementProductQuantity({ idProduct: product.idProduct, selectedOption: product.selectedOption })" data-testid="increase-quantity-button">
                                         <i class="fa fa-plus"></i>
                                     </div>
                                 </div>
                                 <div class="delete">
-                                    <i class="fa-regular fa-trash-can fa-xl" @click="openRemoveProdModal(product)"></i>
+                                    <i class="fa-regular fa-trash-can fa-xl" @click="openRemoveProdModal(product)" data-testid="remove-from-cart-button">
+                                    </i>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +96,8 @@
 
                 <div class="options">
                     <button class="btn btn-secondary" @click="removeProdModalOpen = false">Cancelar</button>
-                    <button class="btn btn-primary" @click="removeProduct()">Remover</button>
+                    <button class="btn btn-primary" @click="removeProduct()" data-testid="remove-from-cart-confirm">
+                        Remover</button>
                 </div>
             </div>
         </ModalComponent>

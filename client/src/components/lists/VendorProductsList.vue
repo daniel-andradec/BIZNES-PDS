@@ -22,8 +22,8 @@
                 <h2>{{ product.quantity }}</h2>
                 <h2> {{ product.options || '-' }}</h2>
                 <div class="actions">
-                    <i class="fa-solid fa-edit" @click="editProduct(product)"></i>
-                    <i class="fa-solid fa-trash red" @click="openDeleteProdModal(product)"></i>
+                    <i class="fa-solid fa-edit" @click="editProduct(product)" data-testid="edit-product-button"></i>
+                    <i class="fa-solid fa-trash red" @click="openDeleteProdModal(product)" data-testid="delete-product-button"></i>
                 </div>
             </div>
         </div>
@@ -42,7 +42,9 @@
                 <h2>Tem certeza que deseja <b>excluir</b> o produto {{ productToDelete.name }}?</h2>
                 <div class="delete-buttons">
                     <button class="btn btn-primary" @click="deleteProductModalOpen = false">Cancelar</button>
-                    <button class="btn btn-danger" @click="deleteProduct">Excluir</button>
+                    <button class="btn btn-danger" @click="deleteProduct" data-testid="delete-product-confirm">
+                        Excluir
+                    </button>
                 </div>
             </div>
         </ModalComponent>

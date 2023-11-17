@@ -15,7 +15,8 @@
                 <h2>{{ customer.CPF }}</h2>
                 <h2>{{ customer.User.Address.city }}/{{ customer.User.Address.state }}</h2>
                 <h2>{{ customer.User.email }}</h2>
-                <i class="fa-solid fa-trash red" @click="openDeleteCustomerModal(customer)"></i>
+                <i class="fa-solid fa-trash red" @click="openDeleteCustomerModal(customer)" data-testid="delete-customer-button">
+                </i>
             </div>
         </div>
 
@@ -29,7 +30,8 @@
                 <h2>Tem certeza que deseja <b>excluir</b> o cliente {{ customerToDelete.name }}?</h2>
                 <div class="delete-buttons">
                     <button class="btn btn-primary" @click="deleteCustomerModalOpen = false">Cancelar</button>
-                    <button class="btn btn-danger" @click="deleteCustomer">Excluir</button>
+                    <button class="btn btn-danger" @click="deleteCustomer" data-testid="delete-customer-confirm">
+                        Excluir</button>
                 </div>
             </div>
         </ModalComponent>

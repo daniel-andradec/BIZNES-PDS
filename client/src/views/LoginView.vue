@@ -23,7 +23,7 @@
 
                 <p><span>Esqueceu a senha?</span></p>
 
-                <div class="button" @click="login()">
+                <div class="button" @click="login()" id="login">
                     <button>Entrar</button>
                 </div>
 

@@ -8,16 +8,16 @@
                 <div class="text-inputs">
                     <h3><span>*</span> Campos obrigatórios</h3>
                     <label for="name">Nome <span>*</span></label>
-                    <input type="text" placeholder="Nome" required ref="name" />
+                    <input type="text" placeholder="Nome" required ref="name" data-testid="product-name-input" >
 
                     <label for="description">Descrição <span>*</span></label>
-                    <input type="text" placeholder="Descrição" required ref="description" />
+                    <input type="text" placeholder="Descrição" required ref="description" data-testid="product-description-input">
                 </div>
                 <div class="image-input">
                     <label for="inputfile" class="add-image-label" v-if="!imagePreviewUrl">
                         Adicionar imagem
                     </label>
-                    <input type="file" id="inputfile" @change="handleFileUpload" class="file-input" ref="inputfile" />
+                    <input type="file" id="inputfile" @change="handleFileUpload" class="file-input" ref="inputfile" data-testid="product-image-input" >
                     <div class="image-preview" v-if="imagePreviewUrl" @click="triggerFileInput">
                         <img :src="imagePreviewUrl" alt="Preview da imagem">
                         <h2>Alterar imagem</h2>
@@ -28,12 +28,12 @@
             <div class="middle-fields">
                 <div>
                     <label for="price">Preço <span>*</span></label>
-                    <input type="text" placeholder="Preço" required ref="price" @keypress="formatInput" />
+                    <input type="text" placeholder="Preço" required ref="price" @keypress="formatInput" data-testid="product-price-input" />
                 </div>
 
                 <div>
                     <label for="quantity">Qtde. disponível <span>*</span></label>
-                    <input type="text" placeholder="Quantidade" required ref="quantity" @keypress="formatInput" />
+                    <input type="text" placeholder="Quantidade" required ref="quantity" @keypress="formatInput" data-testid="product-quantity-input" />
                 </div>
             </div>
 
@@ -47,7 +47,7 @@
                 <div class="category-input">
                     <label for="category">Categoria <span>*</span>
                     </label>
-                    <input type="text" placeholder="Selecione" required ref="category" @click="openCategoryModal()"> 
+                    <input type="text" placeholder="Selecione" required ref="category" @click="openCategoryModal()" data-testid="product-category-input" />
                     <i class="fa fa-chevron-down" @click="openCategoryModal()"></i>
                 </div>
             </div>
@@ -61,7 +61,13 @@
 
             <div class="buttons">
                 <button class="cancel" @click="this.$emit('closeModal')">Cancelar</button>
-                <button class="save" @click="handleSave" v-if="!loading">Salvar</button>
+                <button 
+                    class="save" 
+                    @click="handleSave" 
+                    v-if="!loading" 
+                    data-testid="product-save-button">
+                        Salvar
+                </button>
                 <div class="loading" v-else>
                     <i class="fa fa-spinner fa-spin"></i>
                     <h2>Salvando...</h2>

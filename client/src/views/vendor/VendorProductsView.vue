@@ -12,7 +12,9 @@
             <div class="vendor-prod-options">
                 <div class="left">
                     <h1>Meus Produtos</h1>
-                    <h2 @click="addProductModalOpen = true">Adicionar Produto</h2>
+                    <h2 @click="addProductModalOpen = true" data-testid="add-product-button">
+                        Adicionar 
+                    </h2>
                 </div>
                 <div class="right">
                     <i class="fa-solid fa-arrow-down-short-wide" @click="categoryModalOpen = true"></i>

@@ -26,7 +26,7 @@
 
         <div class="list" v-if="Object.values(products).length > 0">
             <div class="list-item" v-for="(product, key) in products" :key="key" @click="goToProduct(product)">
-                <ProductCard :key="product.idProduct" :product="product" />
+                <ProductCard :key="product.idProduct" :product="product" data-testid="product-card"/>
             </div>
         </div>
         <div class="not-found" v-else>

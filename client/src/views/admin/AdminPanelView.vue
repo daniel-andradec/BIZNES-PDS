@@ -10,12 +10,12 @@
 
         <div class="choose-tab">
             <div class="options">
-                <div class="tab-option" :class="{ 'selected': currentTab === 'users' }" @click="currentTab = 'users'">
+                <div class="tab-option" :class="{ 'selected': currentTab === 'users' }" @click="currentTab = 'users'" data-testid="customers-tab">
                     <i class="fa-solid fa-user"></i>
                     <h2>Usuários</h2>
                 </div>
                 <div id="separator"></div>
-                <div class="tab-option" :class="{ 'selected': currentTab === 'stores' }" @click="currentTab = 'stores'">
+                <div class="tab-option" :class="{ 'selected': currentTab === 'stores' }" @click="currentTab = 'stores'" data-testid="vendors-tab">
                     <i class="fa-solid fa-store"></i>
                     <h2>Lojas</h2>
                 </div>
