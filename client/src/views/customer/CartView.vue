@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="checkout">
-                    <button @click="goToCheckout">Finalizar compra</button>
+                    <button @click="goToCheckout" data-testid="checkout-button" >Finalizar compra</button>
                     <button @click="goToHome" class="choose">Escolher mais produtos</button>
                 </div>
             </div>

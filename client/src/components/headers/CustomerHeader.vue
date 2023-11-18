@@ -3,8 +3,8 @@
         <img @click="this.$router.push('/')" alt="Vue logo" :src="logo">
 
         <div class="search">
-            <input type="text" placeholder="Buscar no Biznes" v-model="searchText" @keyup.enter="search()"/>
-            <i class="fa fa-search icon" @click="search()"></i>
+            <input type="text" placeholder="Buscar no Biznes" v-model="searchText" data-testid="search-box" @keyup.enter="search()"/>
+            <i class="fa fa-search icon" data-testid="search-icon" @click="search()"></i>
         </div>
 
         <div class="login-container" @mouseover="showDropdown" @mouseleave="hideDropdown">
