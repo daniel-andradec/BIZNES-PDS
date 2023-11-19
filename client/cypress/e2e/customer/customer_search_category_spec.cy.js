@@ -1,4 +1,4 @@
-/* global cy, describe, it, expect */ // declare globals for eslint
+/* global cy, describe, it */ // declare globals for eslint
 
 describe('Customer Search', () => {
     it('Should purchase a cart item successfully', () => {
