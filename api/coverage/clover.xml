@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<coverage generated="1699919469103" clover="3.2.0">
-  <project timestamp="1699919469103" name="All files">
-    <metrics statements="280" coveredstatements="177" conditionals="31" coveredconditionals="20" methods="37" coveredmethods="24" elements="348" coveredelements="221" complexity="0" loc="280" ncloc="280" packages="7" files="7" classes="7"/>
-
+<coverage generated="1700438217035" clover="3.2.0">
+  <project timestamp="1700438217035" name="All files">
+    <metrics statements="280" coveredstatements="250" conditionals="31" coveredconditionals="21" methods="37" coveredmethods="37" elements="348" coveredelements="308" complexity="0" loc="280" ncloc="280" packages="7" files="7" classes="7"/>
     <package name="address.adapters">
       <metrics statements="18" coveredstatements="16" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
-      <file name="SequelizeAddressRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\address\adapters\SequelizeAddressRepository.ts">
+      <file name="SequelizeAddressRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/address/adapters/SequelizeAddressRepository.ts">
         <metrics statements="18" coveredstatements="16" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
-
-        <line num="1" count="3" type="stmt"/>
-        <line num="6" count="3" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-
+        <line num="1" count="6" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
@@ -32,7 +28,7 @@
     </package>
     <package name="customer.adapters">
       <metrics statements="57" coveredstatements="51" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="6"/>
-      <file name="SequelizeCustomerRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\customer\adapters\SequelizeCustomerRepository.ts">
+      <file name="SequelizeCustomerRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/customer/adapters/SequelizeCustomerRepository.ts">
         <metrics statements="57" coveredstatements="51" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="6"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -95,7 +91,7 @@
     </package>
     <package name="product.adapters">
       <metrics statements="43" coveredstatements="33" conditionals="4" coveredconditionals="1" methods="6" coveredmethods="6"/>
-      <file name="SequelizeProductRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\product\adapters\SequelizeProductRepository.ts">
+      <file name="SequelizeProductRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/product/adapters/SequelizeProductRepository.ts">
         <metrics statements="43" coveredstatements="33" conditionals="4" coveredconditionals="1" methods="6" coveredmethods="6"/>
         <line num="1" count="3" type="stmt"/>
         <line num="5" count="3" type="stmt"/>
@@ -144,7 +140,7 @@
     </package>
     <package name="transaction.adapters">
       <metrics statements="33" coveredstatements="30" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="6"/>
-      <file name="SequelizeTransactionRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\transaction\adapters\SequelizeTransactionRepository.ts">
+      <file name="SequelizeTransactionRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/transaction/adapters/SequelizeTransactionRepository.ts">
         <metrics statements="33" coveredstatements="30" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="6"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -183,7 +179,7 @@
     </package>
     <package name="transactionProduct.adapters">
       <metrics statements="12" coveredstatements="10" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <file name="SequelizeTransactionProductRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\transactionProduct\adapters\SequelizeTransactionProductRepository.ts">
+      <file name="SequelizeTransactionProductRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/transactionProduct/adapters/SequelizeTransactionProductRepository.ts">
         <metrics statements="12" coveredstatements="10" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -201,17 +197,15 @@
     </package>
     <package name="users.adapters">
       <metrics statements="61" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
-      <file name="SequelizeUserRepository.ts" path="D:\Projetos UFMG\PraticaDS\TP-PDS-1\api\src\domains\users\adapters\SequelizeUserRepository.ts">
+      <file name="SequelizeUserRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/users/adapters/SequelizeUserRepository.ts">
         <metrics statements="61" coveredstatements="59" conditionals="15" coveredconditionals="14" methods="9" coveredmethods="9"/>
-
-        <line num="1" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="4" count="3" type="stmt"/>
-        <line num="5" count="3" type="stmt"/>
-        <line num="6" count="3" type="stmt"/>
-        <line num="7" count="3" type="stmt"/>
-        <line num="10" count="3" type="stmt"/>
-
+        <line num="1" count="6" type="stmt"/>
+        <line num="3" count="6" type="stmt"/>
+        <line num="4" count="6" type="stmt"/>
+        <line num="5" count="6" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="7" count="6" type="stmt"/>
+        <line num="10" count="6" type="stmt"/>
         <line num="12" count="3" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
         <line num="17" count="3" type="stmt"/>
@@ -269,19 +263,18 @@
       </file>
     </package>
     <package name="vendor.adapters">
-
       <metrics statements="56" coveredstatements="51" conditionals="2" coveredconditionals="1" methods="6" coveredmethods="6"/>
       <file name="SequelizeVendorRepository.ts" path="/home/arthur/BIZNES-PDS/api/src/domains/vendor/adapters/SequelizeVendorRepository.ts">
         <metrics statements="56" coveredstatements="51" conditionals="2" coveredconditionals="1" methods="6" coveredmethods="6"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
         <line num="19" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
@@ -297,12 +290,12 @@
         <line num="62" count="1" type="stmt"/>
         <line num="73" count="1" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
-        <line num="80" count="5" type="stmt"/>
-        <line num="81" count="5" type="stmt"/>
-        <line num="82" count="5" type="stmt"/>
-        <line num="89" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="80" count="7" type="stmt"/>
+        <line num="81" count="7" type="stmt"/>
+        <line num="82" count="7" type="stmt"/>
+        <line num="89" count="7" type="cond" truecount="1" falsecount="0"/>
         <line num="90" count="2" type="stmt"/>
-        <line num="92" count="3" type="stmt"/>
+        <line num="92" count="5" type="stmt"/>
         <line num="94" count="2" type="stmt"/>
         <line num="99" count="1" type="stmt"/>
         <line num="100" count="1" type="stmt"/>
@@ -329,7 +322,6 @@
         <line num="160" count="2" type="stmt"/>
         <line num="161" count="1" type="stmt"/>
         <line num="163" count="1" type="stmt"/>
-
       </file>
     </package>
   </project>

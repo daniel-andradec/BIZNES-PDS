@@ -183,7 +183,7 @@ describe('Teste de criação de cliente',  () => {
 
       Customer.findByPk= jest.fn().mockResolvedValue(deletedUser);
 
-      await expect(CustomerService.delete('2', loggedUser)).rejects.toThrow('Você não tem permissão para deletar outro usuário');
+      await expect(CustomerService.delete('2', loggedUser)).rejects.toThrow('Vcê não tem permissão para deletar outro usuário');
   });
 });
 
