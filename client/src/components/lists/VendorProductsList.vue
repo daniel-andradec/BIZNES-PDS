@@ -14,7 +14,7 @@
                 <h2>{{ product.name }}</h2>
                 <h2>{{ fixLength(product.description) }} <i class="fa-regular fa-eye fa-xs" @click="toggleDescription(product)"></i></h2>
                 <div class="categories">
-                    <div class="category" v-for="(category, key) in product.category.split(',')" :key="key">
+                    <div class="category" v-for="(category, key) in product.category.split(',')" :key="key" data-testid="product-category">
                         {{ category }}
                     </div>
                 </div>

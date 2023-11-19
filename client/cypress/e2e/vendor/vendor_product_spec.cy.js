@@ -96,4 +96,28 @@ describe('Vendor Product Control', () => {
             expect(response.statusCode).to.equal(204);
         });
     });
+
+    it('Should list the products with a category filter', () => {
+        // go to vendor panel
+        cy.login('vendor1@biz.com', '123456');
+
+        // visits products page
+        cy.wait(500);
+        cy.visit('localhost:3000/#/vendor-products');
+
+        // filter by category
+        cy.get('[data-testid="filter-button"]').click();
+        cy.get('.option-label input[type="checkbox"]').first().check();
+
+        cy.get('.option-label input[type="checkbox"]').first().parent().invoke('text').then((categoryName) => {
+            console.log(categoryName);
+    
+            cy.get('.category-modal .add').click();
+    
+            // Verifica se a lista tem apenas produtos com a categoria selecionada
+            cy.get('[data-testid="product-category"]').each(($el) => {
+                cy.wrap($el).should('contain', categoryName.trim());
+            });
+        });
+    });
 });

@@ -17,7 +17,8 @@
                     </h2>
                 </div>
                 <div class="right">
-                    <i class="fa-solid fa-arrow-down-short-wide" @click="categoryModalOpen = true"></i>
+                    <i class="fa-solid fa-arrow-down-short-wide" @click="categoryModalOpen = true" data-testid="filter-button">
+                    </i>
                     <div class="search">
                         <input type="text" placeholder="Pesquisar produto" v-model="searchText" @input="searchProduct()"/>
                         <i class="fa fa-search icon" @click="searchProduct()"></i>
