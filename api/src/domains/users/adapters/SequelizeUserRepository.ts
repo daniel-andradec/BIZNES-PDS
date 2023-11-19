@@ -55,7 +55,7 @@ export class SequelizeUserRepository implements UserRepository {
                     exclude: ['createdAt', 'updatedAt']
                 }
             });
-
+            
             if (!user) {
                 throw new QueryError(`Não há um usuário com o ID ${id}!`);
             }
@@ -106,14 +106,12 @@ export class SequelizeUserRepository implements UserRepository {
             }
             return false;
         } catch (error) {
-            console.error("Erro enquanto checava senha: ", error);
             return false;
         }
     }
 
     async updatePassword(id: string, newPassword: string, oldPassword: string, loggedUser: PayloadParams): Promise<void> {
         try {
-            const user = await this.getById(id);
             if (loggedUser.role !== userRoles.admin && loggedUser.idUser !== id) {
                 throw new NotAuthorizedError('Você não tem permissão para editar outro usuário!');
             }

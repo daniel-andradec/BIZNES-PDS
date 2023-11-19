@@ -16,7 +16,6 @@ import { AddressService } from "../../address/ports/AddressService";
 export class SequelizeVendorRepository implements vendorRepository{
     async create(body: VendorCreationAttributes) { 
         try {
-            validateRegisterVendor(body);
             const newVendor  = {
                 CNPJ: body.CNPJ,
                 companyName: body.companyName,

@@ -15,8 +15,6 @@ import { Address, AddressInterface } from "../../address/models/Address";
 export class SequelizeCustomerRepository implements CustomerRepository{
     async create(body: CustomerCreationAttributes): Promise<CustomerInterface> {
         try {
-            //validateRegisterCustomer(body);
-            console.log(body);
             const newUser: CreationAttributes<UserInterface> = {
                 name: body.name,
                 email: body.email,
@@ -153,8 +151,8 @@ export class SequelizeCustomerRepository implements CustomerRepository{
             if(loggedUser.role != userRoles.admin && loggedUser.idUser != id){
                 throw new NotAuthorizedError('Você não tem permissão para deletar outro usuário!');
             }
-
-            await UserService.delete(customer.idUser);
+            console.log(customer);
+            await UserService.delete(customer.idUser!);
         } catch (error) {
             throw(error);
         }

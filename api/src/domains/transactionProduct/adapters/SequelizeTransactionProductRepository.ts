@@ -1,6 +1,6 @@
 import { TransactionProduct } from "../models/TransactionProduct";
 import { TransactionProductInterface } from "../models/TransactionProduct";
-import { ProductService } from "../../product/port/ProductService";
+import { ProductService } from "../../product/ports/ProductService";
 import { QueryError } from "../../../../errors/QueryError";
 import {TransactionProductRepository} from "../repository/TransactionProductRepository";
 
