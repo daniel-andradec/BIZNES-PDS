@@ -16,7 +16,8 @@
                 <h2>{{ vendor.User.Address.city }}/{{ vendor.User.Address.state }}</h2>
                 <h2>{{ vendor.phone }}</h2>
                 <h2>{{ vendor.User.email }}</h2>                
-                <i class="fa-solid fa-trash red" @click="openDeleteVendorModal(vendor)"></i>
+                <i class="fa-solid fa-trash red" @click="openDeleteVendorModal(vendor)" data-testid="delete-vendor-button">
+                </i>
             </div>
         </div>
 
@@ -30,7 +31,8 @@
                 <h2>Tem certeza que deseja <b>excluir</b> o fornecedor {{ vendorToDelete.companyName }}?</h2>
                 <div class="delete-buttons">
                     <button class="btn btn-primary" @click="deleteVendorModalOpen = false">Cancelar</button>
-                    <button class="btn btn-danger" @click="deleteVendor">Excluir</button>
+                    <button class="btn btn-danger" @click="deleteVendor" data-testid="delete-vendor-confirm">
+                        Excluir</button>
                 </div>
             </div>
         </ModalComponent>

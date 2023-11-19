@@ -30,7 +30,7 @@
                 <div class="payment-method">
                     <div class="payment-options">
                         <label>
-                            <input type="radio" name="payment" value="pix" v-model="selectedPayment" />
+                            <input type="radio" name="payment" value="pix" v-model="selectedPayment" data-testid="pix-button" />
                             <i class="fab fa-pix"></i>
                             <p>Pix <span>- Aprovação imediata</span></p>
                         </label>
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="checkout">
-                    <button @click="checkout">Finalizar compra</button>
+                    <button @click="checkout" data-testid="final-checkout-button">Finalizar compra</button>
                 </div>
             </div>
         </div>

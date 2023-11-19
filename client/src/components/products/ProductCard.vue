@@ -1,7 +1,7 @@
 <template>
     <div class="product-card" :class="{ fixedSize: fixSize }">
         <img :src="product.photo" />
-        <div class="name">{{ fixLength(product.name) }}</div>
+        <div class="name" data-testid="name">{{ fixLength(product.name) }}</div>
         <div class="categories">
             <div class="category" v-for="(category, key) in product.category.split(',')" :key="key">
                 {{ category }}
