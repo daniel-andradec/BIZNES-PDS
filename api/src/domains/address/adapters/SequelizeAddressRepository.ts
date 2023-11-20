@@ -31,7 +31,7 @@ export class SequelizeAddressRepository implements AddressRepository{
                     idUser: id, 
                 }
             });
-            return address;
+            return address; 
         } catch (error) {
             throw(error);
         }
