@@ -28,7 +28,7 @@ export class SequelizeAddressRepository implements AddressRepository{
         try {
             const address = await Address.findOne({
                 where: {
-                    idUser: id,
+                    idUser: id, 
                 }
             });
             return address;
