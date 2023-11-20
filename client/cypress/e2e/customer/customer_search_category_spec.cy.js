@@ -1,7 +1,7 @@
 /* global cy, describe, it */ // declare globals for eslint
 
 describe('Customer Search', () => {
-    it('Should purchase a cart item successfully', () => {
+    it('Should search for products', () => {
         cy.visit('localhost:3000/#/');
         cy.get('[data-testid="search-box"]').type("Apple");
         cy.get('[data-testid="search-icon"]').click();

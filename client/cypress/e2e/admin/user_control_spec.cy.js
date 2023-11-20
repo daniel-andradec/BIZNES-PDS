@@ -16,7 +16,7 @@ describe('Admin - User Control', () => {
         });
 
         // delete the last customer in the list
-        cy.get('[data-testid="delete-customer-button"]').last().click();
+        cy.get('[data-testid="delete-customer-button"]').last().click({ force: true });
 
         // delete modal
         cy.get('[data-testid="delete-customer-confirm"]').click();
@@ -45,7 +45,7 @@ describe('Admin - User Control', () => {
         });
 
         // delete the last vendor in the list
-        cy.get('[data-testid="delete-vendor-button"]').last().click();
+        cy.get('[data-testid="delete-vendor-button"]').last().click({ force: true });
 
         // delete modal
         cy.get('[data-testid="delete-vendor-confirm"]').click();

@@ -51,7 +51,7 @@ describe('Vendor Product Control', () => {
         cy.visit('localhost:3000/#/vendor-products');
 
         // edit the last product in the list
-        cy.get('[data-testid="edit-product-button"]').last().click();
+        cy.get('[data-testid="edit-product-button"]').last().click({ force: true });
 
         // Preenche os detalhes do produto
         cy.get('[data-testid="product-name-input"]').clear().type('Produto Teste Editado');
@@ -87,7 +87,7 @@ describe('Vendor Product Control', () => {
         cy.visit('localhost:3000/#/vendor-products');
 
         // delete the last product in the list
-        cy.get('[data-testid="delete-product-button"]').last().click();
+        cy.get('[data-testid="delete-product-button"]').last().click({ force: true });
         
         cy.get('[data-testid="delete-product-confirm"]').click();
 

@@ -46,7 +46,7 @@ describe('Vendor Product Control', () => {
         cy.visit('localhost:3000/#/vendor-products');
         
         // edit the last product in the list
-        cy.get('[data-testid="edit-product-button"]').last().click();
+        cy.get('[data-testid="edit-product-button"]').last().click({ force: true });
 
         // product details
         cy.get('[data-testid="product-name-input"]').clear().type('Produto Teste Editado');

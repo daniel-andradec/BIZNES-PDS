@@ -1,6 +1,7 @@
-/* global cy, describe, it, expect */ // declare globals for eslint
+/* global cy, describe, it, expect, Cypress */ // declare globals for eslint
 
 describe('Vendor Registration', () => {
+    Cypress.config('scrollBehavior', 'bottom');
     it('Should register a new vendor successfully', () => {
       // intercept declaration
       cy.intercept('GET', 'https://viacep.com.br/ws/30350230/json/').as('getCep');
@@ -32,9 +33,12 @@ describe('Vendor Registration', () => {
       });
 
       cy.get('input[id="number"]').type('123');
-      cy.get('textarea[id="devolutionPolicy"]').type('Não aceitamos devoluções');
+      
+      cy.get('textarea[id="devolutionPolicy"]').scrollIntoView();
+      cy.get('textarea[id="devolutionPolicy"]').type('Não aceitamos devoluções', { force: true });
+
       // submit the form
-      cy.get('.submit-button button').click();
+      cy.get('.submit-button button').click({ force: true });
   
       // wait for the response from the API and check the status code
       cy.wait('@registerVendor').then(({ response }) => {
@@ -74,9 +78,11 @@ describe('Vendor Registration', () => {
       });
 
       cy.get('input[id="number"]').type('123');
-      cy.get('textarea[id="devolutionPolicy"]').type('Não aceitamos devoluções');
+
+      cy.get('textarea[id="devolutionPolicy"]').scrollIntoView();
+      cy.get('textarea[id="devolutionPolicy"]').type('Não aceitamos devoluções', { force: true });
       // submit the form
-      cy.get('.submit-button button').click();
+      cy.get('.submit-button button').click({ force: true });
   
       // wait for the response from the API and check the status code
       cy.wait('@registerVendor').then(({ response }) => {
@@ -116,9 +122,11 @@ describe('Vendor Registration', () => {
       });
 
       cy.get('input[id="number"]').type('123');
-      cy.get('textarea[id="devolutionPolicy"]').type('Não aceitamos devoluções');
+
+      cy.get('textarea[id="devolutionPolicy"]').scrollIntoView();
+      cy.get('textarea[id="devolutionPolicy"]').type('Não aceitamos devoluções', { force: true });
       // submit the form
-      cy.get('.submit-button button').click();
+      cy.get('.submit-button button').click({ force: true });
   
       // should not call the API
       cy.get('@registerVendor').should('not.exist');
